@@ -1,0 +1,15 @@
+[Brand Ad Script - 30 Seconds]
+
+[Scene: Sunrise over city]
+Voiceover: "Start your day with purpose."
+
+[Scene: Person using product]
+Voiceover: "Our innovative tool empowers you to achieve more."
+
+[Scene: Happy customers]
+Voiceover: "Join thousands who trust [Brand]."
+
+[Scene: Logo]
+Voiceover: "Discover now at [website]."
+
+[End with Call-to-Action]
