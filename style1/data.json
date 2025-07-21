@@ -73,19 +73,15 @@
     }
   ],
   "testimonials": [
-    {
-      "text": "Jane's work on our new branding was exceptional! She truly captured our vision and brought it to life with her creativity.",
-      "author": "Sarah M., Startup Founder"
-    },
-    {
-      "text": "Professional, prompt, and incredibly talented. Jane redesigned our website, and the results exceeded our expectations.",
-      "author": "David L., Marketing Manager"
-    },
-    {
-      "text": "Working with Jane was a breeze. Her ability to understand our needs and deliver high-quality designs on time is unmatched.",
-      "author": "Emily R., Small Business Owner"
-    }
-  ],
+  {
+    "text": "Jane's work on our new branding was exceptional! She truly captured our vision and brought it to life with her creativity.",
+    "author": "Sarah M., Startup Founder"
+  },
+  {
+    "text": "Professional, prompt, and incredibly talented. Jane redesigned our website, and the results exceeded our expectations.",
+    "author": "David L., Marketing Manager"
+  }
+],
   "contact": {
     "title": "Get In Touch",
     "formEmail": "your-email@example.com"
