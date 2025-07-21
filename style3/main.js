@@ -19,6 +19,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let currentData = null; // Store loaded data
 
+    // Default data as fallback
+    const defaultData = {
+        logo: 'Default Name',
+        hero: { title: 'Creative Portfolio', subtitle: 'Showcasing my work' },
+        projects: [],
+        about: { text: 'About section unavailable.', skills: [] },
+        testimonials: [],
+        contact: { email: 'your-email@example.com', successMessage: 'Thank you for your message!' },
+        footer: { text: '© 2025 Default Name' },
+        social: {}
+    };
+
     function renderProjects(data) {
         const projectGrid = document.getElementById('projects');
         projectGrid.innerHTML = ''; // Clear existing projects
@@ -148,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } catch (error) {
             console.error('Error in loadContent:', error);
-            document.getElementById('projects').innerHTML = '<p>Error loading content. Please try again.</p>';
+            document.getElementById('projects').innerHTML = '<p>Error loading content. Please try again or clear browser cache.</p>';
             document.querySelector('.pagination').style.display = 'none';
         }
 
@@ -169,21 +181,41 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Load from localStorage if available (for preview)
-    if (localStorage.getItem('portfolioData')) {
+    // Validate JSON string
+    function isValidJSON(str) {
+        try {
+            JSON.parse(str);
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    // Load from localStorage if valid, otherwise clear it
+    if (localStorage.getItem('portfolioData') && isValidJSON(localStorage.getItem('portfolioData'))) {
         try {
             const data = JSON.parse(localStorage.getItem('portfolioData'));
             console.log('Loading from localStorage');
             loadContent(data);
         } catch (error) {
             console.error('Error parsing localStorage JSON:', error);
-            document.getElementById('projects').innerHTML = '<p>Error loading projects. Please try again.</p>';
-            document.querySelector('.pagination').style.display = 'none';
+            localStorage.removeItem('portfolioData'); // Clear invalid localStorage
+            loadFromJSON(); // Fallback to data.json
         }
     } else {
-        // Load from data.json with cache-busting
+        if (localStorage.getItem('portfolioData')) {
+            console.warn('Invalid localStorage data detected, clearing it');
+            localStorage.removeItem('portfolioData');
+        }
+        loadFromJSON();
+    }
+
+    // Load from data.json with enhanced cache-busting
+    function loadFromJSON() {
         console.log('Fetching data.json');
-        fetch('data.json?t=' + new Date().getTime())
+        fetch('data.json', {
+            cache: 'no-store' // Disable cache entirely
+        })
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Failed to fetch data.json: ' + response.status);
@@ -196,8 +228,9 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .catch(error => {
                 console.error('Error loading JSON:', error);
-                document.getElementById('projects').innerHTML = '<p>Error loading projects. Please check data.json.</p>';
+                document.getElementById('projects').innerHTML = '<p>Error loading projects. Please check data.json or clear browser cache.</p>';
                 document.querySelector('.pagination').style.display = 'none';
+                loadContent(defaultData); // Fallback to default data
             });
     }
 
@@ -222,6 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.error('Error parsing JSON:', error);
                     document.getElementById('projects').innerHTML = '<p>Error loading projects. Please upload a valid JSON file.</p>';
                     document.querySelector('.pagination').style.display = 'none';
+                    loadContent(defaultData); // Fallback to default data
                 }
             };
             reader.readAsText(file);
