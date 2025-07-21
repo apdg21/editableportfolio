@@ -17,6 +17,10 @@
     box-sizing: border-box;
 }
 
+.hidden {
+    display: none !important;
+}
+
 body {
     font-family: var(--font-main);
     line-height: 1.6;
@@ -24,7 +28,6 @@ body {
     background-color: var(--light-color);
 }
 
-/* Added for no scroll on mobile menu open */
 body.no-scroll {
     overflow: hidden;
 }
@@ -58,12 +61,11 @@ header .container {
     color: var(--primary-color);
 }
 
-/* Default Navigation (Desktop) */
 #main-nav ul {
     display: flex;
     list-style: none;
-    margin: 0; /* Ensure no default margin from browser */
-    padding: 0; /* Ensure no default padding from browser */
+    margin: 0;
+    padding: 0;
 }
 
 #main-nav ul li {
@@ -81,30 +83,28 @@ header .container {
     color: var(--primary-color);
 }
 
-/* Hamburger Menu Icon Base Styles (Hidden by default on desktop) */
 .hamburger {
-    display: none; /* Hidden by default on desktop */
-    flex-direction: column; /* To stack the spans */
-    justify-content: space-around; /* Distribute spans evenly */
-    width: 30px; /* Adjust as needed */
-    height: 25px; /* Adjust as needed */
+    display: none;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 30px;
+    height: 25px;
     background: none;
     border: none;
     cursor: pointer;
-    padding: 0; /* Reset padding from your old .hamburger rule */
-    z-index: 1001; /* Ensure it's above the nav when open */
+    padding: 0;
+    z-index: 1001;
 }
 
 .hamburger span {
     display: block;
-    width: 100%; /* Fill the width of the hamburger button */
+    width: 100%;
     height: 3px;
     background: var(--dark-color);
-    border-radius: 5px; /* Slightly rounded ends */
-    transition: var(--transition); /* Smooth transition for animation */
+    border-radius: 5px;
+    transition: var(--transition);
 }
 
-/* Hero Section */
 .hero {
     padding: 8rem 0 4rem;
     background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
@@ -348,7 +348,6 @@ footer {
     background-color: var(--gray-color);
 }
 
-/* FORM SPECIFIC STYLES */
 #portfolio-form {
     background-color: white;
     padding: 2rem;
@@ -427,7 +426,6 @@ footer {
     margin-top: 2rem;
 }
 
-/* Specific form elements */
 .nav-item,
 .project-item,
 .testimonial-item,
@@ -439,7 +437,6 @@ footer {
     margin-bottom: 1rem;
 }
 
-/* Pagination Button Styles */
 .pagination {
     display: flex;
     justify-content: center;
@@ -473,12 +470,7 @@ footer {
     color: var(--gray-color);
 }
 
-/* ========================================================= */
-/* Media Queries for Responsiveness (consolidated and refined) */
-/* ========================================================= */
-
 @media (max-width: 768px) {
-    /* General Mobile Layout Adjustments */
     .hero-content,
     .about-content {
         flex-direction: column;
@@ -499,20 +491,11 @@ footer {
         font-size: 2rem;
     }
 
-    /* Project Grid Adjustment */
     .projects-grid {
-        grid-template-columns: 1fr; /* Single column on mobile */
+        grid-template-columns: 1fr;
         gap: 1.5rem;
     }
 
-    /* Project card visibility (controlled by JS pagination, remove old static rule) */
-    /* Remove this if you want all project cards to initially show on mobile without JS pagination
-       .project-card:nth-child(-n+4) {
-           display: block;
-       }
-    */
-
-    /* Form specific responsive adjustments */
     .form-row {
         flex-direction: column;
         gap: 1rem;
@@ -535,168 +518,59 @@ footer {
         width: 100%;
     }
 
-    /* ========================================= */
-    /* Hamburger Menu & Mobile Nav Specifics */
-    /* ========================================= */
-
-    /* Show the hamburger icon on mobile */
     .hamburger {
-        display: flex; /* Changed from 'block' to 'flex' for vertical alignment of spans */
-        align-items: center; /* Vertically center the spans within the button */
+        display: flex;
+        align-items: center;
     }
 
-    /* Hide desktop navigation on mobile */
     #main-nav {
         position: fixed;
         top: 0;
-        /* Start off-screen to the right, full height, width for the menu */
-        right: -100%; /* Or transform: translateX(100%); if you prefer */
-        width: 70%; /* Adjust width of the slide-out menu as desired */
-        max-width: 300px; /* Optional: cap max width for very large phones */
+        right: -100%;
+        width: 70%;
+        max-width: 300px;
         height: 100vh;
         background: white;
         box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
-        transition: right 0.4s ease-in-out; /* Transition 'right' property */
-        padding-top: 80px; /* To clear space for the fixed header */
-        z-index: 999; /* Below hamburger, but above content */
-        overflow-y: auto; /* Enable scrolling if menu content is too long */
+        transition: right 0.4s ease-in-out;
+        padding-top: 80px;
+        z-index: 999;
+        overflow-y: auto;
     }
 
-    /* When .active class is added by JS, slide the nav into view */
     #main-nav.active {
-        right: 0; /* Slide in */
+        right: 0;
     }
 
-    /* Stack navigation items vertically in the mobile menu */
     #main-nav ul {
         flex-direction: column;
         padding: 20px;
-        align-items: center; /* Center menu items */
-        gap: 1.5rem; /* Space between links */
+        align-items: center;
+        gap: 1.5rem;
     }
 
     #main-nav ul li {
-        margin: 0; /* Remove desktop margin */
-        width: 100%; /* Make list items take full width */
+        margin: 0;
+        width: 100%;
         text-align: center;
     }
 
     #main-nav ul li a {
-        font-size: 1.2rem; /* Make links larger for touch */
-        padding: 10px 0; /* Add some padding for touch target */
-        display: block; /* Make the whole link area clickable */
+        font-size: 1.2rem;
+        padding: 10px 0;
+        display: block;
     }
 
-    /* Hamburger icon animation to X */
     .hamburger.active span:nth-child(1) {
-        transform: rotate(45deg) translate(8px, 8px); /* Adjusted for better look */
+        transform: rotate(45deg) translate(8px, 8px);
     }
     .hamburger.active span:nth-child(2) {
         opacity: 0;
     }
     .hamburger.active span:nth-child(3) {
-        transform: rotate(-45deg) translate(8px, -8px); /* Adjusted for better look */
+        transform: rotate(-45deg) translate(8px, -8px);
     }
-}
-/* Add this to your style.css, preferably near the top with other body/global styles */
-body.no-scroll {
-    overflow: hidden;
-}
-/* Add this to your style.css */
-html {
-    scroll-behavior: smooth;
-}
 
-/* --- Contact Section Styles --- */
-.contact-section {
-    padding: 60px 0;
-    background-color: var(--color-background-alt); /* Light background for contrast */
-    text-align: center;
-}
-
-.contact-section h2 {
-    font-size: 2.5em;
-    margin-bottom: 20px;
-    color: var(--color-heading);
-}
-
-.contact-section p {
-    font-size: 1.1em;
-    margin-bottom: 40px;
-    color: var(--color-text);
-}
-
-#contact-form {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 30px;
-    background-color: var(--color-card-background); /* Card background for the form itself */
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow-small);
-    display: flex;
-    flex-direction: column;
-    gap: 15px; /* Space between form fields */
-}
-
-/* Ensure input and textarea backgrounds and text colors are clearly visible */
-#contact-form input[type="text"],
-#contact-form input[type="email"],
-#contact-form textarea {
-    width: 100%;
-    padding: 12px 15px;
-    border: 1px solid grey; /* Clear border */
-    border-radius: var(--border-radius);
-    font-size: 1em;
-    font-family: 'Poppins', sans-serif; /* Match overall font */
-
-    /* Crucial: Ensure text and background are contrasting */
-    color: var(--color-text); /* Text color inside input */
-    background-color: var(--light-color); /* Input field background */
-    box-shadow: var(--box-shadow);
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-#contact-form input[type="text"]:focus,
-#contact-form input[type="email"]:focus,
-#contact-form textarea:focus {
-    border-color: var(--color-primary); /* Highlight border on focus */
-    box-shadow: 0 0 0 2px rgba(var(--color-primary-rgb), 0.2); /* Subtle glow on focus */
-    outline: none; /* Remove default browser outline */
-}
-
-#contact-form textarea {
-    resize: vertical; /* Allow vertical resizing */
-    min-height: 120px;
-    
-}
-
-/* Submit button within the form */
-#contact-form .btn {
-    align-self: flex-start; /* Align button to the left */
-    /* Inherits general .btn styles, but specific overrides can go here */
-    background-color: var(--primary-color); /* Explicitly set for form submit */
-    color: white; /* Explicitly set for form submit */
-    border: none; /* Remove border if primary .btn has one, or keep it */
-}
-
-#contact-form .btn:hover {
-    background-color: var(--color-primary-dark);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.success-message {
-    color: var(--color-success); /* Green for success */
-    font-weight: bold;
-    margin-top: 15px;
-    text-align: center;
-    padding: 10px;
-    background-color: rgba(var(--color-success-rgb), 0.1); /* Light green background */
-    border-radius: var(--border-radius);
-}
-
-/* Responsive adjustments for smaller screens */
-@media (max-width: 768px) {
     .contact-section h2 {
         font-size: 2em;
     }
@@ -711,7 +585,99 @@ html {
     }
 
     #contact-form .btn {
-        width: 100%; /* Full width button on small screens */
+        width: 100%;
         align-self: center;
     }
+}
+
+body.no-scroll {
+    overflow: hidden;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+.contact-section {
+    padding: 60px 0;
+    background-color: var(--light-color);
+    text-align: center;
+}
+
+.contact-section h2 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    color: var(--dark-color);
+}
+
+.contact-section p {
+    font-size: 1.1em;
+    margin-bottom: 40px;
+    color: var(--gray-color);
+}
+
+#contact-form {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: var(--box-shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+#contact-form input[type="text"],
+#contact-form input[type="email"],
+#contact-form textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid grey;
+    border-radius: 5px;
+    font-size: 1em;
+    font-family: var(--font-main);
+    color: var(--dark-color);
+    background-color: var(--light-color);
+    box-shadow: var(--box-shadow);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#contact-form input[type="text"]:focus,
+#contact-form input[type="email"]:focus,
+#contact-form textarea:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.2);
+    outline: none;
+}
+
+#contact-form textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+#contact-form .btn {
+    align-self: flex-start;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+}
+
+#contact-form .btn:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.success-message {
+    color: var(--success-color);
+    font-weight: bold;
+    margin-top: 15px;
+    text-align: center;
+    padding: 10px;
+    background-color: rgba(75, 181, 67, 0.1);
+    border-radius: 5px;
+}
+.hidden {
+    display: none !important;
 }

@@ -1,28 +1,56 @@
 document.addEventListener('DOMContentLoaded', function() {
     // 1. UTILITY FUNCTIONS
-    // Safe element selector with null check
     function getElementSafe(id) {
         const el = document.getElementById(id);
-        if (!el) console.warn(`Element #${id} not found`);
+        if (!el) console.warn(`Element #${id} not found in DOM`);
         return el;
     }
 
-    // Set content safely
     function setContent(id, content) {
         const el = getElementSafe(id);
         if (el) el.textContent = content || '';
     }
 
-    // Check online status
     function isOnline() {
-        return navigator.onLine;
+        const online = navigator.onLine;
+        console.log(`Connectivity status: ${online ? 'Online' : 'Offline'}`);
+        return online;
     }
 
     // 2. CONNECTIVITY HANDLING
     function updateUIForConnectivity() {
-        const loadSection = getElementSafe('load-section');
-        if (loadSection) {
-            loadSection.style.display = isOnline() ? 'none' : 'block';
+        console.log('Running updateUIForConnectivity');
+        const loadJsonBtn = getElementSafe('load-json');
+        const editBtn = getElementSafe('edit-portfolio');
+        
+        if (loadJsonBtn) {
+            loadJsonBtn.classList.toggle('hidden', isOnline());
+            if (!isOnline()) {
+                // Fallback to ensure visibility
+                loadJsonBtn.style.display = 'block';
+                loadJsonBtn.style.visibility = 'visible';
+                loadJsonBtn.style.opacity = '1';
+            }
+            const computedStyle = window.getComputedStyle(loadJsonBtn);
+            console.log(`Load JSON button - display: ${computedStyle.display}, visibility: ${computedStyle.visibility}, opacity: ${computedStyle.opacity}, has .hidden: ${loadJsonBtn.classList.contains('hidden')}`);
+        }
+        
+        if (editBtn) {
+            editBtn.classList.toggle('hidden', isOnline());
+            if (!isOnline()) {
+                // Fallback to ensure visibility
+                editBtn.style.display = 'block';
+                editBtn.style.visibility = 'visible';
+                editBtn.style.opacity = '1';
+            }
+            const computedStyle = window.getComputedStyle(editBtn);
+            console.log(`Edit portfolio button - display: ${computedStyle.display}, visibility: ${computedStyle.visibility}, opacity: ${computedStyle.opacity}, has .hidden: ${editBtn.classList.contains('hidden')}`);
+        }
+
+        const footer = document.querySelector('footer');
+        if (footer) {
+            const footerStyle = window.getComputedStyle(footer);
+            console.log(`Footer - display: ${footerStyle.display}, visibility: ${footerStyle.visibility}, opacity: ${footerStyle.opacity}`);
         }
     }
 
@@ -46,13 +74,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         hamburger.addEventListener('click', toggleMenu);
-        
-        // Close menu when clicking on links
         nav.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', closeMenu);
         });
-
-        // Close menu when clicking outside
         document.addEventListener('click', (e) => {
             if (!nav.contains(e.target) && !hamburger.contains(e.target)) {
                 closeMenu();
@@ -63,32 +87,27 @@ document.addEventListener('DOMContentLoaded', function() {
     // 4. DATA LOADING
     async function loadPortfolioData() {
         showLoadingState(true);
+        // Clear localStorage to prevent stale data
+        localStorage.removeItem('portfolioData');
+        console.log('localStorage cleared for portfolioData');
 
         try {
-            // Try network first if online
             if (isOnline()) {
                 try {
-                    const response = await fetch('data.json');
+                    // Cache-busting query parameter
+                    const response = await fetch('data.json?t=' + new Date().getTime());
                     if (!response.ok) throw new Error('Network response not ok');
                     const data = await response.json();
                     handleDataSuccess(data);
-                    return;
                 } catch (networkError) {
-                    console.warn("Network load failed, trying cache...", networkError);
+                    console.warn('Network load failed:', networkError);
+                    handleDataError(networkError);
                 }
+            } else {
+                // Offline: start with empty state
+                clearPortfolioDisplay();
+                setContent('work-title', 'Offline: Please use the "Load JSON File" button to load your portfolio data.');
             }
-
-            // Fallback to localStorage
-            const savedData = localStorage.getItem('portfolioData');
-            if (savedData) {
-                handleDataSuccess(JSON.parse(savedData));
-                return;
-            }
-
-            // Final fallback to direct file load
-            const fallbackResponse = await fetch('data.json');
-            const fallbackData = await fallbackResponse.json();
-            handleDataSuccess(fallbackData);
         } catch (error) {
             handleDataError(error);
         } finally {
@@ -100,13 +119,13 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!data) throw new Error('No data received');
         populatePortfolio(data);
         localStorage.setItem('portfolioData', JSON.stringify(data));
+        console.log('Portfolio data saved to localStorage');
     }
 
     function handleDataError(error) {
-        console.error("Data loading failed:", error);
+        console.error('Data loading failed:', error);
         clearPortfolioDisplay();
-        setContent('work-title', 'Failed to load projects. ' + 
-            (isOnline() ? 'Try refreshing.' : 'Connect to the internet or load a file.'));
+        setContent('work-title', isOnline() ? 'Failed to load projects. Try refreshing.' : 'Offline: Please use the "Load JSON File" button to load your portfolio data.');
     }
 
     function showLoadingState(loading) {
@@ -116,27 +135,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 5. PORTFOLIO DISPLAY
     function clearPortfolioDisplay() {
-        // Set default/empty states for all sections
         setContent('hero-title', 'My Portfolio');
         setContent('hero-subtitle', 'Content will appear here once loaded');
         setContent('work-title', 'My Work');
-        
         const projectsGrid = getElementSafe('projects-grid');
         if (projectsGrid) projectsGrid.innerHTML = '<p class="empty-state">No projects loaded</p>';
-        
-        // Clear pagination
         const pagination = document.querySelector('.pagination');
         if (pagination) pagination.innerHTML = '';
     }
 
     function populatePortfolio(data) {
         if (!data) return;
-
-        // Basic Info
         document.title = data.basicInfo?.title || 'Portfolio';
         setContent('logo', data.basicInfo?.logo);
-
-        // Navigation
         const navElement = getElementSafe('main-nav');
         if (navElement) {
             navElement.innerHTML = '';
@@ -151,8 +162,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             navElement.appendChild(navList);
         }
-
-        // Hero Section
         if (data.hero) {
             setContent('hero-title', data.hero.title);
             setContent('hero-subtitle', data.hero.subtitle);
@@ -163,14 +172,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 profileImg.alt = data.hero.title || '';
             }
         }
-
-        // Work Section
         if (data.work?.projects) {
             setContent('work-title', data.work.title);
             displayProjects(data.work.projects);
         }
-
-        // About Section
         if (data.about) {
             setContent('about-title', data.about.title);
             setContent('about-content', data.about.content);
@@ -179,7 +184,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 aboutImg.src = `assets/${data.about.image}`;
                 aboutImg.alt = data.about.title || '';
             }
-
             const skillsList = getElementSafe('skills-list');
             if (skillsList) {
                 skillsList.innerHTML = '';
@@ -191,8 +195,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             }
         }
-
-        // Testimonials
         if (data.testimonials) {
             setContent('testimonials-title', data.testimonials.title);
             const testimonialsGrid = getElementSafe('testimonials-grid');
@@ -217,14 +219,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             }
         }
-
-        // Footer
         if (data.footer) {
             const footerContent = getElementSafe('footer-content');
             if (footerContent) footerContent.innerHTML = data.footer.content || '';
-            
             setContent('copyright', data.footer.copyright);
-
             const socialLinks = getElementSafe('social-links');
             if (socialLinks) {
                 socialLinks.innerHTML = '';
@@ -251,12 +249,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const grid = getElementSafe('projects-grid');
         if (!grid) return;
         grid.innerHTML = '';
-        
         projects.forEach((project, index) => {
             const card = document.createElement('div');
             card.className = 'project-card';
-            
-            // Make clickable if link/file exists
             if (project.link || project.file) {
                 card.style.cursor = 'pointer';
                 card.addEventListener('click', () => {
@@ -264,7 +259,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     window.open(target, '_blank');
                 });
             }
-            
             card.innerHTML = `
                 <img src="assets/${project.image || 'project-default.jpg'}"
                      alt="${project.title || 'Project'}"
@@ -275,7 +269,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="project-tags"></div>
                 </div>
             `;
-            
             const tagsContainer = card.querySelector('.project-tags');
             if (tagsContainer && project.tags) {
                 project.tags.forEach(tag => {
@@ -285,10 +278,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     tagsContainer.appendChild(tagElement);
                 });
             }
-            
             grid.appendChild(card);
         });
-        
         updateVisibleProjects();
     }
 
@@ -296,18 +287,15 @@ document.addEventListener('DOMContentLoaded', function() {
         const cards = document.querySelectorAll('.project-card');
         const startIdx = (currentPage - 1) * projectsPerPage;
         const endIdx = startIdx + projectsPerPage;
-        
         cards.forEach((card, index) => {
             card.style.display = (index >= startIdx && index < endIdx) ? 'block' : 'none';
         });
-        
         updatePaginationControls(cards.length);
     }
 
     function updatePaginationControls(totalProjects) {
         const workSection = getElementSafe('work');
         if (!workSection) return;
-        
         let pagination = workSection.querySelector('.pagination');
         if (!pagination) {
             pagination = document.createElement('div');
@@ -315,10 +303,7 @@ document.addEventListener('DOMContentLoaded', function() {
             workSection.appendChild(pagination);
         }
         pagination.innerHTML = '';
-        
         const totalPages = Math.ceil(totalProjects / projectsPerPage);
-        
-        // Previous Button
         if (currentPage > 1) {
             const prevBtn = createPaginationButton('« Previous', () => {
                 currentPage--;
@@ -327,19 +312,15 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             pagination.appendChild(prevBtn);
         }
-        
-        // Page Numbers
         const maxVisible = 5;
         let startPage = Math.max(1, currentPage - Math.floor(maxVisible/2));
         let endPage = Math.min(totalPages, startPage + maxVisible - 1);
-        
         if (startPage > 1) {
             pagination.appendChild(createPaginationButton(1, () => {
                 currentPage = 1;
                 updateVisibleProjects();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }));
-            
             if (startPage > 2) {
                 const ellipsis = document.createElement('span');
                 ellipsis.className = 'pagination-ellipsis';
@@ -347,7 +328,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 pagination.appendChild(ellipsis);
             }
         }
-        
         for (let i = startPage; i <= endPage; i++) {
             const btn = createPaginationButton(i, () => {
                 currentPage = i;
@@ -357,7 +337,6 @@ document.addEventListener('DOMContentLoaded', function() {
             if (i === currentPage) btn.classList.add('active');
             pagination.appendChild(btn);
         }
-        
         if (endPage < totalPages) {
             if (endPage < totalPages - 1) {
                 const ellipsis = document.createElement('span');
@@ -365,15 +344,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 ellipsis.textContent = '...';
                 pagination.appendChild(ellipsis);
             }
-            
             pagination.appendChild(createPaginationButton(totalPages, () => {
                 currentPage = totalPages;
                 updateVisibleProjects();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }));
         }
-        
-        // Next Button
         if (currentPage < totalPages) {
             const nextBtn = createPaginationButton('Next »', () => {
                 currentPage++;
@@ -392,38 +368,84 @@ document.addEventListener('DOMContentLoaded', function() {
         return btn;
     }
 
-    // 7. FILE LOADING (for offline use)
+    // 7. FILE LOADING
     function setupFileLoading() {
         const loadJsonBtn = getElementSafe('load-json');
         const jsonUpload = getElementSafe('json-upload');
-        
-        if (!loadJsonBtn || !jsonUpload) return;
-        
-        loadJsonBtn.addEventListener('click', () => jsonUpload.click());
-        
+        if (!loadJsonBtn || !jsonUpload) {
+            console.error('Load JSON button or input not found in DOM');
+            return;
+        }
+        loadJsonBtn.classList.toggle('hidden', isOnline());
+        if (!isOnline()) {
+            loadJsonBtn.style.display = 'block';
+            loadJsonBtn.style.visibility = 'visible';
+            loadJsonBtn.style.opacity = '1';
+        }
+        const computedStyle = window.getComputedStyle(loadJsonBtn);
+        console.log(`Initial load JSON button - display: ${computedStyle.display}, visibility: ${computedStyle.visibility}, opacity: ${computedStyle.opacity}, has .hidden: ${loadJsonBtn.classList.contains('hidden')}`);
+        loadJsonBtn.addEventListener('click', () => {
+            console.log('Load JSON button clicked');
+            jsonUpload.click();
+        }, { once: false });
         jsonUpload.addEventListener('change', function(e) {
+            console.log('File input changed');
             const file = e.target.files[0];
-            if (!file) return;
-            
+            if (!file) {
+                console.warn('No file selected');
+                return;
+            }
             const reader = new FileReader();
             reader.onload = function(e) {
                 try {
                     const data = JSON.parse(e.target.result);
-                    if (!data.work?.projects) throw new Error("Invalid portfolio data");
+                    if (!data.work?.projects) throw new Error('Invalid portfolio data');
                     populatePortfolio(data);
-                    localStorage.setItem('portfolioData', e.target.result);
+                    localStorage.setItem('portfolioData', JSON.stringify(data));
+                    console.log('Portfolio data loaded successfully');
+                    alert('JSON loaded successfully!');
                 } catch (error) {
                     alert(`Error loading file: ${error.message}`);
-                    console.error("File parsing error:", error);
+                    console.error('File parsing error:', error);
                 }
             };
+            reader.onerror = function(e) {
+                console.error('File reading error:', e);
+                alert('Error reading file. Please try another file.');
+            };
             reader.readAsText(file);
-        });
+        }, { once: false });
     }
 
-    // 8. INITIALIZATION
+    // 8. EDIT PORTFOLIO
+    function setupEditPortfolio() {
+        const editBtn = getElementSafe('edit-portfolio');
+        if (!editBtn) {
+            console.error('Edit portfolio button not found in DOM');
+            return;
+        }
+        editBtn.classList.toggle('hidden', isOnline());
+        if (!isOnline()) {
+            editBtn.style.display = 'block';
+            editBtn.style.visibility = 'visible';
+            editBtn.style.opacity = '1';
+        }
+        const computedStyle = window.getComputedStyle(editBtn);
+        console.log(`Initial edit portfolio button - display: ${computedStyle.display}, visibility: ${computedStyle.visibility}, opacity: ${computedStyle.opacity}, has .hidden: ${editBtn.classList.contains('hidden')}`);
+        editBtn.addEventListener('click', () => {
+            console.log('Edit portfolio button clicked');
+            try {
+                window.location.href = 'form.html';
+            } catch (error) {
+                console.error('Navigation to form.html failed:', error);
+                alert('Error navigating to edit page. Please ensure form.html exists.');
+            }
+        }, { once: false });
+    }
+
+    // 9. INITIALIZATION
     function init() {
-        // Setup responsive behavior
+        console.log('Initializing portfolio');
         window.addEventListener('resize', () => {
             const newProjectsPerPage = getProjectsPerPage();
             if (newProjectsPerPage !== projectsPerPage) {
@@ -432,30 +454,27 @@ document.addEventListener('DOMContentLoaded', function() {
                 updateVisibleProjects();
             }
         });
-
-        // Setup connectivity monitoring
-        window.addEventListener('online', updateUIForConnectivity);
-        window.addEventListener('offline', updateUIForConnectivity);
-        updateUIForConnectivity();
-
-        // Setup mobile menu
+        window.addEventListener('online', () => {
+            console.log('Online event triggered');
+            updateUIForConnectivity();
+        });
+        window.addEventListener('offline', () => {
+            console.log('Offline event triggered');
+            updateUIForConnectivity();
+        });
         setupMobileMenu();
-
-        // Setup file loading for offline use
         setupFileLoading();
-
-        // Edit Portfolio button
-        const editBtn = getElementSafe('edit-portfolio');
-        if (editBtn) {
-            editBtn.addEventListener('click', () => {
-                window.location.href = 'form.html';
-            });
-        }
-
-        // Initial data load
+        setupEditPortfolio();
         loadPortfolioData();
+        setTimeout(() => {
+            console.log('Delayed UI update');
+            updateUIForConnectivity();
+        }, 100);
     }
 
-    // Start everything
-    init();
+    try {
+        init();
+    } catch (error) {
+        console.error('Initialization failed:', error);
+    }
 });
