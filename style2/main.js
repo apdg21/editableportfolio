@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // 1. UTILITY FUNCTIONS
     // Safe element selector with null check
     function getElementSafe(id) {
         const el = document.getElementById(id);
@@ -6,161 +7,139 @@ document.addEventListener('DOMContentLoaded', function() {
         return el;
     }
 
-    const hamburger = document.querySelector('.hamburger');
-    const nav = getElementSafe('main-nav');
-
-    // Function to close the mobile menu
-    function closeMobileMenu() {
-        if (hamburger) hamburger.classList.remove('active');
-        if (nav) nav.classList.remove('active');
-        document.body.classList.remove('no-scroll');
-    }
-
-    // Function to add event listeners to navigation links
-    function addNavEventListeners() {
-        if (nav) {
-            nav.querySelectorAll('a').forEach(link => {
-                link.removeEventListener('click', closeMobileMenu); // Prevent duplicate listeners
-                link.addEventListener('click', closeMobileMenu);
-            });
-        }
-    }
-
-    if (hamburger && nav) {
-        hamburger.addEventListener('click', () => {
-            hamburger.classList.toggle('active');
-            nav.classList.toggle('active');
-            document.body.classList.toggle('no-scroll', nav.classList.contains('active'));
-        });
-    }
-
-    // Function to clear all dynamic content and show a "no data" state
-    function clearPortfolioDisplay() {
-        // Clear main navigation
-        const navElement = getElementSafe('main-nav');
-        if (navElement) {
-            navElement.innerHTML = '<ul><li><a href="#hero">Home</a></li></ul>'; // Minimal default nav
-            addNavEventListeners(); // Re-attach listeners for default nav
-        }
-
-        // Clear hero section
-        setContent('hero-title', 'Welcome!');
-        setContent('hero-subtitle', 'Load your portfolio data to get started.');
-        setContent('hero-button-text', 'Learn More'); // Or leave empty
-        const profileImg = getElementSafe('profile-image');
-        if (profileImg) {
-            profileImg.src = 'assets/profile.jpg'; // Default placeholder image
-            profileImg.alt = 'Placeholder Image';
-        }
-
-        // Clear work section
-        setContent('work-title', 'No Projects Loaded');
-        const projectsGrid = getElementSafe('projects-grid');
-        if (projectsGrid) projectsGrid.innerHTML = '<p style="text-align: center; margin-top: 2rem;">Load your data.json file to see your amazing projects!</p>';
-        const pagination = document.querySelector('.pagination');
-        if (pagination) pagination.innerHTML = ''; // Clear pagination buttons
-
-        // Clear about section
-        setContent('about-title', 'About Me');
-        setContent('about-content', 'Information about yourself will appear here once you load your portfolio data.');
-        const aboutImg = getElementSafe('about-image');
-        if (aboutImg) {
-            aboutImg.src = 'assets/about.jpg'; // Default placeholder image
-            aboutImg.alt = 'About Placeholder';
-        }
-        const skillsList = getElementSafe('skills-list');
-        if (skillsList) skillsList.innerHTML = '<p>No skills loaded.</p>';
-
-        // Clear testimonials
-        setContent('testimonials-title', 'Testimonials');
-        const testimonialsGrid = getElementSafe('testimonials-grid');
-        if (testimonialsGrid) testimonialsGrid.innerHTML = '<p style="text-align: center; margin-top: 2rem;">Testimonials will be displayed here.</p>';
-
-        // Clear footer
-        const footerContent = getElementSafe('footer-content');
-        if (footerContent) footerContent.innerHTML = 'Your custom footer content will appear here.';
-        setContent('copyright', '© 2025 Your Portfolio. All rights reserved.');
-        const socialLinks = getElementSafe('social-links');
-        if (socialLinks) socialLinks.innerHTML = '<p>Social links will appear here.</p>';
-        
-        // Reset any other dynamic content areas that might be populated
-        document.title = 'My Portfolio'; // Reset default title
-    }
-
-    // This function will now be explicitly called
-    function loadAndPopulatePortfolio(data) {
-        populatePortfolio(data); // Populate the display with the loaded data
-        addNavEventListeners(); // Ensure nav links are clickable AFTER population
-    }
-
-    // Load JSON button functionality
-    const loadJsonBtn = getElementSafe('load-json');
-    // CORRECTED TYPO HERE: Was 'json-ejpload', now 'json-upload'
-    const jsonUpload = getElementSafe('json-upload'); 
-    
-    if (loadJsonBtn && jsonUpload) {
-        loadJsonBtn.addEventListener('click', function() {
-            jsonUpload.click();
-        });
-        
-        jsonUpload.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    try {
-                        const data = JSON.parse(e.target.result);
-                        if (!data.work?.projects) throw new Error("Missing projects data");
-                        loadAndPopulatePortfolio(data); // Use the new loader function
-                        localStorage.setItem('portfolioData', e.target.result); // Still save it
-                    } catch (error) {
-                        alert(`JSON Error: ${error.message}`);
-                        console.error("Parsing error:", error);
-                        clearPortfolioDisplay(); // Show clear state on error
-                    }
-                };
-                reader.readAsText(file);
-            }
-        });
-    }
-
-    // Current page and responsive settings
-    let currentPage = 1;
-    let projectsPerPage = getProjectsPerPage();
-    
-    function getProjectsPerPage() {
-        return window.innerWidth < 768 ? 4 : 6;
-    }
-
-    const resizeHandler = () => {
-        const newProjectsPerPage = getProjectsPerPage();
-        if (newProjectsPerPage !== projectsPerPage) {
-            projectsPerPage = newProjectsPerPage;
-            currentPage = 1;
-            updateVisibleProjects();
-        }
-    };
-    window.addEventListener('resize', resizeHandler);
-
-    // Helper function to safely set content (moved up for scope)
+    // Set content safely
     function setContent(id, content) {
         const el = getElementSafe(id);
         if (el) el.textContent = content || '';
     }
 
-    // The 'populatePortfolio' function remains largely the same, but it's now called by loadAndPopulatePortfolio
-    // and its handling of nav listeners is removed as it's now done in addNavEventListeners().
+    // Check online status
+    function isOnline() {
+        return navigator.onLine;
+    }
+
+    // 2. CONNECTIVITY HANDLING
+    function updateUIForConnectivity() {
+        const loadSection = getElementSafe('load-section');
+        if (loadSection) {
+            loadSection.style.display = isOnline() ? 'none' : 'block';
+        }
+    }
+
+    // 3. MOBILE MENU
+    const hamburger = document.querySelector('.hamburger');
+    const nav = getElementSafe('main-nav');
+
+    function setupMobileMenu() {
+        if (!hamburger || !nav) return;
+
+        function toggleMenu() {
+            hamburger.classList.toggle('active');
+            nav.classList.toggle('active');
+            document.body.classList.toggle('no-scroll', nav.classList.contains('active'));
+        }
+
+        function closeMenu() {
+            hamburger.classList.remove('active');
+            nav.classList.remove('active');
+            document.body.classList.remove('no-scroll');
+        }
+
+        hamburger.addEventListener('click', toggleMenu);
+        
+        // Close menu when clicking on links
+        nav.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', closeMenu);
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!nav.contains(e.target) && !hamburger.contains(e.target)) {
+                closeMenu();
+            }
+        });
+    }
+
+    // 4. DATA LOADING
+    async function loadPortfolioData() {
+        showLoadingState(true);
+
+        try {
+            // Try network first if online
+            if (isOnline()) {
+                try {
+                    const response = await fetch('data.json');
+                    if (!response.ok) throw new Error('Network response not ok');
+                    const data = await response.json();
+                    handleDataSuccess(data);
+                    return;
+                } catch (networkError) {
+                    console.warn("Network load failed, trying cache...", networkError);
+                }
+            }
+
+            // Fallback to localStorage
+            const savedData = localStorage.getItem('portfolioData');
+            if (savedData) {
+                handleDataSuccess(JSON.parse(savedData));
+                return;
+            }
+
+            // Final fallback to direct file load
+            const fallbackResponse = await fetch('data.json');
+            const fallbackData = await fallbackResponse.json();
+            handleDataSuccess(fallbackData);
+        } catch (error) {
+            handleDataError(error);
+        } finally {
+            showLoadingState(false);
+        }
+    }
+
+    function handleDataSuccess(data) {
+        if (!data) throw new Error('No data received');
+        populatePortfolio(data);
+        localStorage.setItem('portfolioData', JSON.stringify(data));
+    }
+
+    function handleDataError(error) {
+        console.error("Data loading failed:", error);
+        clearPortfolioDisplay();
+        setContent('work-title', 'Failed to load projects. ' + 
+            (isOnline() ? 'Try refreshing.' : 'Connect to the internet or load a file.'));
+    }
+
+    function showLoadingState(loading) {
+        const loader = getElementSafe('loader');
+        if (loader) loader.style.display = loading ? 'block' : 'none';
+    }
+
+    // 5. PORTFOLIO DISPLAY
+    function clearPortfolioDisplay() {
+        // Set default/empty states for all sections
+        setContent('hero-title', 'My Portfolio');
+        setContent('hero-subtitle', 'Content will appear here once loaded');
+        setContent('work-title', 'My Work');
+        
+        const projectsGrid = getElementSafe('projects-grid');
+        if (projectsGrid) projectsGrid.innerHTML = '<p class="empty-state">No projects loaded</p>';
+        
+        // Clear pagination
+        const pagination = document.querySelector('.pagination');
+        if (pagination) pagination.innerHTML = '';
+    }
+
     function populatePortfolio(data) {
         if (!data) return;
 
-        if (data.basicInfo) {
-            document.title = data.basicInfo.title || 'Portfolio';
-            setContent('logo', data.basicInfo.logo);
-        }
+        // Basic Info
+        document.title = data.basicInfo?.title || 'Portfolio';
+        setContent('logo', data.basicInfo?.logo);
 
+        // Navigation
         const navElement = getElementSafe('main-nav');
         if (navElement) {
-            navElement.innerHTML = ''; // Clear existing content
+            navElement.innerHTML = '';
             const navList = document.createElement('ul');
             data.navigation?.forEach(item => {
                 const li = document.createElement('li');
@@ -173,6 +152,7 @@ document.addEventListener('DOMContentLoaded', function() {
             navElement.appendChild(navList);
         }
 
+        // Hero Section
         if (data.hero) {
             setContent('hero-title', data.hero.title);
             setContent('hero-subtitle', data.hero.subtitle);
@@ -184,11 +164,13 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
+        // Work Section
         if (data.work?.projects) {
             setContent('work-title', data.work.title);
             displayProjects(data.work.projects);
         }
 
+        // About Section
         if (data.about) {
             setContent('about-title', data.about.title);
             setContent('about-content', data.about.content);
@@ -210,6 +192,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
+        // Testimonials
         if (data.testimonials) {
             setContent('testimonials-title', data.testimonials.title);
             const testimonialsGrid = getElementSafe('testimonials-grid');
@@ -221,8 +204,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     card.innerHTML = `
                         <p class="testimonial-text">"${testimonial.text || ''}"</p>
                         <div class="testimonial-author">
-                            <img src="assets/${testimonial.authorImage || 'profile.jpg'}"
-                                 alt="${testimonial.authorName || ''}"
+                            <img src="assets/${testimonial.authorImage || 'profile.jpg'}" 
+                                 alt="${testimonial.authorName || ''}" 
                                  class="author-image">
                             <div class="author-info">
                                 <h4>${testimonial.authorName || ''}</h4>
@@ -235,10 +218,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        if (data.contact) {
-            // Placeholder for contact form population if needed
-        }
-
+        // Footer
         if (data.footer) {
             const footerContent = getElementSafe('footer-content');
             if (footerContent) footerContent.innerHTML = data.footer.content || '';
@@ -259,7 +239,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // displayProjects, updateVisibleProjects, updatePaginationControls, createPaginationButton unchanged
+    // 6. PROJECTS DISPLAY & PAGINATION
+    let currentPage = 1;
+    let projectsPerPage = getProjectsPerPage();
+
+    function getProjectsPerPage() {
+        return window.innerWidth < 768 ? 4 : 6;
+    }
+
     function displayProjects(projects) {
         const grid = getElementSafe('projects-grid');
         if (!grid) return;
@@ -336,6 +323,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const prevBtn = createPaginationButton('« Previous', () => {
                 currentPage--;
                 updateVisibleProjects();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             });
             pagination.appendChild(prevBtn);
         }
@@ -345,14 +333,11 @@ document.addEventListener('DOMContentLoaded', function() {
         let startPage = Math.max(1, currentPage - Math.floor(maxVisible/2));
         let endPage = Math.min(totalPages, startPage + maxVisible - 1);
         
-        if (endPage - startPage + 1 < maxVisible) {
-            startPage = Math.max(1, endPage - maxVisible + 1);
-        }
-        
         if (startPage > 1) {
             pagination.appendChild(createPaginationButton(1, () => {
                 currentPage = 1;
                 updateVisibleProjects();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }));
             
             if (startPage > 2) {
@@ -367,6 +352,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const btn = createPaginationButton(i, () => {
                 currentPage = i;
                 updateVisibleProjects();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             });
             if (i === currentPage) btn.classList.add('active');
             pagination.appendChild(btn);
@@ -383,6 +369,7 @@ document.addEventListener('DOMContentLoaded', function() {
             pagination.appendChild(createPaginationButton(totalPages, () => {
                 currentPage = totalPages;
                 updateVisibleProjects();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }));
         }
         
@@ -391,6 +378,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const nextBtn = createPaginationButton('Next »', () => {
                 currentPage++;
                 updateVisibleProjects();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             });
             pagination.appendChild(nextBtn);
         }
@@ -400,24 +388,74 @@ document.addEventListener('DOMContentLoaded', function() {
         const btn = document.createElement('button');
         btn.className = 'pagination-btn';
         btn.textContent = text;
-        btn.addEventListener('click', () => {
-            onClick();
-            window.scrollTo({
-                top: document.getElementById('work')?.offsetTop || 0,
-                behavior: 'smooth'
-            });
-        });
+        btn.addEventListener('click', onClick);
         return btn;
     }
 
-    // Edit Portfolio Button
-    const editBtn = getElementSafe('edit-portfolio');
-    if (editBtn) {
-        editBtn.addEventListener('click', () => {
-            window.location.href = 'form.html';
+    // 7. FILE LOADING (for offline use)
+    function setupFileLoading() {
+        const loadJsonBtn = getElementSafe('load-json');
+        const jsonUpload = getElementSafe('json-upload');
+        
+        if (!loadJsonBtn || !jsonUpload) return;
+        
+        loadJsonBtn.addEventListener('click', () => jsonUpload.click());
+        
+        jsonUpload.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (!data.work?.projects) throw new Error("Invalid portfolio data");
+                    populatePortfolio(data);
+                    localStorage.setItem('portfolioData', e.target.result);
+                } catch (error) {
+                    alert(`Error loading file: ${error.message}`);
+                    console.error("File parsing error:", error);
+                }
+            };
+            reader.readAsText(file);
         });
     }
 
-    // Initialize: Start with a blank display
-    clearPortfolioDisplay(); 
+    // 8. INITIALIZATION
+    function init() {
+        // Setup responsive behavior
+        window.addEventListener('resize', () => {
+            const newProjectsPerPage = getProjectsPerPage();
+            if (newProjectsPerPage !== projectsPerPage) {
+                projectsPerPage = newProjectsPerPage;
+                currentPage = 1;
+                updateVisibleProjects();
+            }
+        });
+
+        // Setup connectivity monitoring
+        window.addEventListener('online', updateUIForConnectivity);
+        window.addEventListener('offline', updateUIForConnectivity);
+        updateUIForConnectivity();
+
+        // Setup mobile menu
+        setupMobileMenu();
+
+        // Setup file loading for offline use
+        setupFileLoading();
+
+        // Edit Portfolio button
+        const editBtn = getElementSafe('edit-portfolio');
+        if (editBtn) {
+            editBtn.addEventListener('click', () => {
+                window.location.href = 'form.html';
+            });
+        }
+
+        // Initial data load
+        loadPortfolioData();
+    }
+
+    // Start everything
+    init();
 });
