@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Edit Portfolio Content</h1>
+        
+        <button id="load-existing" class="btn">Load Existing JSON</button>
+        <input type="file" id="existing-json" accept=".json" style="display: none;">
+        
+        <form id="portfolio-form">
+            <h2>Basic Information</h2>
+            <div class="form-group">
+                <label for="title">Page Title:</label>
+                <input type="text" id="title" name="title" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="logo">Logo Text:</label>
+                <input type="text" id="logo" name="logo" required>
+            </div>
+            
+            <h2>Navigation</h2>
+            <div id="navigation-items">
+                <!-- Navigation items will be added here -->
+            </div>
+            <button type="button" id="add-nav-item" class="btn">Add Navigation Item</button>
+            
+            <h2>Hero Section</h2>
+            <div class="form-group">
+                <label for="hero-title">Title:</label>
+                <input type="text" id="hero-title" name="hero-title" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="hero-subtitle">Subtitle:</label>
+                <textarea id="hero-subtitle" name="hero-subtitle" required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="hero-button-text">Button Text:</label>
+                <input type="text" id="hero-button-text" name="hero-button-text" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="hero-image">Profile Image (filename in assets folder):</label>
+                <input type="text" id="hero-image" name="hero-image" required>
+            </div>
+            
+            <h2>Work Section</h2>
+            <div class="form-group">
+                <label for="work-title">Section Title:</label>
+                <input type="text" id="work-title" name="work-title" required>
+            </div>
+            
+            <div id="projects">
+                <!-- Projects will be added here -->
+            </div>
+            <button type="button" id="add-project" class="btn">Add Project</button>
+            
+            <h2>About Section</h2>
+            <div class="form-group">
+                <label for="about-title">Title:</label>
+                <input type="text" id="about-title" name="about-title" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="about-content">Content:</label>
+                <textarea id="about-content" name="about-content" required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="about-image">About Image (filename in assets folder):</label>
+                <input type="text" id="about-image" name="about-image" required>
+            </div>
+            
+            <div id="skills">
+                <!-- Skills will be added here -->
+            </div>
+            <button type="button" id="add-skill" class="btn">Add Skill</button>
+            
+            <h2>Testimonials</h2>
+            <div class="form-group">
+                <label for="testimonials-title">Section Title:</label>
+                <input type="text" id="testimonials-title" name="testimonials-title" required>
+            </div>
+            
+            <div id="testimonial-items">
+                <!-- Testimonials will be added here -->
+            </div>
+            <button type="button" id="add-testimonial" class="btn">Add Testimonial</button>
+            
+            <h2>Contact Form</h2>
+            <div class="form-group">
+                <label for="contact-title">Section Title:</label>
+                <input type="text" id="contact-title" name="contact-title" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="contact-description">Description:</label>
+                <textarea id="contact-description" name="contact-description" required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="contact-email">Recipient Email:</label>
+                <input type="email" id="contact-email" name="contact-email" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="contact-success">Success Message:</label>
+                <input type="text" id="contact-success" name="contact-success" required>
+            </div>
+            
+            <h2>Footer</h2>
+            <div class="form-group">
+                <label for="footer-content">Content:</label>
+                <textarea id="footer-content" name="footer-content" required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="copyright">Copyright Text:</label>
+                <input type="text" id="copyright" name="copyright" required>
+            </div>
+            
+            <div id="social-links-form">
+                <!-- Social links will be added here -->
+            </div>
+            <button type="button" id="add-social-link" class="btn">Add Social Link</button>
+            
+            <div class="form-actions">
+                <button type="submit" class="btn">Save Changes</button>
+                <button type="button" id="download-json" class="btn">Download JSON</button>
+                <button type="button" id="preview" class="btn">Preview Portfolio</button>
+            </div>
+        </form>
+    </div>
+    
+    <script src="form.js"></script>
+</body>
+</html>

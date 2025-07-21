@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Designer Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+    <div class="container">
+        <div id="logo"></div>
+        <button class="hamburger" aria-label="Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <nav id="main-nav"></nav>
+    </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1 id="hero-title"></h1>
+                    <p id="hero-subtitle"></p>
+                    <a href="#work" class="btn" id="hero-button-text"></a>
+                </div>
+                <div class="hero-image">
+                    <img id="profile-image" src="" alt="Profile Image">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="work" class="work">
+        <div class="container">
+            <h2 id="work-title"></h2>
+            <div id="projects-grid" class="projects-grid"></div>
+        </div>
+    </section>
+
+    <section id="about" class="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-image">
+                    <img id="about-image" src="" alt="About Image">
+                </div>
+                <div class="about-text">
+                    <h2 id="about-title"></h2>
+                    <p id="about-content"></p>
+                    <div id="skills-list" class="skills-list"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="testimonials" class="testimonials">
+        <div class="container">
+            <h2 id="testimonials-title"></h2>
+            <div id="testimonials-grid" class="testimonials-grid"></div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact-section">
+            <div class="container">
+                <h2>Contact Me</h2>
+                <p>Feel free to reach out!</p>
+                <form id="contact-form" action="https://formsubmit.co/reload.adolf2023@gmail.com" method="POST">
+                    <input type="hidden" name="_subject" value="New Portfolio Message!">
+                    <input type="hidden" name="_captcha" value="false">
+                    <input type="hidden" name="recipient-email" id="recipient-email" value="your@email.com">
+                    <input type="text" name="name" placeholder="Your Name" required>
+                    <input type="email" name="email" placeholder="Your Email" required>
+                    <textarea name="message" placeholder="Your Message" required></textarea>
+                    <button type="submit" class="btn">Send Message</button>
+                    <p id="form-success" class="success-message" style="display:none;"></p>
+                </form>
+            </div>
+        </section>
+
+    <footer>
+        <div class="container">
+            <div id="footer-content" class="footer-content"></div>
+            <div id="social-links" class="social-links"></div>
+            <p id="copyright"></p>
+            <button id="edit-portfolio" class="btn edit-btn">Edit Portfolio</button>
+            <button id="load-json" class="btn load-btn">Load JSON File</button>
+            <input type="file" id="json-upload" accept=".json" style="display: none;">
+        </div>
+    </footer>
+    <!-- Your existing HTML remains the same, just add this script below or in a separate .js file -->
+<script>
+document.getElementById('contact-form').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent default form submission
+
+    const form = this;
+    const successMessage = document.getElementById('form-success');
+    
+    // Use Fetch API to submit the form
+    fetch(form.action, {
+        method: form.method,
+        body: new FormData(form),
+        headers: {
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw new Error('Form submission failed');
+        }
+    })
+    .then(data => {
+        // Show success message
+        successMessage.style.display = 'block';
+        successMessage.textContent = 'Message sent successfully!';
+        successMessage.style.color = 'green';
+        form.reset(); // Clear the form
+    })
+    .catch(error => {
+        // Show error message
+        successMessage.style.display = 'block';
+        successMessage.textContent = 'Error sending message. Please try again.';
+        successMessage.style.color = 'red';
+        console.error('Error:', error);
+    });
+});
+</script>
+    <script src="main.js"></script>
+</body>
+</html>

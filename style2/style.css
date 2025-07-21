@@ -1,0 +1,717 @@
+:root {
+    --primary-color: #4361ee;
+    --secondary-color: #3f37c9;
+    --accent-color: #4895ef;
+    --light-color: #f8f9fa;
+    --dark-color: #212529;
+    --gray-color: #6c757d;
+    --success-color: #4bb543;
+    --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-main);
+    line-height: 1.6;
+    color: var(--dark-color);
+    background-color: var(--light-color);
+}
+
+/* Added for no scroll on mobile menu open */
+body.no-scroll {
+    overflow: hidden;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+header {
+    background-color: white;
+    box-shadow: var(--box-shadow);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    padding: 1rem 0;
+}
+
+header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+/* Default Navigation (Desktop) */
+#main-nav ul {
+    display: flex;
+    list-style: none;
+    margin: 0; /* Ensure no default margin from browser */
+    padding: 0; /* Ensure no default padding from browser */
+}
+
+#main-nav ul li {
+    margin-left: 2rem;
+}
+
+#main-nav ul li a {
+    text-decoration: none;
+    color: var(--dark-color);
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+#main-nav ul li a:hover {
+    color: var(--primary-color);
+}
+
+/* Hamburger Menu Icon Base Styles (Hidden by default on desktop) */
+.hamburger {
+    display: none; /* Hidden by default on desktop */
+    flex-direction: column; /* To stack the spans */
+    justify-content: space-around; /* Distribute spans evenly */
+    width: 30px; /* Adjust as needed */
+    height: 25px; /* Adjust as needed */
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0; /* Reset padding from your old .hamburger rule */
+    z-index: 1001; /* Ensure it's above the nav when open */
+}
+
+.hamburger span {
+    display: block;
+    width: 100%; /* Fill the width of the hamburger button */
+    height: 3px;
+    background: var(--dark-color);
+    border-radius: 5px; /* Slightly rounded ends */
+    transition: var(--transition); /* Smooth transition for animation */
+}
+
+/* Hero Section */
+.hero {
+    padding: 8rem 0 4rem;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.hero-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+}
+
+.hero-text {
+    flex: 1;
+}
+
+.hero-image {
+    flex: 1;
+    text-align: center;
+}
+
+.hero-image img {
+    max-width: 100%;
+    border-radius: 10px;
+    box-shadow: var(--box-shadow);
+}
+
+h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: var(--dark-color);
+}
+
+h2 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    color: var(--dark-color);
+}
+
+.btn {
+    display: inline-block;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: var(--transition);
+    cursor: pointer;
+    margin-top: 1rem;
+}
+
+.btn:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.work {
+    padding: 4rem 0;
+    background-color: white;
+}
+
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.project-card {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--box-shadow);
+    transition: var(--transition);
+}
+
+.project-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.project-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.project-info {
+    padding: 1.5rem;
+}
+
+.project-info h3 {
+    margin-bottom: 0.5rem;
+    color: var(--dark-color);
+}
+
+.project-info p {
+    color: var(--gray-color);
+    margin-bottom: 1rem;
+}
+
+.project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.tag {
+    background-color: var(--light-color);
+    color: var(--dark-color);
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.about {
+    padding: 4rem 0;
+    background-color: var(--light-color);
+}
+
+.about-content {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+}
+
+.about-image {
+    flex: 1;
+    text-align: center;
+}
+
+.about-image img {
+    max-width: 100%;
+    border-radius: 10px;
+    box-shadow: var(--box-shadow);
+}
+
+.about-text {
+    flex: 1;
+}
+
+.skills-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.skill-item {
+    background-color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    box-shadow: var(--box-shadow);
+    font-weight: 500;
+}
+
+.testimonials {
+    padding: 4rem 0;
+    background-color: white;
+}
+
+.testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.testimonial-card {
+    background-color: var(--light-color);
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: var(--box-shadow);
+}
+
+.testimonial-text {
+    font-style: italic;
+    margin-bottom: 1.5rem;
+}
+
+.testimonial-author {
+    display: flex;
+    align-items: center;
+}
+
+.author-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 1rem;
+}
+
+.author-info h4 {
+    margin-bottom: 0.2rem;
+}
+
+.author-info p {
+    color: var(--gray-color);
+    font-size: 0.9rem;
+}
+
+footer {
+    padding: 3rem 0;
+    background-color: var(--dark-color);
+    color: white;
+    text-align: center;
+}
+
+.footer-content {
+    margin-bottom: 2rem;
+}
+
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.social-links a {
+    color: white;
+    font-size: 1.5rem;
+    transition: var(--transition);
+}
+
+.social-links a:hover {
+    color: var(--accent-color);
+}
+
+.edit-btn {
+    background-color: var(--success-color);
+    margin-right: 1rem;
+}
+
+.load-btn {
+    background-color: var(--gray-color);
+}
+
+/* FORM SPECIFIC STYLES */
+#portfolio-form {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: var(--box-shadow);
+    margin: 2rem 0;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--dark-color);
+}
+
+.form-group input[type="text"],
+.form-group input[type="url"],
+.form-group input[type="email"],
+.form-group input[type="tel"],
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-family: var(--font-main);
+    font-size: 1rem;
+    transition: var(--transition);
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="url"]:focus,
+.form-group input[type="email"]:focus,
+.form-group input[type="tel"]:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+}
+
+.form-group textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.form-row {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-end;
+    margin-bottom: 1rem;
+}
+
+.form-row > div {
+    flex: 1;
+}
+
+.form-row .remove-btn {
+    background-color: #dc3545;
+    margin-left: auto;
+    flex: 0 0 auto;
+}
+
+.form-row .remove-btn:hover {
+    background-color: #c82333;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+/* Specific form elements */
+.nav-item,
+.project-item,
+.testimonial-item,
+.social-link-item,
+.skill-item {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+}
+
+/* Pagination Button Styles */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+
+.pagination-btn {
+    padding: 8px 15px;
+    border: 1px solid var(--primary-color);
+    background: white;
+    color: var(--primary-color);
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.pagination-btn:hover:not(.active) {
+    background: var(--light-color);
+}
+
+.pagination-btn.active {
+    background: var(--primary-color);
+    color: white;
+}
+
+.pagination-ellipsis {
+    padding: 8px 5px;
+    color: var(--gray-color);
+}
+
+/* ========================================================= */
+/* Media Queries for Responsiveness (consolidated and refined) */
+/* ========================================================= */
+
+@media (max-width: 768px) {
+    /* General Mobile Layout Adjustments */
+    .hero-content,
+    .about-content {
+        flex-direction: column;
+    }
+
+    .hero-text,
+    .hero-image,
+    .about-text,
+    .about-image {
+        text-align: center;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+    }
+
+    h2 {
+        font-size: 2rem;
+    }
+
+    /* Project Grid Adjustment */
+    .projects-grid {
+        grid-template-columns: 1fr; /* Single column on mobile */
+        gap: 1.5rem;
+    }
+
+    /* Project card visibility (controlled by JS pagination, remove old static rule) */
+    /* Remove this if you want all project cards to initially show on mobile without JS pagination
+       .project-card:nth-child(-n+4) {
+           display: block;
+       }
+    */
+
+    /* Form specific responsive adjustments */
+    .form-row {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .form-row > div {
+        width: 100%;
+    }
+
+    .form-row .remove-btn {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .form-actions .btn {
+        width: 100%;
+    }
+
+    /* ========================================= */
+    /* Hamburger Menu & Mobile Nav Specifics */
+    /* ========================================= */
+
+    /* Show the hamburger icon on mobile */
+    .hamburger {
+        display: flex; /* Changed from 'block' to 'flex' for vertical alignment of spans */
+        align-items: center; /* Vertically center the spans within the button */
+    }
+
+    /* Hide desktop navigation on mobile */
+    #main-nav {
+        position: fixed;
+        top: 0;
+        /* Start off-screen to the right, full height, width for the menu */
+        right: -100%; /* Or transform: translateX(100%); if you prefer */
+        width: 70%; /* Adjust width of the slide-out menu as desired */
+        max-width: 300px; /* Optional: cap max width for very large phones */
+        height: 100vh;
+        background: white;
+        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+        transition: right 0.4s ease-in-out; /* Transition 'right' property */
+        padding-top: 80px; /* To clear space for the fixed header */
+        z-index: 999; /* Below hamburger, but above content */
+        overflow-y: auto; /* Enable scrolling if menu content is too long */
+    }
+
+    /* When .active class is added by JS, slide the nav into view */
+    #main-nav.active {
+        right: 0; /* Slide in */
+    }
+
+    /* Stack navigation items vertically in the mobile menu */
+    #main-nav ul {
+        flex-direction: column;
+        padding: 20px;
+        align-items: center; /* Center menu items */
+        gap: 1.5rem; /* Space between links */
+    }
+
+    #main-nav ul li {
+        margin: 0; /* Remove desktop margin */
+        width: 100%; /* Make list items take full width */
+        text-align: center;
+    }
+
+    #main-nav ul li a {
+        font-size: 1.2rem; /* Make links larger for touch */
+        padding: 10px 0; /* Add some padding for touch target */
+        display: block; /* Make the whole link area clickable */
+    }
+
+    /* Hamburger icon animation to X */
+    .hamburger.active span:nth-child(1) {
+        transform: rotate(45deg) translate(8px, 8px); /* Adjusted for better look */
+    }
+    .hamburger.active span:nth-child(2) {
+        opacity: 0;
+    }
+    .hamburger.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(8px, -8px); /* Adjusted for better look */
+    }
+}
+/* Add this to your style.css, preferably near the top with other body/global styles */
+body.no-scroll {
+    overflow: hidden;
+}
+/* Add this to your style.css */
+html {
+    scroll-behavior: smooth;
+}
+
+/* --- Contact Section Styles --- */
+.contact-section {
+    padding: 60px 0;
+    background-color: var(--color-background-alt); /* Light background for contrast */
+    text-align: center;
+}
+
+.contact-section h2 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    color: var(--color-heading);
+}
+
+.contact-section p {
+    font-size: 1.1em;
+    margin-bottom: 40px;
+    color: var(--color-text);
+}
+
+#contact-form {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: var(--color-card-background); /* Card background for the form itself */
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-small);
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Space between form fields */
+}
+
+/* Ensure input and textarea backgrounds and text colors are clearly visible */
+#contact-form input[type="text"],
+#contact-form input[type="email"],
+#contact-form textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid grey; /* Clear border */
+    border-radius: var(--border-radius);
+    font-size: 1em;
+    font-family: 'Poppins', sans-serif; /* Match overall font */
+
+    /* Crucial: Ensure text and background are contrasting */
+    color: var(--color-text); /* Text color inside input */
+    background-color: var(--light-color); /* Input field background */
+    box-shadow: var(--box-shadow);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#contact-form input[type="text"]:focus,
+#contact-form input[type="email"]:focus,
+#contact-form textarea:focus {
+    border-color: var(--color-primary); /* Highlight border on focus */
+    box-shadow: 0 0 0 2px rgba(var(--color-primary-rgb), 0.2); /* Subtle glow on focus */
+    outline: none; /* Remove default browser outline */
+}
+
+#contact-form textarea {
+    resize: vertical; /* Allow vertical resizing */
+    min-height: 120px;
+    
+}
+
+/* Submit button within the form */
+#contact-form .btn {
+    align-self: flex-start; /* Align button to the left */
+    /* Inherits general .btn styles, but specific overrides can go here */
+    background-color: var(--primary-color); /* Explicitly set for form submit */
+    color: white; /* Explicitly set for form submit */
+    border: none; /* Remove border if primary .btn has one, or keep it */
+}
+
+#contact-form .btn:hover {
+    background-color: var(--color-primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.success-message {
+    color: var(--color-success); /* Green for success */
+    font-weight: bold;
+    margin-top: 15px;
+    text-align: center;
+    padding: 10px;
+    background-color: rgba(var(--color-success-rgb), 0.1); /* Light green background */
+    border-radius: var(--border-radius);
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+    .contact-section h2 {
+        font-size: 2em;
+    }
+
+    .contact-section p {
+        font-size: 1em;
+        margin-bottom: 30px;
+    }
+
+    #contact-form {
+        padding: 20px;
+    }
+
+    #contact-form .btn {
+        width: 100%; /* Full width button on small screens */
+        align-self: center;
+    }
+}
