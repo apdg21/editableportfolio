@@ -71,63 +71,85 @@ document.addEventListener('DOMContentLoaded', () => {
         currentData = data; // Store data for resize events
         console.log('Loaded data:', data);
 
-        // Logo
-        document.getElementById('logo').textContent = data.logo || 'Default Name';
+        try {
+            // Logo
+            document.getElementById('logo').textContent = data.logo || 'Default Name';
 
-        // Hero
-        document.getElementById('hero-title').textContent = data.hero?.title || 'Default Title';
-        document.getElementById('hero-subtitle').textContent = data.hero?.subtitle || 'Default Subtitle';
+            // Hero
+            document.getElementById('hero-title').textContent = data.hero?.title || 'Default Title';
+            document.getElementById('hero-subtitle').textContent = data.hero?.subtitle || 'Default Subtitle';
 
-        // Projects
-        renderProjects(data);
+            // Projects
+            renderProjects(data);
 
-        // About
-        document.getElementById('about-text').textContent = data.about?.text || 'About section unavailable.';
-        const skillsList = document.getElementById('skills-list');
-        skillsList.innerHTML = ''; // Clear existing skills
-        (data.about?.skills || []).forEach(skill => {
-            const li = document.createElement('li');
-            li.textContent = skill;
-            skillsList.appendChild(li);
-        });
+            // About
+            const aboutTextElement = document.getElementById('about-text');
+            if (aboutTextElement) {
+                aboutTextElement.textContent = data.about?.text || 'About section unavailable.';
+            } else {
+                console.warn('Element with ID "about-text" not found');
+            }
 
-        // Testimonials
-        const testimonialGrid = document.getElementById('testimonials-list');
-        testimonialGrid.innerHTML = ''; // Clear existing testimonials
-        (data.testimonials || []).forEach(testimonial => {
-            if (!testimonial.text || !testimonial.author) return;
-            const testimonialCard = document.createElement('div');
-            testimonialCard.className = 'testimonial-card';
-            testimonialCard.innerHTML = `
-                <p>"${testimonial.text}"</p>
-                <h4>- ${testimonial.author}</h4>
-            `;
-            testimonialGrid.appendChild(testimonialCard);
-        });
+            const skillsList = document.getElementById('skills-list');
+            if (skillsList) {
+                skillsList.innerHTML = ''; // Clear existing skills
+                if (data.about?.skills && Array.isArray(data.about.skills)) {
+                    data.about.skills.forEach(skill => {
+                        const li = document.createElement('li');
+                        li.textContent = skill;
+                        skillsList.appendChild(li);
+                    });
+                }
+            } else {
+                console.warn('Element with ID "skills-list" not found');
+            }
 
-        // Contact
-        document.getElementById('contact-form').action = `https://formsubmit.co/${data.contact?.email || 'your-email@example.com'}`;
-        document.getElementById('form-success').textContent = data.contact?.successMessage || 'Thank you for your message!';
+            // Testimonials
+            const testimonialGrid = document.getElementById('testimonials-list');
+            if (testimonialGrid) {
+                testimonialGrid.innerHTML = ''; // Clear existing testimonials
+                (data.testimonials || []).forEach(testimonial => {
+                    if (!testimonial.text || !testimonial.author) return;
+                    const testimonialCard = document.createElement('div');
+                    testimonialCard.className = 'testimonial-card';
+                    testimonialCard.innerHTML = `
+                        <p>"${testimonial.text}"</p>
+                        <h4>- ${testimonial.author}</h4>
+                    `;
+                    testimonialGrid.appendChild(testimonialCard);
+                });
+            } else {
+                console.warn('Element with ID "testimonials-list" not found');
+            }
 
-        // Footer
-        document.getElementById('footer-text').textContent = data.footer?.text || '© 2025 Default Name';
-        const socialLinks = document.getElementById('social-links');
-        socialLinks.innerHTML = ''; // Clear existing social links
-        if (data.social?.linkedin) {
-            socialLinks.innerHTML += `<a href="${data.social.linkedin}" target="_blank" class="social-icon" aria-label="LinkedIn"><i class="fab fa-linkedin"></i><span class="fallback-text">LinkedIn</span></a>`;
-        }
-        if (data.social?.twitter) {
-            socialLinks.innerHTML += `<a href="${data.social.twitter}" target="_blank" class="social-icon" aria-label="Twitter"><i class="fab fa-twitter"></i><span class="fallback-text">Twitter</span></a>`;
-        }
-        if (data.social?.github) {
-            socialLinks.innerHTML += `<a href="${data.social.github}" target="_blank" class="social-icon" aria-label="GitHub"><i class="fab fa-github"></i><span class="fallback-text">GitHub</span></a>`;
-        }
+            // Contact
+            document.getElementById('contact-form').action = `https://formsubmit.co/${data.contact?.email || 'your-email@example.com'}`;
+            document.getElementById('form-success').textContent = data.contact?.successMessage || 'Thank you for your message!';
 
-        // Check if Font Awesome loaded, apply fallback if not
-        if (typeof window.FontAwesome === 'undefined') {
-            document.querySelectorAll('.social-icon').forEach(link => {
-                link.classList.add('no-fontawesome');
-            });
+            // Footer
+            document.getElementById('footer-text').textContent = data.footer?.text || '© 2025 Default Name';
+            const socialLinks = document.getElementById('social-links');
+            socialLinks.innerHTML = ''; // Clear existing social links
+            if (data.social?.linkedin) {
+                socialLinks.innerHTML += `<a href="${data.social.linkedin}" target="_blank" class="social-icon" aria-label="LinkedIn"><i class="fab fa-linkedin"></i><span class="fallback-text">LinkedIn</span></a>`;
+            }
+            if (data.social?.twitter) {
+                socialLinks.innerHTML += `<a href="${data.social.twitter}" target="_blank" class="social-icon" aria-label="Twitter"><i class="fab fa-twitter"></i><span class="fallback-text">Twitter</span></a>`;
+            }
+            if (data.social?.github) {
+                socialLinks.innerHTML += `<a href="${data.social.github}" target="_blank" class="social-icon" aria-label="GitHub"><i class="fab fa-github"></i><span class="fallback-text">GitHub</span></a>`;
+            }
+
+            // Check if Font Awesome loaded, apply fallback if not
+            if (typeof window.FontAwesome === 'undefined') {
+                document.querySelectorAll('.social-icon').forEach(link => {
+                    link.classList.add('no-fontawesome');
+                });
+            }
+        } catch (error) {
+            console.error('Error in loadContent:', error);
+            document.getElementById('projects').innerHTML = '<p>Error loading content. Please try again.</p>';
+            document.querySelector('.pagination').style.display = 'none';
         }
 
         // Pagination controls
