@@ -113,7 +113,7 @@
             <form id="contact-form" action="https://formsubmit.co/reload.adolf2023@gmail.com" method="POST">
                 <input type="hidden" name="_subject" value="New Portfolio Message!">
                 <input type="hidden" name="_captcha" value="false">
-                <input type="hidden" name="recipient-email" id="recipient-email" value="reload.adolf2023@gmail.com">
+                <input type="hidden" name="_next" value="contact-success.html">
                 <input type="text" name="name" placeholder="Your Name" required>
                 <input type="email" name="email" placeholder="Your Email" required>
                 <textarea name="message" placeholder="Your Message" required></textarea>
@@ -134,34 +134,7 @@
         </div>
     </footer>
 
-    <script>
-        document.getElementById('contact-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const form = this;
-            const successMessage = document.getElementById('form-success');
-            fetch(form.action, {
-                method: form.method,
-                body: new FormData(form),
-                headers: { 'Accept': 'application/json' }
-            })
-            .then(response => {
-                if (response.ok) return response.json();
-                throw new Error('Form submission failed');
-            })
-            .then(data => {
-                successMessage.style.display = 'block';
-                successMessage.textContent = 'Message sent successfully!';
-                successMessage.style.color = 'green';
-                form.reset();
-            })
-            .catch(error => {
-                successMessage.style.display = 'block';
-                successMessage.textContent = 'Error sending message. Please try again.';
-                successMessage.style.color = 'red';
-                console.error('Error:', error);
-            });
-        });
-    </script>
+    
     <script src="main.js?v=3"></script>
 </body>
 </html>
