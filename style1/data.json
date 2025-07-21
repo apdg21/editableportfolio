@@ -1,0 +1,101 @@
+{
+  "logo": "Jane Doe Designs",
+  "hero": {
+    "title": "Bringing Your Vision to Life.",
+    "subtitle": "Creative Graphic Designer specializing in branding, web, and print.",
+    "buttonText": "View My Latest Work"
+  },
+  "about": {
+    "title": "About Me",
+    "description": "Hi, I'm Jane Doe, a passionate graphic designer with over 7 years of experience crafting compelling visual narratives. My expertise spans across brand identity, web design, print collateral, and digital illustrations. I love collaborating with clients to transform their ideas into stunning and effective designs that resonate with their audience. Let's create something amazing together!",
+    "profileImage": "assets/profile.jpg"
+  },
+  "samples": [
+    {
+      "title": "Eco-Friendly Brand Identity",
+      "description": "Complete branding package for a sustainable fashion startup, including logo, color palette, and typography guidelines.",
+      "image": "assets/samples/sample1.jpg",
+      "link": "#"
+    },
+    {
+      "title": "Tech Conference Website Redesign",
+      "description": "Responsive website UI/UX redesign for a major annual technology conference, focusing on user experience and visual appeal.",
+      "image": "assets/samples/sample2.jpg",
+      "link": "#"
+    },
+    {
+      "title": "Local Cafe Menu Design",
+      "description": "Creation of a vibrant and inviting menu design for a new independent coffee shop, reflecting its unique atmosphere.",
+      "image": "assets/samples/sample3.jpg",
+      "link": "#"
+    },
+    {
+      "title": "Mobile App UI for Fitness Tracker",
+      "description": "Designed intuitive and engaging user interface screens for a health and fitness tracking mobile application.",
+      "image": "assets/samples/sample4.jpg",
+      "link": "#"
+    },
+    {
+      "title": "Children's Book Illustrations",
+      "description": "Series of whimsical digital illustrations created for a new children's storybook aimed at young readers.",
+      "image": "assets/samples/sample5.jpg",
+      "link": "#"
+    },
+    {
+      "title": "Corporate Annual Report Layout",
+      "description": "Designed a clean and professional layout for a multinational corporation's annual financial report, enhancing readability.",
+      "image": "assets/samples/sample6.jpg",
+      "link": "#"
+    },
+    {
+      "title": "Product Packaging Design",
+      "description": "Innovative and eye-catching packaging design for a line of artisanal food products, ensuring shelf appeal.",
+      "image": "assets/samples/sample7.jpg",
+      "link": "#"
+    },
+    {
+      "title": "Event Poster Series",
+      "description": "A collection of bold and dynamic poster designs for a music festival, a local charity run, and a tech expo.",
+      "image": "assets/samples/sample8.jpg",
+      "link": "#"
+    },
+    {
+      "title": "Social Media Content Templates",
+      "description": "Developed a cohesive set of editable templates for a small business to maintain a consistent brand presence on social platforms.",
+      "image": "assets/samples/sample9.jpg",
+      "link": "#"
+    },
+    {
+      "title": "Infographic for Data Visualization",
+      "description": "Created an informative and visually appealing infographic to explain complex market trends for a business consultancy.",
+      "image": "assets/samples/sample10.jpg",
+      "link": "#"
+    }
+  ],
+  "testimonials": [
+    {
+      "text": "Jane's work on our new branding was exceptional! She truly captured our vision and brought it to life with her creativity.",
+      "author": "Sarah M., Startup Founder"
+    },
+    {
+      "text": "Professional, prompt, and incredibly talented. Jane redesigned our website, and the results exceeded our expectations.",
+      "author": "David L., Marketing Manager"
+    },
+    {
+      "text": "Working with Jane was a breeze. Her ability to understand our needs and deliver high-quality designs on time is unmatched.",
+      "author": "Emily R., Small Business Owner"
+    }
+  ],
+  "contact": {
+    "title": "Get In Touch",
+    "formEmail": "your-email@example.com"
+  },
+  "footer": {
+    "copyright": "© 2025 Jane Doe Designs. All rights reserved."
+  },
+  "social": {
+    "linkedin": "https://linkedin.com/in/janedoeportfolio",
+    "twitter": "https://twitter.com/janedoedesigns",
+    "github": "https://github.com/janedoegraphic"
+  }
+}

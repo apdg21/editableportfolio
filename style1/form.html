@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Content Editor</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="form-container">
+        <h1>Edit Portfolio Content</h1>
+        <form id="portfolio-editor-form">
+            
+            <fieldset>
+                <legend>General</legend>
+                <label for="logo">Logo Text</label>
+                <input type="text" name="logo" id="logo">
+            </fieldset>
+
+            <fieldset>
+                <legend>Hero Section</legend>
+                <label for="hero.title">Title</label>
+                <input type="text" name="hero.title" id="hero.title">
+                <label for="hero.subtitle">Subtitle</label>
+                <input type="text" name="hero.subtitle" id="hero.subtitle">
+                <label for="hero.buttonText">Button Text</label>
+                <input type="text" name="hero.buttonText" id="hero.buttonText">
+            </fieldset>
+
+            <fieldset>
+                <legend>About Section</legend>
+                <label for="about.title">Title</label>
+                <input type="text" name="about.title" id="about.title">
+                <label for="about.description">Description</label>
+                <textarea name="about.description" id="about.description" rows="5"></textarea>
+                <label for="about.profileImage">Profile Image Path</label>
+                <input type="text" name="about.profileImage" id="about.profileImage" placeholder="e.g., assets/profile.jpg">
+            </fieldset>
+
+            <fieldset>
+                <legend>Work Samples</legend>
+                <div id="samples-editor"></div>
+                <button type="button" id="add-sample" class="btn">Add Sample</button>
+            </fieldset>
+
+            <fieldset>
+                <legend>Testimonials</legend>
+                <div id="testimonials-editor"></div>
+                <button type="button" id="add-testimonial" class="btn">Add Testimonial</button>
+            </fieldset>
+
+            <fieldset>
+                <legend>Contact Section</legend>
+                <label for="contact.title">Title</label>
+                <input type="text" name="contact.title" id="contact.title">
+                <label for="contact.formEmail">FormSubmit Email</label>
+                <input type="email" name="contact.formEmail" id="contact.formEmail" placeholder="your-email@example.com">
+            </fieldset>
+
+            <fieldset>
+                <legend>Footer & Social</legend>
+                <label for="footer.copyright">Copyright Text</label>
+                <input type="text" name="footer.copyright" id="footer.copyright">
+                <label for="social.linkedin">LinkedIn URL</label>
+                <input type="url" name="social.linkedin" id="social.linkedin">
+                <label for="social.twitter">Twitter URL</label>
+                <input type="url" name="social.twitter" id="social.twitter">
+                <label for="social.github">GitHub URL</label>
+                <input type="url" name="social.github" id="social.github">
+            </fieldset>
+
+            <div class="form-actions">
+                <button type="submit" class="btn">Save to Local Storage</button>
+                <button type="button" id="download-json" class="btn">Download Updated data.json</button>
+                <a href="index.html" class="btn">Back to Portfolio</a>
+            </div>
+        </form>
+    </div>
+    <script src="form.js"></script>
+</body>
+</html>
