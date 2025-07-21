@@ -13,8 +13,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function isOnline() {
         const online = navigator.onLine;
-        console.log(`Connectivity status: ${online ? 'Online' : 'Offline'}`);
-        return online;
+        // Fallback check inspired by other template
+        const protocolOnline = window.location.protocol === 'http:' || window.location.protocol === 'https:';
+        console.log(`Connectivity status: navigator.onLine=${online}, protocol=${window.location.protocol}, isOnline=${online && protocolOnline}`);
+        return online && protocolOnline;
     }
 
     // 2. CONNECTIVITY HANDLING
@@ -25,9 +27,14 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (loadJsonBtn) {
             loadJsonBtn.classList.toggle('hidden', isOnline());
-            if (!isOnline()) {
-                // Fallback to ensure visibility
-                loadJsonBtn.style.display = 'block';
+            if (isOnline()) {
+                // Force hide online
+                loadJsonBtn.style.display = 'none';
+                loadJsonBtn.style.visibility = 'hidden';
+                loadJsonBtn.style.opacity = '0';
+            } else {
+                // Ensure visibility offline
+                loadJsonBtn.style.display = 'inline-block';
                 loadJsonBtn.style.visibility = 'visible';
                 loadJsonBtn.style.opacity = '1';
             }
@@ -37,9 +44,14 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (editBtn) {
             editBtn.classList.toggle('hidden', isOnline());
-            if (!isOnline()) {
-                // Fallback to ensure visibility
-                editBtn.style.display = 'block';
+            if (isOnline()) {
+                // Force hide online
+                editBtn.style.display = 'none';
+                editBtn.style.visibility = 'hidden';
+                editBtn.style.opacity = '0';
+            } else {
+                // Ensure visibility offline
+                editBtn.style.display = 'inline-block';
                 editBtn.style.visibility = 'visible';
                 editBtn.style.opacity = '1';
             }
@@ -378,7 +390,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         loadJsonBtn.classList.toggle('hidden', isOnline());
         if (!isOnline()) {
-            loadJsonBtn.style.display = 'block';
+            loadJsonBtn.style.display = 'inline-block';
             loadJsonBtn.style.visibility = 'visible';
             loadJsonBtn.style.opacity = '1';
         }
@@ -426,7 +438,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         editBtn.classList.toggle('hidden', isOnline());
         if (!isOnline()) {
-            editBtn.style.display = 'block';
+            editBtn.style.display = 'inline-block';
             editBtn.style.visibility = 'visible';
             editBtn.style.opacity = '1';
         }
