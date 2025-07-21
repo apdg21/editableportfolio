@@ -4,12 +4,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentPage = 1; // For pagination
     let itemsPerPage = window.innerWidth > 768 ? 8 : 4; // Responsive items per page
 
-    // DOM Elements for Initial Load Screen
-    const startPortfolioBtn = document.getElementById('start-portfolio-btn');
-    const initialLoadScreen = document.getElementById('initial-load-screen');
-    const portfolioContentWrapper = document.getElementById('portfolio-content-wrapper');
-    const loadingMessage = document.getElementById('loading-message');
-
     // DOM Elements for Hamburger Menu
     const hamburger = document.getElementById('hamburger');
     const navLinks = document.getElementById('nav-links');
@@ -29,14 +23,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- MAIN DATA LOADING FUNCTION ---
-    // This function is triggered by clicking the "Load Portfolio" button
+    // This function will now be called automatically on DOMContentLoaded
     async function loadDataAndDisplay() {
-        // Show loading message and disable button
-        loadingMessage.classList.remove('hidden');
-        startPortfolioBtn.disabled = true;
-
         try {
-            // First, try to load from localStorage (if data was saved by form.html)
+            // First, try to load from localStorage (if data was saved by form.html or admin upload)
             const localData = localStorage.getItem('portfolioData');
             if (localData) {
                 portfolioData = JSON.parse(localData);
@@ -45,7 +35,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 // If not in localStorage, fetch from data.json
                 const response = await fetch(DATA_PATH);
                 if (!response.ok) {
-                    // Log specific network error if fetch fails
                     console.error(`Network response was not ok: ${response.status} ${response.statusText}`);
                     throw new Error('Failed to fetch data.json. Check file path and content.');
                 }
@@ -56,20 +45,13 @@ document.addEventListener('DOMContentLoaded', () => {
             // Once data is loaded, render the page
             renderPage();
 
-            // Transition from load screen to portfolio content
-            initialLoadScreen.classList.add('hidden'); // Hide the welcome screen
-            portfolioContentWrapper.classList.remove('hidden'); // Show the main portfolio content
-            // Ensure footer is visible if it was initially hidden by CSS
-            document.querySelector('footer').classList.remove('hidden');
+            // Ensure main content wrapper is visible (it should be by default in HTML now)
+            document.getElementById('portfolio-content-wrapper').classList.remove('hidden');
 
         } catch (error) {
             console.error('An error occurred while loading portfolio data:', error);
             // Display a user-friendly error message on the page
             document.body.innerHTML = '<p style="text-align: center; padding: 2rem; color: red;">Error: Could not load portfolio content. Please ensure data.json is available and valid.</p>';
-        } finally {
-            // Always hide loading message and re-enable button (though screen hides)
-            loadingMessage.classList.add('hidden');
-            startPortfolioBtn.disabled = false;
         }
     }
 
@@ -108,7 +90,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // Contact Section
         document.getElementById('contact-title').textContent = portfolioData.contact.title;
         document.getElementById('contact-form').action = `https://formsubmit.co/${portfolioData.contact.formEmail}`;
-        // The success-message text is handled by the form submission logic, not directly from data.json
 
         // Footer Section
         renderFooter();
@@ -265,7 +246,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     successMessage.classList.remove('hidden'); // Show success message
                     setTimeout(() => successMessage.classList.add('hidden'), 5000); // Hide after 5 seconds
                 } else {
-                    // Attempt to read error message from response if available
                     const errorData = await response.json();
                     alert(`There was an error sending your message: ${errorData.message || 'Please try again.'}`);
                 }
@@ -304,7 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             const json = JSON.parse(e.target.result); // Parse uploaded file content
                             localStorage.setItem('portfolioData', JSON.stringify(json)); // Save to localStorage
                             alert('JSON data loaded successfully! The page will now reload to apply changes.');
-                            window.location.reload(); // Reload the page to apply the new data
+                            window.location.reload(); // **Crucial: Reload the page to apply the new data automatically**
                         } catch (err) {
                             alert('Error parsing JSON file. Please check the file format.');
                             console.error('JSON Parse Error:', err);
@@ -319,12 +299,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- INITIALIZATION ON PAGE LOAD ---
-    // Attach event listener to the "Load Portfolio" button on the initial screen
-    if (startPortfolioBtn) {
-        startPortfolioBtn.addEventListener('click', loadDataAndDisplay);
-    } else {
-        console.error('Start Portfolio Button not found! Make sure ID is correct in index.html.');
-    }
+    // This is the key change: call loadDataAndDisplay directly on DOMContentLoaded
+    loadDataAndDisplay();
 
     // Always set up admin controls at the beginning to handle their visibility
     setupAdminControls();
