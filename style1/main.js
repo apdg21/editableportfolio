@@ -25,22 +25,36 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- MAIN DATA LOADING FUNCTION ---
     // This function will now be called automatically on DOMContentLoaded
     async function loadDataAndDisplay() {
+        // Clear localStorage on load to ensure we prioritize fresh data from data.json
+        // This helps prevent stale data from caching issues.
+        localStorage.removeItem('portfolioData');
+        console.log('localStorage cleared for portfolioData to ensure fresh load.');
+
         try {
-            // First, try to load from localStorage (if data was saved by form.html or admin upload)
-            const localData = localStorage.getItem('portfolioData');
-            if (localData) {
-                portfolioData = JSON.parse(localData);
-                console.log('Loaded data from Local Storage.');
-            } else {
-                // If not in localStorage, fetch from data.json
-                const response = await fetch(DATA_PATH);
-                if (!response.ok) {
-                    console.error(`Network response was not ok: ${response.status} ${response.statusText}`);
-                    throw new Error('Failed to fetch data.json. Check file path and content.');
+            let fetchedData;
+
+            // Attempt to fetch from data.json with cache-busting
+            // This is the primary method now.
+            console.log('Attempting to fetch data.json...');
+            const response = await fetch(`${DATA_PATH}?t=${new Date().getTime()}`); // Cache-busting
+            if (!response.ok) {
+                // If fetch from data.json fails, then try loading from localStorage as a fallback
+                const localData = localStorage.getItem('portfolioData');
+                if (localData) {
+                    fetchedData = JSON.parse(localData);
+                    console.log('Failed to fetch data.json, but loaded from Local Storage as fallback.');
+                } else {
+                    console.error(`Network response for data.json was not ok: ${response.status} ${response.statusText}`);
+                    throw new Error('Failed to fetch data.json and no data in Local Storage.');
                 }
-                portfolioData = await response.json();
-                console.log('Loaded data from data.json.');
+            } else {
+                fetchedData = await response.json();
+                console.log('Loaded data from data.json successfully.');
+                // Save fetched data to localStorage for future quick loads (e.g., if offline)
+                localStorage.setItem('portfolioData', JSON.stringify(fetchedData));
             }
+
+            portfolioData = fetchedData; // Assign the loaded data to portfolioData
 
             // Once data is loaded, render the page
             renderPage();
@@ -51,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             console.error('An error occurred while loading portfolio data:', error);
             // Display a user-friendly error message on the page
-            document.body.innerHTML = '<p style="text-align: center; padding: 2rem; color: red;">Error: Could not load portfolio content. Please ensure data.json is available and valid.</p>';
+            document.body.innerHTML = '<p style="text-align: center; padding: 2rem; color: red;">Error: Could not load portfolio content. Please ensure data.json is available and valid, or try clearing browser cache. Check console for details.</p>';
         }
     }
 
@@ -85,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setupPagination(); // Initialize/update pagination controls
 
         // Testimonials Section
-        renderTestimonials();
+        renderTestimonials(); // <--- This is where the TypeError was
 
         // Contact Section
         document.getElementById('contact-title').textContent = portfolioData.contact.title;
@@ -130,10 +144,23 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+
     function renderTestimonials() {
         const container = document.getElementById('testimonial-container');
         container.innerHTML = ''; // Clear existing testimonials
-        (portfolioData.testimonials || []).forEach(testimonial => { // Ensure testimonials array exists
+
+        // --- IMPORTANT: ADJUST THIS LINE BASED ON YOUR data.json structure ---
+        // Option 1: If data.json has "testimonials": [...] (an array directly)
+        const testimonials = portfolioData.testimonials || [];
+
+        // Option 2: If data.json has "testimonials": { "items": [...] } (object with an items array)
+        // const testimonials = portfolioData.testimonials?.items || [];
+        // if (portfolioData.testimonials && portfolioData.testimonials.title) {
+        //     document.getElementById('testimonials-title').textContent = portfolioData.testimonials.title;
+        // }
+
+
+        testimonials.forEach(testimonial => { // This is the line that previously failed
             const div = document.createElement('div');
             div.className = 'testimonial';
             div.innerHTML = `
@@ -143,6 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
             container.appendChild(div);
         });
     }
+
 
     function renderFooter() {
         const socialContainer = document.getElementById('social-links');
@@ -256,7 +284,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-
     // --- ADMIN CONTROLS FUNCTIONALITY ---
     // These controls are only visible when the page is accessed via file:// protocol
     function setupAdminControls() {
@@ -284,7 +311,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             const json = JSON.parse(e.target.result); // Parse uploaded file content
                             localStorage.setItem('portfolioData', JSON.stringify(json)); // Save to localStorage
                             alert('JSON data loaded successfully! The page will now reload to apply changes.');
-                            window.location.reload(); // **Crucial: Reload the page to apply the new data automatically**
+                            window.location.reload(); // Reload the page to apply the new data
                         } catch (err) {
                             alert('Error parsing JSON file. Please check the file format.');
                             console.error('JSON Parse Error:', err);
@@ -299,7 +326,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- INITIALIZATION ON PAGE LOAD ---
-    // This is the key change: call loadDataAndDisplay directly on DOMContentLoaded
+    // Call loadDataAndDisplay directly on DOMContentLoaded
     loadDataAndDisplay();
 
     // Always set up admin controls at the beginning to handle their visibility
