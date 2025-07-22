@@ -100,6 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function loadContent(data) {
         portfolioData = data; // Store data for resize events
+        console.log('Loaded data:', data); // Debug log
 
         // Logo
         document.getElementById('logo').textContent = data.logo || 'Portfolio';
@@ -179,38 +180,52 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Load data
-    async function loadData() {
+    // Load data (adapted from first template)
+    async function loadDataAndDisplay() {
+        // Only clear localStorage if no recent upload has occurred
+        if (!sessionStorage.getItem('justUploaded')) {
+            localStorage.removeItem('portfolioData');
+            console.log('localStorage cleared for portfolioData to ensure fresh load.');
+        }
+
         try {
-            // Check localStorage first
+            let fetchedData;
+
+            // Check if data was just uploaded
             const localData = localStorage.getItem('portfolioData');
-            if (localData) {
-                try {
-                    const data = JSON.parse(localData);
-                    console.log('Loaded data from localStorage.');
-                    loadContent(data);
-                    return;
-                } catch (error) {
-                    console.error('Error parsing localStorage JSON:', error);
+            if (sessionStorage.getItem('justUploaded') && localData) {
+                fetchedData = JSON.parse(localData);
+                console.log('Using recently uploaded data from localStorage:', fetchedData);
+                sessionStorage.removeItem('justUploaded'); // Clear upload flag
+            } else {
+                // Attempt to fetch from data.json
+                console.log('Attempting to fetch data.json...');
+                const response = await fetch(`data.json?t=${new Date().getTime()}`);
+                if (!response.ok) {
+                    if (localData) {
+                        fetchedData = JSON.parse(localData);
+                        console.log('Failed to fetch data.json, but loaded from localStorage:', fetchedData);
+                    } else {
+                        console.warn('No data in localStorage. Using default dataset.');
+                        fetchedData = defaultData;
+                    }
+                } else {
+                    fetchedData = await response.json();
+                    console.log('Loaded data from data.json:', fetchedData);
+                    localStorage.setItem('portfolioData', JSON.stringify(fetchedData));
                 }
             }
 
-            // Fetch from data.json with cache-busting
-            console.log('Attempting to fetch data.json...');
-            const response = await fetch(`data.json?t=${new Date().getTime()}`);
-            if (!response.ok) {
-                throw new Error(`Failed to fetch data.json: ${response.status} ${response.statusText}`);
+            // Validate projects array
+            if (!Array.isArray(fetchedData.projects)) {
+                console.warn('Data has no valid projects array. Using empty array.');
+                fetchedData.projects = [];
             }
-            const data = await response.json();
-            console.log('Loaded data from data.json.');
-            if (!Array.isArray(data.projects)) {
-                console.warn('data.json has no valid projects array. Using empty array.');
-                data.projects = [];
-            }
-            localStorage.setItem('portfolioData', JSON.stringify(data));
-            loadContent(data);
+
+            loadContent(fetchedData);
+
         } catch (error) {
-            console.error('Error loading JSON:', error);
+            console.error('Error loading portfolio data:', error);
             console.warn('Using default dataset.');
             loadContent(defaultData);
         }
@@ -228,14 +243,16 @@ document.addEventListener('DOMContentLoaded', () => {
             reader.onload = (event) => {
                 try {
                     const data = JSON.parse(event.target.result);
+                    console.log('Uploaded JSON data:', data);
                     if (!Array.isArray(data.projects)) {
                         console.warn('Uploaded JSON has no valid projects array. Using empty array.');
                         data.projects = [];
                     }
+                    portfolioData = data; // Directly update portfolioData
                     localStorage.setItem('portfolioData', JSON.stringify(data));
-                    currentPage = 1;
-                    loadContent(data);
+                    sessionStorage.setItem('justUploaded', 'true'); // Flag to indicate recent upload
                     alert('JSON loaded successfully!');
+                    loadContent(data); // Re-render immediately
                 } catch (error) {
                     alert('Invalid JSON file.');
                     console.error('Error parsing JSON:', error);
@@ -271,5 +288,5 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Initialize
-    loadData();
+    loadDataAndDisplay();
 });
