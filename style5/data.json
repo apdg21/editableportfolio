@@ -1,0 +1,160 @@
+{
+    "logo": "Video Editor Portfolio",
+    "hero": {
+        "title": "Crafting Stories Through Motion",
+        "subtitle": "Bringing Visions to Life, Frame by Frame"
+    },
+    "projects": [
+        {
+            "title": "Dynamic Promo Video",
+            "description": "Engaging promotional video for a tech startup, highlighting key features and benefits.",
+            "image": "assets/sample1.jpg",
+            "link": "samples/sample1.txt"
+        },
+        {
+            "title": "Corporate Explainer",
+            "description": "Animated explainer video simplifying complex corporate services for a broader audience.",
+            "image": "assets/sample2.jpg",
+            "link": "samples/sample2.txt"
+        },
+        {
+            "title": "Event Highlight Reel",
+            "description": "Capturing the energy and key moments of a major industry conference.",
+            "image": "assets/sample3.jpg",
+            "link": "samples/sample3.txt"
+        },
+        {
+            "title": "Product Launch Cinematic",
+            "description": "High-production value video for a new product, focusing on aesthetics and user experience.",
+            "image": "assets/sample4.jpg",
+            "link": "samples/sample4.txt"
+        },
+        {
+            "title": "Social Media Ad Campaign",
+            "description": "Series of short, punchy videos optimized for various social media platforms.",
+            "image": "assets/sample5.jpg",
+            "link": "samples/sample5.txt"
+        },
+        {
+            "title": "Documentary Short",
+            "description": "Compelling short documentary exploring a local community initiative.",
+            "image": "assets/sample6.jpg",
+            "link": "samples/sample6.txt"
+        },
+        {
+            "title": "Music Video Production",
+            "description": "Creative and visually stunning music video for an indie artist.",
+            "image": "assets/sample7.jpg",
+            "link": "samples/sample7.txt"
+        },
+        {
+            "title": "Educational Content Series",
+            "description": "Editing a series of educational videos for an online learning platform.",
+            "image": "assets/sample8.jpg",
+            "link": "samples/sample8.txt"
+        },
+        {
+            "title": "Real Estate Walkthrough",
+            "description": "Immersive video tour of a luxury property, showcasing its unique features.",
+            "image": "assets/sample9.jpg",
+            "link": "samples/sample9.txt"
+        },
+        {
+            "title": "Travel Vlog Montage",
+            "description": "Fast-paced and exciting montage from a travel vlog, capturing adventure.",
+            "image": "assets/sample10.jpg",
+            "link": "samples/sample10.txt"
+        },
+        {
+            "title": "Fitness Training Series",
+            "description": "Energetic and clear training videos for a fitness coach's online program.",
+            "image": "assets/sample11.jpg",
+            "link": "samples/sample11.txt"
+        },
+        {
+            "title": "Wedding Highlight Film",
+            "description": "Emotionally resonant and beautifully crafted highlight film of a wedding day.",
+            "image": "assets/sample12.jpg",
+            "link": "samples/sample12.txt"
+        },
+        {
+            "title": "Game Trailer Edit",
+            "description": "Dynamic trailer for an upcoming video game, building excitement and anticipation.",
+            "image": "assets/sample13.jpg",
+            "link": "samples/sample13.txt"
+        },
+        {
+            "title": "Exploration of Nature",
+            "description": "Calm and mesmerizing video showcasing the beauty of a natural landscape.",
+            "image": "assets/sample14.jpg",
+            "link": "samples/sample14.txt"
+        },
+        {
+            "title": "Food & Recipe Series",
+            "description": "Appetizing and instructional videos for a cooking channel.",
+            "image": "assets/sample15.jpg",
+            "link": "samples/sample15.txt"
+        },
+        {
+            "title": "Fashion Lookbook",
+            "description": "Stylish and modern video presenting a new fashion collection.",
+            "image": "assets/sample16.jpg",
+            "link": "samples/sample16.txt"
+        },
+        {
+            "title": "Company Profile Video",
+            "description": "Comprehensive video introducing a company, its values, and team.",
+            "image": "assets/sample17.jpg",
+            "link": "samples/sample17.txt"
+        },
+        {
+            "title": "Short Film Post-Production",
+            "description": "Full post-production for an independent short film, including color grading and sound design.",
+            "image": "assets/sample18.jpg",
+            "link": "samples/sample18.txt"
+        },
+        {
+            "title": "Interview Series",
+            "description": "Clean and professional edits for a series of expert interviews.",
+            "image": "assets/sample19.jpg",
+            "link": "samples/sample19.txt"
+        },
+        {
+            "title": "Sports Action Montage",
+            "description": "High-energy montage capturing peak moments from various sports events.",
+            "image": "assets/sample20.jpg",
+            "link": "samples/sample20.txt"
+        }
+    ],
+    "about": {
+        "text": "Hello! I'm a passionate video editor with over 8 years of experience in crafting compelling visual narratives. From dynamic promotional content to intricate documentary edits, my goal is always to bring stories to life with precision and creativity. I specialize in post-production, color grading, sound design, and motion graphics, using industry-standard software to deliver high-quality results. I believe that every frame has a purpose, and I'm dedicated to ensuring that your vision not only looks incredible but also resonates deeply with your audience. Let's create something unforgettable together!",
+        "skills": ["Adobe Premiere Pro", "After Effects", "DaVinci Resolve", "Final Cut Pro", "Motion Graphics", "Color Grading", "Sound Design", "VFX", "Storytelling", "Video Compression"],
+       "profileImage": "assets/your-actual-profile-image.jpg" 
+    },
+    "testimonials": [
+        {
+            "text": "The video editor delivered exceptional work! They perfectly captured our brand's essence and the final video exceeded all our expectations. Highly recommended!",
+            "author": "Client A"
+        },
+        {
+            "text": "An absolute professional. Their keen eye for detail and understanding of pacing transformed our raw footage into a masterpiece. We'll definitely be working with them again.",
+            "author": "Client B"
+        },
+        {
+            "text": "Outstanding creativity and technical skill. The video editor took our complex ideas and translated them into a clear, engaging, and visually stunning piece.",
+            "author": "Client C"
+        }
+    ],
+    "contact": {
+        "email": "videoeditor@example.com",
+        "successMessage": "Thank you for your message! I'll get back to you soon."
+    },
+    "footer": {
+        "text": "© 2025 Video Editor Portfolio"
+    },
+    "social": {
+        "linkedin": "https://linkedin.com/in/yourvideoeditor",
+        "twitter": "https://twitter.com/yourvideoeditor",
+        "github": "https://github.com/yourvideoeditor"
+    }
+}

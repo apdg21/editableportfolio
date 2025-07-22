@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Edit Portfolio Content</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Back to Portfolio</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container form-main">
+        <form id="editForm">
+            <h2 class="section-title">Site Settings</h2>
+            <div class="form-group">
+                <label for="logo">Logo Text:</label>
+                <input type="text" id="logo" name="logo">
+            </div>
+
+            <h2 class="section-title">Hero Section</h2>
+            <div class="form-group">
+                <label for="heroTitle">Hero Title:</label>
+                <input type="text" id="heroTitle" name="heroTitle">
+            </div>
+            <div class="form-group">
+                <label for="heroSubtitle">Hero Subtitle:</label>
+                <input type="text" id="heroSubtitle" name="heroSubtitle">
+            </div>
+
+            <h2 class="section-title">Projects</h2>
+            <div id="projectsContainer">
+                </div>
+            <button type="button" id="addProject" class="button">Add Project</button>
+
+            <h2 class="section-title">About Section</h2>
+            <div class="form-group">
+                <label for="aboutText">About Text:</label>
+                <textarea id="aboutText" name="aboutText" rows="5"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="aboutSkills">Skills (comma-separated):</label>
+                <input type="text" id="aboutSkills" name="aboutSkills">
+            </div>
+
+            <h2 class="section-title">Testimonials</h2>
+            <div id="testimonialsContainer">
+                </div>
+            <button type="button" id="addTestimonial" class="button">Add Testimonial</button>
+
+            <h2 class="section-title">Contact</h2>
+            <div class="form-group">
+                <label for="contactEmail">Contact Email:</label>
+                <input type="email" id="contactEmail" name="contactEmail">
+            </div>
+            <div class="form-group">
+                <label for="successMessage">Contact Success Message:</label>
+                <input type="text" id="successMessage" name="successMessage">
+            </div>
+
+            <h2 class="section-title">Footer</h2>
+            <div class="form-group">
+                <label for="footerText">Footer Text:</label>
+                <input type="text" id="footerText" name="footerText">
+            </div>
+
+            <h2 class="section-title">Social Links</h2>
+            <div class="form-group">
+                <label for="socialLinkedin">LinkedIn URL:</label>
+                <input type="url" id="socialLinkedin" name="socialLinkedin">
+            </div>
+            <div class="form-group">
+                <label for="socialTwitter">Twitter URL:</label>
+                <input type="url" id="socialTwitter" name="socialTwitter">
+            </div>
+            <div class="form-group">
+                <label for="socialGithub">GitHub URL:</label>
+                <input type="url" id="socialGithub" name="socialGithub">
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="button primary">Save Changes</button>
+                <button type="button" id="downloadJson" class="button">Download JSON</button>
+                <div id="saveStatus" class="success-message hidden">Changes saved successfully!</div>
+            </div>
+        </form>
+    </main>
+
+    <script src="form.js"></script>
+</body>
+</html>
