@@ -11,9 +11,9 @@ const jsonUploadInput = document.getElementById('jsonUpload');
 const adminControls = document.querySelector('.admin-controls');
 const contactForm = document.getElementById('contactForm');
 const formSuccessMessage = document.getElementById('formSuccessMessage');
-const menuToggle = document.getElementById('menuToggle'); // New: Hamburger menu toggle
-const mainNav = document.getElementById('mainNav');       // New: Main navigation element
-const profileImageElement = document.getElementById('profileImage'); // New: Profile image element
+const menuToggle = document.getElementById('menuToggle'); // Hamburger menu toggle
+const mainNav = document.getElementById('mainNav');       // Main navigation element
+const profileImageElement = document.getElementById('profileImage'); // Profile image element
 
 
 // Default data if no data.json or localStorage is found
@@ -148,7 +148,7 @@ const defaultData = {
     "about": {
         "text": "Hello! I'm a passionate video editor with over 8 years of experience in crafting compelling visual narratives. From dynamic promotional content to intricate documentary edits, my goal is always to bring stories to life with precision and creativity. I specialize in post-production, color grading, sound design, and motion graphics, using industry-standard software to deliver high-quality results. I believe that every frame has a purpose, and I'm dedicated to ensuring that your vision not only looks incredible but also resonates deeply with your audience. Let's create something unforgettable together!",
         "skills": ["Adobe Premiere Pro", "After Effects", "DaVinci Resolve", "Final Cut Pro", "Motion Graphics", "Color Grading", "Sound Design", "VFX", "Storytelling", "Video Compression"],
-        "profileImage": "assets/default-profile.jpg" // New: Default profile image
+        "profileImage": "assets/default-profile.jpg" // Default profile image
     },
     "testimonials": [
         {
@@ -192,6 +192,10 @@ function validateData(data) {
         console.error('Validation Error: data.testimonials is not an array. Setting to empty array.');
         data.testimonials = [];
     }
+    // Ensure about and skills exist before checking Array.isArray
+    if (!data.about) {
+        data.about = {};
+    }
     if (!Array.isArray(data.about.skills)) {
         console.error('Validation Error: data.about.skills is not an array. Setting to empty array.');
         data.about.skills = [];
@@ -205,6 +209,7 @@ function validateData(data) {
  * 2. Attempts to fetch data.json from the server.
  * 3. Falls back to localStorage if fetch fails.
  * 4. Uses defaultData as a final fallback.
+ * @returns {Promise<void>} A promise that resolves when data is loaded and rendered.
  */
 async function loadDataAndDisplay() {
     let dataToUse = null;
@@ -231,18 +236,24 @@ async function loadDataAndDisplay() {
             // Cache-busting to ensure fresh data.json
             const response = await fetch(`data.json?t=${new Date().getTime()}`);
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const fetchedData = await response.json();
-            dataToUse = validateData(fetchedData);
-            console.log('Loaded data from data.json:', dataToUse);
-            // If data.json is successfully fetched, clear localStorage if no recent upload
-            if (!justUploaded) {
-                localStorage.removeItem('portfolioData');
-                console.log('localStorage cleared as data.json was successfully fetched.');
+                // Check for 404 specifically for a more targeted message
+                if (response.status === 404) {
+                    console.warn('data.json not found on server. Falling back to localStorage or default data.');
+                } else {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+            } else {
+                const fetchedData = await response.json();
+                dataToUse = validateData(fetchedData);
+                console.log('Loaded data from data.json:', dataToUse);
+                // If data.json is successfully fetched, clear localStorage if no recent upload
+                if (!justUploaded) {
+                    localStorage.removeItem('portfolioData');
+                    console.log('localStorage cleared as data.json was successfully fetched.');
+                }
             }
         } catch (error) {
-            console.warn('Could not fetch data.json:', error);
+            console.warn('Could not fetch data.json:', error); // Generic error for fetch issues
             // Priority 3: Fallback to localStorage
             const storedData = localStorage.getItem('portfolioData');
             if (storedData) {
@@ -264,6 +275,8 @@ async function loadDataAndDisplay() {
 
     portfolioData = dataToUse;
     renderPortfolio();
+    // After rendering, check Font Awesome status
+    checkFontAwesome();
 }
 
 /**
@@ -278,13 +291,17 @@ function renderPortfolio() {
     document.getElementById('aboutText').textContent = portfolioData.about.text || defaultData.about.text;
     document.getElementById('footerText').textContent = portfolioData.footer.text || defaultData.footer.text;
 
-    // New: Profile Image
-    if (portfolioData.about.profileImage && profileImageElement) {
+    // Profile Image
+    if (portfolioData.about && portfolioData.about.profileImage && profileImageElement) {
         profileImageElement.src = portfolioData.about.profileImage;
-        profileImageElement.classList.remove('hidden'); // Show the image
+        profileImageElement.onerror = () => {
+            console.warn("Failed to load profile image. Using placeholder.");
+            profileImageElement.src = 'assets/placeholder-profile.jpg';
+        };
     } else if (profileImageElement) {
-        profileImageElement.classList.add('hidden'); // Hide if no image specified
+        profileImageElement.src = 'assets/placeholder-profile.jpg';
     }
+
 
     // About Skills
     const aboutSkillsList = document.getElementById('aboutSkills');
@@ -322,16 +339,16 @@ function renderPortfolio() {
     socialLinksContainer.innerHTML = '';
     const socialPlatforms = ['linkedin', 'twitter', 'github'];
     socialPlatforms.forEach(platform => {
-        if (portfolioData.social[platform]) {
+        if (portfolioData.social && portfolioData.social[platform]) {
             const a = document.createElement('a');
             a.href = portfolioData.social[platform];
             a.target = "_blank";
             a.rel = "noopener noreferrer";
-            a.className = "social-icon";
+            a.className = "social-icon"; // Added for CSS targeting
             a.setAttribute('aria-label', platform.charAt(0).toUpperCase() + platform.slice(1));
 
             const icon = document.createElement('i');
-            icon.className = `fab fa-${platform}`;
+            icon.className = `fab fa-${platform}`; // Using fab for brand icons
             a.appendChild(icon);
 
             const fallbackText = document.createElement('span');
@@ -343,25 +360,74 @@ function renderPortfolio() {
         }
     });
 
-    // Check if Font Awesome loaded (simple check)
-    // Removed specific integrity check here as it's often better handled by removing the attribute during local dev
-    // or by letting browser warn if integrity check fails.
+    // Render projects after all other main content, as it depends on itemsPerPage.
+    renderProjects();
 }
+
+/**
+ * Checks if Font Awesome icons are loading and applies 'no-fontawesome' class if not.
+ */
+function checkFontAwesome() {
+    // Create a temporary element to test Font Awesome rendering
+    const testElement = document.createElement('i');
+    testElement.className = 'fas fa-check'; // A common Font Awesome icon
+    testElement.style.position = 'absolute';
+    testElement.style.left = '-9999px'; // Hide it off-screen
+    testElement.style.fontSize = '1px'; // Make it tiny to not affect layout
+    document.body.appendChild(testElement);
+
+    // Give browser a moment to render the icon (important for computed styles)
+    setTimeout(() => {
+        // Check if the element has rendered a non-zero width/height,
+        // which would indicate the icon font loaded.
+        const isFontAwesomeLoaded = testElement.offsetWidth > 0 && testElement.offsetHeight > 0;
+        document.body.removeChild(testElement); // Clean up the test element
+
+        if (!isFontAwesomeLoaded) {
+            // Font Awesome probably failed to load
+            console.warn("Font Awesome icons are not loading. Showing fallback text.");
+            document.querySelectorAll('.social-icon').forEach(link => {
+                link.classList.add('no-fontawesome'); // Add class to trigger fallback CSS
+            });
+        } else {
+            // Font Awesome loaded successfully
+            console.log("Font Awesome icons loaded successfully.");
+            document.querySelectorAll('.social-icon').forEach(link => {
+                link.classList.remove('no-fontawesome'); // Ensure class is removed if it was there
+            });
+        }
+    }, 100); // Small delay to allow CSS to apply and font to load
+}
+
 
 /**
  * Adjusts items per page based on screen width.
  */
 function updateItemsPerPage() {
+    console.log('updateItemsPerPage called. InnerWidth:', window.innerWidth);
+    const oldItemsPerPage = itemsPerPage;
+
     if (window.innerWidth <= 768) {
-        itemsPerPage = 4;
+        itemsPerPage = 4; // Mobile/smaller view
     } else {
-        itemsPerPage = 8;
+        itemsPerPage = 8; // Desktop/larger view
     }
-    // Reset to first page if current page becomes invalid after resize
-    if (currentPage > getTotalPages()) {
-        currentPage = 1;
+
+    // Only re-render projects if itemsPerPage actually changed
+    // or if the total number of projects changed (e.g., after data load)
+    const newTotalPages = getTotalPages();
+    const oldTotalPages = Math.ceil((portfolioData.projects ? portfolioData.projects.length : 0) / oldItemsPerPage);
+
+    if (itemsPerPage !== oldItemsPerPage || newTotalPages !== oldTotalPages) {
+        console.log(`itemsPerPage changed from ${oldItemsPerPage} to ${itemsPerPage} or total pages changed. Re-rendering projects.`);
+        // Reset to first page if current page becomes invalid after resize
+        if (currentPage > getTotalPages() || currentPage < 1) { // Also handle currentPage < 1 case
+            currentPage = 1;
+        }
+        renderProjects(); // Re-render projects with new item count
+    } else {
+        console.log('itemsPerPage and total pages are the same. No project re-render needed by updateItemsPerPage.');
     }
-    renderProjects(); // Re-render projects with new item count
 }
 
 /**
@@ -449,7 +515,8 @@ jsonUploadInput.addEventListener('change', (event) => {
             console.log('JSON uploaded and saved to localStorage:', portfolioData);
             alert('Portfolio data successfully uploaded and saved!');
             currentPage = 1; // Reset to first page after upload
-            renderPortfolio(); // Re-render immediately
+            renderPortfolio(); // Re-render immediately (this will also call renderProjects and checkFontAwesome)
+            updateItemsPerPage(); // Ensure item count is correct after new data
         } catch (error) {
             console.error('Error parsing uploaded JSON:', error);
             alert('Failed to parse JSON file. Please ensure it is valid.');
@@ -469,9 +536,6 @@ contactForm.addEventListener('submit', function(event) {
         alert('Please enter a valid email address.');
         return;
     }
-
-    // Temporarily change action to FormSubmit.co URL (already done by renderPortfolio)
-    // The form's action attribute is already set by renderPortfolio based on data.json
 
     // Perform the actual submission using fetch
     const formData = new FormData(this);
@@ -504,21 +568,23 @@ contactForm.addEventListener('submit', function(event) {
 
 // Admin Controls Visibility
 function setAdminControlsVisibility() {
+    // Check if the protocol is http or https (meaning it's served by a web server)
     if (window.location.protocol === 'http:' || window.location.protocol === 'https:') {
         adminControls?.classList.add('hidden');
         console.log('Admin controls hidden in online mode.');
     } else {
+        // If it's file:// protocol, show controls (for local file system development)
         adminControls?.classList.remove('hidden');
         console.log('Admin controls visible in offline mode.');
     }
 }
 
-// New: Hamburger menu toggle logic
+// Hamburger menu toggle logic
 menuToggle.addEventListener('click', () => {
     mainNav.classList.toggle('active');
 });
 
-// New: Close mobile menu when a navigation link is clicked
+// Close mobile menu when a navigation link is clicked
 mainNav.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', () => {
         if (window.innerWidth <= 768) { // Only close if in mobile view
@@ -534,6 +600,8 @@ window.addEventListener('resize', updateItemsPerPage);
 // Initial load
 document.addEventListener('DOMContentLoaded', () => {
     setAdminControlsVisibility();
-    updateItemsPerPage(); // Set initial items per page and render
-    loadDataAndDisplay(); // Load and display data
+    // Load data first, then after it's loaded, update items per page and render projects correctly.
+    loadDataAndDisplay().then(() => {
+        updateItemsPerPage(); // This will now run AFTER portfolioData is populated.
+    });
 });
