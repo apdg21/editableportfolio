@@ -1,0 +1,148 @@
+{
+  "logo": "Juan dela Curz Portfolio",
+  "hero": "Crafting compelling stories through dynamic video editing. Let your vision come to life with professional precision.",
+  "about": "I’m a freelance video editor with 5+ years of experience turning raw footage into polished productions. Whether it's social media clips, documentaries, or promotional videos, I bring clarity and creativity to every cut.",
+  "contact": "Feel free to reach out for collaborations or project inquiries.",
+  "footer": "© 2025 Juan dela Cruz. All rights reserved.",
+  "samples": [
+    {
+      "title": "Travel Montage",
+      "description": "A cinematic travel sequence.",
+      "image": "sample1.jpg",
+      "link": "sample1.txt"
+    },
+    {
+      "title": "Corporate Promo",
+      "description": "Professional branding edit.",
+      "image": "sample2.jpg",
+      "link": "sample2.txt"
+    },
+    {
+      "title": "Vlog Edit",
+      "description": "Engaging daily vlog highlights.",
+      "image": "sample3.jpg",
+      "link": "sample3.txt"
+    },
+    {
+      "title": "Event Recap",
+      "description": "Capturing event energy.",
+      "image": "sample4.jpg",
+      "link": "sample4.txt"
+    },
+    {
+      "title": "Music Video Cut",
+      "description": "Stylized music performance edit.",
+      "image": "sample5.jpg",
+      "link": "sample5.txt"
+    },
+    {
+      "title": "Wedding Highlights",
+      "description": "Romantic story summary.",
+      "image": "sample6.jpg",
+      "link": "sample6.txt"
+    },
+    {
+      "title": "Social Media Snippets",
+      "description": "Short, punchy videos.",
+      "image": "sample7.jpg",
+      "link": "sample7.txt"
+    },
+    {
+      "title": "Interview Sync",
+      "description": "Polished dialogue edits.",
+      "image": "sample8.jpg",
+      "link": "sample8.txt"
+    },
+    {
+      "title": "Product Demo",
+      "description": "Concise product feature edits.",
+      "image": "sample9.jpg",
+      "link": "sample9.txt"
+    },
+    {
+      "title": "Real Estate Tour",
+      "description": "Home walkthrough visual.",
+      "image": "sample10.jpg",
+      "link": "sample10.txt"
+    },
+    {
+      "title": "Documentary Scene",
+      "description": "Narrative-driven editing.",
+      "image": "sample11.jpg",
+      "link": "sample11.txt"
+    },
+    {
+      "title": "Commercial Spot",
+      "description": "High-impact 30-second ad.",
+      "image": "sample12.jpg",
+      "link": "sample12.txt"
+    },
+    {
+      "title": "YouTube Intro",
+      "description": "Channel branding clips.",
+      "image": "sample13.jpg",
+      "link": "sample13.txt"
+    },
+    {
+      "title": "Fitness Reel",
+      "description": "Fast-paced training edits.",
+      "image": "sample14.jpg",
+      "link": "sample14.txt"
+    },
+    {
+      "title": "TikTok Cut",
+      "description": "Viral-ready vertical video.",
+      "image": "sample15.jpg",
+      "link": "sample15.txt"
+    },
+    {
+      "title": "Drone Footage",
+      "description": "Aerial cinematography trim.",
+      "image": "sample16.jpg",
+      "link": "sample16.txt"
+    },
+    {
+      "title": "Livestream Recap",
+      "description": "Condensed highlights.",
+      "image": "sample17.jpg",
+      "link": "sample17.txt"
+    },
+    {
+      "title": "Screencast Tutorial",
+      "description": "Clean, clear instructions.",
+      "image": "sample18.jpg",
+      "link": "sample18.txt"
+    },
+    {
+      "title": "Animation Assembly",
+      "description": "Motion graphics timeline.",
+      "image": "sample19.jpg",
+      "link": "sample19.txt"
+    },
+    {
+      "title": "Behind-the-Scenes",
+      "description": "Fun production shots.",
+      "image": "sample20.jpg",
+      "link": "sample20.txt"
+    }
+  ],
+  "testimonials": [
+    {
+      "quote": "Incredible work! Always on time and exceeds expectations.",
+      "author": "Alex Rivera"
+    },
+    {
+      "quote": "Turned our raw footage into a powerful story.",
+      "author": "Jasmine Kwon"
+    },
+    {
+      "quote": "Creative, professional, and easy to work with!",
+      "author": "Mark DeLuca"
+    }
+  ],
+  "social": {
+    "linkedin": "https://linkedin.com/in/videoeditor",
+    "twitter": "https://twitter.com/videoeditor",
+    "github": "https://github.com/videoeditor"
+  }
+}

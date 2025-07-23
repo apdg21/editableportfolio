@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edit Portfolio Content</title>
+  <link rel="stylesheet" href="style.css" />
+  <script defer src="form.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Edit Portfolio Content</h1>
+    <nav>
+      <a href="index.html">Back to Portfolio</a>
+    </nav>
+  </header>
+
+  <main>
+    <form id="editor-form">
+      <fieldset>
+        <legend>Logo</legend>
+        <input type="text" id="logo" placeholder="Logo Text" required />
+      </fieldset>
+
+      <fieldset>
+        <legend>Hero Section</legend>
+        <textarea id="hero" placeholder="Hero Text" required></textarea>
+      </fieldset>
+
+      <fieldset>
+        <legend>About Section</legend>
+        <textarea id="about" placeholder="About Me" required></textarea>
+      </fieldset>
+
+      <fieldset>
+        <legend>Samples</legend>
+        <div id="samples-container"></div>
+        <button type="button" id="add-sample">Add Sample</button>
+      </fieldset>
+
+      <fieldset>
+        <legend>Testimonials</legend>
+        <div id="testimonials-container"></div>
+        <button type="button" id="add-testimonial">Add Testimonial</button>
+      </fieldset>
+
+      <fieldset>
+        <legend>Contact Info</legend>
+        <input type="text" id="contact" placeholder="Contact Info" required />
+      </fieldset>
+
+      <fieldset>
+        <legend>Footer Text</legend>
+        <input type="text" id="footer" placeholder="Footer Text" required />
+      </fieldset>
+
+      <fieldset>
+        <legend>Social Links</legend>
+        <input type="url" id="linkedin" placeholder="LinkedIn URL" />
+        <input type="url" id="twitter" placeholder="Twitter URL" />
+        <input type="url" id="github" placeholder="GitHub URL" />
+      </fieldset>
+
+      <div class="buttons">
+        <button type="submit">Save</button>
+        <button type="button" id="download-json">Download JSON</button>
+        <input type="file" id="upload-json" accept="application/json" />
+      </div>
+    </form>
+  </main>
+</body>
+</html>
