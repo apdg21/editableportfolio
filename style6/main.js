@@ -1,5 +1,47 @@
-
 document.addEventListener('DOMContentLoaded', function() {
+
+    // Always fetch fresh data from data.json with cache busting
+    const cacheBust = new Date().getTime();
+    fetch(`data.json?_=${cacheBust}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to load data.json');
+            }
+            return response.json();
+        })
+        .then(data => {
+            portfolioData = data;
+            // Check if there is saved data in localStorage
+            const savedData = JSON.parse(localStorage.getItem('portfolioData'));
+            if (savedData && Object.keys(savedData).length > 0) {
+                // Optionally prompt user to choose between saved and fresh data
+                if (confirm('You have previously saved changes. Would you like to load your saved changes instead of the default data?')) {
+                    portfolioData = savedData;
+                } else {
+                    // Save fresh data to localStorage to ensure consistency
+                    localStorage.setItem('portfolioData', JSON.stringify(data));
+                }
+            } else {
+                // No saved data, use fresh data and save to localStorage
+                localStorage.setItem('portfolioData', JSON.stringify(data));
+            }
+            renderPortfolio();
+        })
+        .catch(error => {
+            console.error('Error loading portfolio data:', error);
+            // Fallback to localStorage if fetch fails
+            const savedData = JSON.parse(localStorage.getItem('portfolioData'));
+            if (savedData && Object.keys(savedData).length > 0) {
+                portfolioData = savedData;
+                renderPortfolio();
+            } else {
+                // Display error message to user
+                const errorMessage = document.createElement('div');
+                errorMessage.className = 'error-message';
+                errorMessage.textContent = 'Failed to load portfolio data. Please try again later.';
+                document.body.prepend(errorMessage);
+            }
+        });
     // ===== EDIT BUTTON VISIBILITY ===== //
     const showEditButton = () => {
         const isLocal = 
@@ -23,23 +65,10 @@ document.addEventListener('DOMContentLoaded', function() {
     };
     showEditButton();
 
-    
     // Load portfolio data
-    let portfolioData = JSON.parse(localStorage.getItem('portfolioData')) || {};
+    let portfolioData = {};
+
     
-    // If no data in localStorage, load from data.json
-    if (Object.keys(portfolioData).length === 0) {
-        fetch('data.json')
-            .then(response => response.json())
-            .then(data => {
-                portfolioData = data;
-                localStorage.setItem('portfolioData', JSON.stringify(data));
-                renderPortfolio();
-            })
-            .catch(error => console.error('Error loading portfolio data:', error));
-    } else {
-        renderPortfolio();
-    }
     
     // Set current year in footer
     document.getElementById('year').textContent = new Date().getFullYear();
