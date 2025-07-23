@@ -328,11 +328,11 @@ footer {
 
 /* ===== Offline Controls ===== */
 .offline-only {
-  display: none;
+  display: none !important;
 }
 
-.offline .offline-only {
-  display: block;
+.admin.offline .offline-only {
+  display: block !important;
   text-align: center;
   margin: 1.5rem auto;
 }

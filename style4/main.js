@@ -164,5 +164,25 @@ document.getElementById('json-file')?.addEventListener('change', e => {
   reader.readAsText(file);
 });
 
-// ===== Init =====
+// ===== Hide Admin Buttons Online =====
+function hideAdminOnline() {
+  const admin = document.querySelector('.admin');
+  if (!admin) {
+    console.error('Admin element not found');
+    return;
+  }
+  // Simple fetch to test online status
+  fetch('data.json', { method: 'HEAD' })
+    .then(() => {
+      console.log('Online: Hiding admin buttons');
+      admin.classList.remove('offline');
+    })
+    .catch(() => {
+      console.log('Offline: Showing admin buttons');
+      admin.classList.add('offline');
+    });
+}
+
+// Initialize
+hideAdminOnline();
 loadContent();
