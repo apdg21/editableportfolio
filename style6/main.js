@@ -1,47 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-
-    // Always fetch fresh data from data.json with cache busting
-    const cacheBust = new Date().getTime();
-    fetch(`data.json?_=${cacheBust}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to load data.json');
-            }
-            return response.json();
-        })
-        .then(data => {
-            portfolioData = data;
-            // Check if there is saved data in localStorage
-            const savedData = JSON.parse(localStorage.getItem('portfolioData'));
-            if (savedData && Object.keys(savedData).length > 0) {
-                // Optionally prompt user to choose between saved and fresh data
-                if (confirm('You have previously saved changes. Would you like to load your saved changes instead of the default data?')) {
-                    portfolioData = savedData;
-                } else {
-                    // Save fresh data to localStorage to ensure consistency
-                    localStorage.setItem('portfolioData', JSON.stringify(data));
-                }
-            } else {
-                // No saved data, use fresh data and save to localStorage
-                localStorage.setItem('portfolioData', JSON.stringify(data));
-            }
-            renderPortfolio();
-        })
-        .catch(error => {
-            console.error('Error loading portfolio data:', error);
-            // Fallback to localStorage if fetch fails
-            const savedData = JSON.parse(localStorage.getItem('portfolioData'));
-            if (savedData && Object.keys(savedData).length > 0) {
-                portfolioData = savedData;
-                renderPortfolio();
-            } else {
-                // Display error message to user
-                const errorMessage = document.createElement('div');
-                errorMessage.className = 'error-message';
-                errorMessage.textContent = 'Failed to load portfolio data. Please try again later.';
-                document.body.prepend(errorMessage);
-            }
-        });
     // ===== EDIT BUTTON VISIBILITY ===== //
     const showEditButton = () => {
         const isLocal = 
@@ -67,8 +24,75 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Load portfolio data
     let portfolioData = {};
+    const isLocal = 
+        window.location.hostname === "localhost" || 
+        window.location.hostname === "127.0.0.1" ||
+        window.location.protocol === "file:";
 
-    
+    // Function to load and render portfolio data
+    function loadPortfolioData() {
+        const cacheBust = new Date().getTime();
+        // Always try to fetch data.json when online
+        if (!isLocal) {
+            fetch(`data.json?_=${cacheBust}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to load data.json');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    portfolioData = data;
+                    localStorage.setItem('portfolioData', JSON.stringify(data));
+                    renderPortfolio();
+                })
+                .catch(error => {
+                    console.error('Error loading portfolio data:', error);
+                    // Fallback to localStorage if fetch fails
+                    const savedData = JSON.parse(localStorage.getItem('portfolioData'));
+                    if (savedData && Object.keys(savedData).length > 0) {
+                        portfolioData = savedData;
+                        renderPortfolio();
+                    } else {
+                        // Display error message to user
+                        const errorMessage = document.createElement('div');
+                        errorMessage.className = 'error-message';
+                        errorMessage.textContent = 'Failed to load portfolio data. Please try again later.';
+                        document.body.prepend(errorMessage);
+                    }
+                });
+        } else {
+            // Offline: Check localStorage first, then fall back to data.json
+            const savedData = JSON.parse(localStorage.getItem('portfolioData'));
+            if (savedData && Object.keys(savedData).length > 0) {
+                portfolioData = savedData;
+                renderPortfolio();
+            } else {
+                fetch(`data.json?_=${cacheBust}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to load data.json');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        portfolioData = data;
+                        localStorage.setItem('portfolioData', JSON.stringify(data));
+                        renderPortfolio();
+                    })
+                    .catch(error => {
+                        console.error('Error loading portfolio data:', error);
+                        const errorMessage = document.createElement('div');
+                        errorMessage.className = 'error-message';
+                        errorMessage.textContent = 'Failed to load portfolio data. Please try again later.';
+                        document.body.prepend(errorMessage);
+                    });
+            }
+        }
+    }
+
+    // Load portfolio data on page load
+    loadPortfolioData();
     
     // Set current year in footer
     document.getElementById('year').textContent = new Date().getFullYear();

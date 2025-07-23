@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     skillDiv.className = 'array-item';
                     skillDiv.innerHTML = `
                         <input type="text" class="skill-input" value="${skill}" placeholder="Enter skill">
-                        <button class="remove-item" data-index="${index}">&times;</button>
+                        <button class="remove-item" data-index="${index}">×</button>
                     `;
                     skillsContainer.appendChild(skillDiv);
                 });
@@ -205,7 +205,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         skillDiv.innerHTML = `
             <input type="text" class="skill-input" value="" placeholder="Enter skill">
-            <button class="remove-item" data-index="${document.querySelectorAll('.array-item').length}">&times;</button>
+            <button class="remove-item" data-index="${document.querySelectorAll('.array-item').length}">×</button>
         `;
         
         skillsContainer.appendChild(skillDiv);
@@ -231,6 +231,110 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
+    // Load data.json manually
+    document.getElementById('load-json-btn').addEventListener('click', function() {
+        if (confirm('Are you sure you want to load data from data.json? This will overwrite any unsaved changes.')) {
+            const cacheBust = new Date().getTime();
+            fetch(`data.json?_=${cacheBust}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to load data.json');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    portfolioData = data;
+                    localStorage.setItem('portfolioData', JSON.stringify(data));
+                    initializeForm();
+                    
+                    const statusMessage = document.getElementById('status-message');
+                    statusMessage.textContent = 'Data loaded from data.json successfully!';
+                    statusMessage.className = 'status success';
+                    
+                    setTimeout(() => {
+                        statusMessage.className = 'status';
+                        statusMessage.textContent = '';
+                    }, 5000);
+                })
+                .catch(error => {
+                    console.error('Error loading data.json:', error);
+                    const statusMessage = document.getElementById('status-message');
+                    statusMessage.textContent = 'Error loading data.json. Please try again.';
+                    statusMessage.className = 'status error';
+                    
+                    setTimeout(() => {
+                        statusMessage.className = 'status';
+                        statusMessage.textContent = '';
+                    }, 5000);
+                });
+        }
+    });
+    
+    // Download JSON
+    document.getElementById('download-btn').addEventListener('click', function() {
+        // Update portfolio data before downloading
+        portfolioData.siteName = document.getElementById('site-name').value;
+        portfolioData.hero = {
+            title: document.getElementById('hero-title').value,
+            subtitle: document.getElementById('hero-subtitle').value,
+            backgroundImage: document.getElementById('hero-background').value
+        };
+        portfolioData.about = {
+            bio: document.getElementById('about-bio').value,
+            profileImage: document.getElementById('profile-image-url').value,
+            skills: Array.from(document.querySelectorAll('.skill-input')).map(input => input.value).filter(Boolean)
+        };
+        portfolioData.projects = Array.from(document.querySelectorAll('#projects-container .array-item')).map(item => {
+            const categories = Array.from(item.querySelector('.project-categories').selectedOptions)
+                .map(option => option.value);
+            return {
+                title: item.querySelector('.project-title').value,
+                description: item.querySelector('.project-desc').value,
+                image: item.querySelector('.project-image').value,
+                highResUrl: item.querySelector('.project-highres').value,
+                categories: categories
+            };
+        }).filter(project => project.title);
+        portfolioData.testimonials = Array.from(document.querySelectorAll('#testimonials-container .array-item')).map(item => {
+            return {
+                text: item.querySelector('.testimonial-text').value,
+                author: item.querySelector('.testimonial-author').value
+            };
+        }).filter(testimonial => testimonial.text);
+        portfolioData.socialLinks = Array.from(document.querySelectorAll('#social-links-container .array-item')).map(item => {
+            return {
+                platform: item.querySelector('.social-platform').value,
+                url: item.querySelector('.social-url').value
+            };
+        }).filter(link => link.url);
+        portfolioData.copyrightText = document.getElementById('copyright-text').value;
+
+        // Create JSON blob
+        const jsonString = JSON.stringify(portfolioData, null, 2);
+        const blob = new Blob([jsonString], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        
+        // Create download link
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'data.json';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+
+        // Show success message
+        const statusMessage = document.getElementById('status-message');
+        statusMessage.textContent = 'Portfolio data downloaded successfully!';
+        statusMessage.className = 'status success';
+        
+        // Hide message after 5 seconds
+        setTimeout(() => {
+            statusMessage.className = 'status';
+            statusMessage.textContent = '';
+        }, 5000);
+    });
+
     // Save data
     document.getElementById('save-btn').addEventListener('click', function() {
         // Update site name
@@ -296,35 +400,6 @@ document.addEventListener('DOMContentLoaded', function() {
             statusMessage.className = 'status';
             statusMessage.textContent = '';
         }, 5000);
-    });
-    
-    // Reset to default
-    document.getElementById('reset-btn').addEventListener('click', function() {
-        if (confirm('Are you sure you want to reset all content to default? This cannot be undone.')) {
-            localStorage.removeItem('portfolioData');
-            fetch('data.json')
-                .then(response => response.json())
-                .then(data => {
-                    portfolioData = data;
-                    localStorage.setItem('portfolioData', JSON.stringify(data));
-                    initializeForm();
-                    
-                    const statusMessage = document.getElementById('status-message');
-                    statusMessage.textContent = 'Content reset to default successfully!';
-                    statusMessage.className = 'status success';
-                    
-                    setTimeout(() => {
-                        statusMessage.className = 'status';
-                        statusMessage.textContent = '';
-                    }, 5000);
-                })
-                .catch(error => {
-                    console.error('Error loading default data:', error);
-                    const statusMessage = document.getElementById('status-message');
-                    statusMessage.textContent = 'Error loading default data. Please try again.';
-                    statusMessage.className = 'status error';
-                });
-        }
     });
     
     // Initialize the form
