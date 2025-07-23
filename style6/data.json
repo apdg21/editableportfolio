@@ -1,0 +1,115 @@
+{
+    "siteName": "Elena Ray",
+    "copyrightText": "© 2023 Elena Ray Photography. All rights reserved.",
+    "hero": {
+        "title": "Capturing Life's Beautiful Moments",
+        "subtitle": "Professional photography for portraits, landscapes, and special events",
+        "backgroundImage": "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
+    },
+    "projects": [
+        {
+            "title": "Urban Portrait Series",
+            "description": "A collection of portraits taken in various urban environments, showcasing the contrast between people and city landscapes.",
+            "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80",
+            "categories": ["portrait"],
+            "highResUrl": "https://example.com/highres/urban-portrait"
+        },
+        {
+            "title": "Mountain Sunrise",
+            "description": "Captured during a hiking trip in the Rockies, this landscape showcases the breathtaking colors of sunrise over mountain peaks.",
+            "image": "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+            "categories": ["landscape"],
+            "highResUrl": "https://example.com/highres/mountain-sunrise"
+        },
+        {
+            "title": "Product Photography - Watches",
+            "description": "Commercial product photography for a luxury watch brand, highlighting craftsmanship and details.",
+            "image": "https://images.unsplash.com/photo-1523170335258-f5ed11844a49?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80",
+            "categories": ["product"],
+            "highResUrl": "https://example.com/highres/watch-product"
+        },
+        {
+            "title": "Wedding Day",
+            "description": "Candid moments from a beautiful outdoor wedding ceremony and reception.",
+            "image": "https://images.unsplash.com/photo-1519225421980-715cb0215aed?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+            "categories": ["event"],
+            "highResUrl": "https://example.com/highres/wedding-day"
+        },
+        {
+            "title": "Beach Portrait",
+            "description": "Environmental portrait session at sunset on Malibu Beach.",
+            "image": "https://images.unsplash.com/photo-1503104834685-7205e8607eb9?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80",
+            "categories": ["portrait"],
+            "highResUrl": "https://example.com/highres/beach-portrait"
+        },
+        {
+            "title": "Desert Landscape",
+            "description": "The stark beauty of the Arizona desert captured at golden hour.",
+            "image": "https://images.unsplash.com/photo-1418065460487-3e41a6c84dc5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+            "categories": ["landscape"],
+            "highResUrl": "https://example.com/highres/desert-landscape"
+        },
+        {
+            "title": "Jewelry Collection",
+            "description": "Product photography for a boutique jewelry designer's new collection.",
+            "image": "https://images.unsplash.com/photo-1605100804763-247f67b3557e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+            "categories": ["product"],
+            "highResUrl": "https://example.com/highres/jewelry-collection"
+        },
+        {
+            "title": "Corporate Event",
+            "description": "Coverage of a tech company's annual conference and party.",
+            "image": "https://images.unsplash.com/photo-1527529482837-4698179dc6ce?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+            "categories": ["event"],
+            "highResUrl": "https://example.com/highres/corporate-event"
+        }
+    ],
+    "about": {
+        "bio": "<p>I'm Elena Ray, a professional photographer with over 10 years of experience capturing special moments and creating visual stories. My passion lies in finding the perfect light and composition to create images that evoke emotion and tell a story.</p><p>After studying Fine Arts at the University of Washington, I began my career as a photojournalist before transitioning to commercial and portrait photography. My work has been featured in several publications and exhibitions.</p><p>When I'm not behind the camera, you can find me hiking in the mountains or teaching photography workshops to aspiring photographers.</p>",
+        "skills": [
+            "Portrait Photography",
+            "Landscape Photography",
+            "Product Photography",
+            "Event Photography",
+            "Adobe Photoshop",
+            "Adobe Lightroom",
+            "Lighting Techniques",
+            "Photo Editing",
+            "Color Grading",
+            "Studio Lighting"
+        ],
+        "profileImage": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80"
+    },
+    "testimonials": [
+        {
+            "text": "Elena captured our wedding day perfectly. Her ability to find the right moments and compose beautiful shots is incredible. We'll cherish these photos forever.",
+            "author": "Sarah & Michael Johnson"
+        },
+        {
+            "text": "Working with Elena on our product campaign was a pleasure. She understood our brand aesthetic immediately and delivered stunning images that boosted our sales.",
+            "author": "David Chen, Luxe Watches"
+        },
+        {
+            "text": "The family portraits Elena took for us are absolutely beautiful. She made us all feel comfortable and captured our family's personality perfectly.",
+            "author": "The Williams Family"
+        }
+    ],
+    "socialLinks": [
+        {
+            "platform": "instagram",
+            "url": "https://instagram.com"
+        },
+        {
+            "platform": "500px",
+            "url": "https://500px.com"
+        },
+        {
+            "platform": "flickr",
+            "url": "https://flickr.com"
+        },
+        {
+            "platform": "behance",
+            "url": "https://behance.net"
+        }
+    ]
+}

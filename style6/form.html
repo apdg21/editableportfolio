@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Portfolio Content</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Raleway', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1, h2, h3 {
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e74c3c;
+        }
+        
+        .form-section {
+            margin-bottom: 40px;
+            padding: 20px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        input[type="text"],
+        input[type="url"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 16px;
+        }
+        
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: #e74c3c;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background-color: #c0392b;
+        }
+        
+        .btn-secondary {
+            background-color: #3498db;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-danger {
+            background-color: #e74c3c;
+        }
+        
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+        
+        .image-preview {
+            max-width: 200px;
+            max-height: 200px;
+            margin-top: 10px;
+            display: block;
+        }
+        
+        .array-item {
+            border: 1px solid #eee;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            position: relative;
+        }
+        
+        .remove-item {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .add-item {
+            margin-top: 10px;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .tab.active {
+            border-bottom-color: #e74c3c;
+            font-weight: 500;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .status {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 4px;
+            display: none;
+        }
+        
+        .status.success {
+            background-color: #d4edda;
+            color: #155724;
+            display: block;
+        }
+        
+        .status.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .form-section {
+                padding: 15px;
+            }
+            
+            .actions {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Edit Portfolio Content</h1>
+        
+        <div class="tabs">
+            <div class="tab active" data-tab="site">Site</div>
+            <div class="tab" data-tab="hero">Hero</div>
+            <div class="tab" data-tab="projects">Projects</div>
+            <div class="tab" data-tab="about">About</div>
+            <div class="tab" data-tab="testimonials">Testimonials</div>
+            <div class="tab" data-tab="social">Social Links</div>
+            <div class="tab" data-tab="footer">Footer</div>
+        </div>
+        
+        <div id="site-tab" class="tab-content active">
+            <div class="form-section">
+                <h2>Site Information</h2>
+                <div class="form-group">
+                    <label for="site-name">Site Name/Logo Text</label>
+                    <input type="text" id="site-name" placeholder="Your Name/Brand">
+                </div>
+            </div>
+        </div>
+        
+        <div id="hero-tab" class="tab-content">
+            <div class="form-section">
+                <h2>Hero Section</h2>
+                <div class="form-group">
+                    <label for="hero-title">Title</label>
+                    <input type="text" id="hero-title" placeholder="Enter hero title">
+                </div>
+                <div class="form-group">
+                    <label for="hero-subtitle">Subtitle</label>
+                    <input type="text" id="hero-subtitle" placeholder="Enter hero subtitle">
+                </div>
+                <div class="form-group">
+                    <label for="hero-background">Background Image URL</label>
+                    <input type="url" id="hero-background" placeholder="Enter background image URL">
+                    <small>Paste a direct link to a high-quality image</small>
+                </div>
+            </div>
+        </div>
+        
+        <div id="projects-tab" class="tab-content">
+            <div class="form-section">
+                <h2>Projects</h2>
+                <div id="projects-container"></div>
+                <button id="add-project" class="btn btn-secondary add-item">Add Project</button>
+            </div>
+        </div>
+        
+        <div id="about-tab" class="tab-content">
+            <div class="form-section">
+                <h2>About Section</h2>
+                <div class="form-group">
+                    <label for="about-bio">Bio Text</label>
+                    <textarea id="about-bio" placeholder="Enter your bio text (HTML allowed)"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="profile-image">Profile Image</label>
+                    <input type="file" id="profile-image-upload" accept="image/*">
+                    <input type="text" id="profile-image-url" placeholder="Or enter image URL" style="margin-top: 10px;">
+                    <img id="profile-image-preview" class="image-preview" src="" alt="Profile Image Preview">
+                </div>
+                <div class="form-group">
+                    <label>Skills</label>
+                    <div id="skills-container"></div>
+                    <button id="add-skill" class="btn btn-secondary add-item">Add Skill</button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="testimonials-tab" class="tab-content">
+            <div class="form-section">
+                <h2>Testimonials</h2>
+                <div id="testimonials-container"></div>
+                <button id="add-testimonial" class="btn btn-secondary add-item">Add Testimonial</button>
+            </div>
+        </div>
+        
+        <div id="social-tab" class="tab-content">
+            <div class="form-section">
+                <h2>Social Links</h2>
+                <div id="social-links-container"></div>
+                <button id="add-social-link" class="btn btn-secondary add-item">Add Social Link</button>
+            </div>
+        </div>
+        
+        <div id="footer-tab" class="tab-content">
+            <div class="form-section">
+                <h2>Footer Content</h2>
+                <div class="form-group">
+                    <label for="copyright-text">Copyright Text</label>
+                    <input type="text" id="copyright-text" placeholder="© 2023 Your Name. All rights reserved.">
+                </div>
+            </div>
+        </div>
+        
+        <div class="actions">
+            <div class="action-buttons">
+                <button id="reset-btn" class="btn btn-danger">Reset to Default</button>
+                <a href="index.html" target="_blank" class="btn btn-secondary">Preview Portfolio</a>
+            </div>
+            <button id="save-btn" class="btn">Save Changes</button>
+        </div>
+        
+        <div id="status-message" class="status"></div>
+    </div>
+    
+    <script src="form.js"></script>
+</body>
+</html>
