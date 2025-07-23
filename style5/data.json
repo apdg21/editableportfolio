@@ -129,7 +129,7 @@
     "about": {
         "text": "Hello! I'm a passionate video editor with over 8 years of experience in crafting compelling visual narratives. From dynamic promotional content to intricate documentary edits, my goal is always to bring stories to life with precision and creativity. I specialize in post-production, color grading, sound design, and motion graphics, using industry-standard software to deliver high-quality results. I believe that every frame has a purpose, and I'm dedicated to ensuring that your vision not only looks incredible but also resonates deeply with your audience. Let's create something unforgettable together!",
         "skills": ["Adobe Premiere Pro", "After Effects", "DaVinci Resolve", "Final Cut Pro", "Motion Graphics", "Color Grading", "Sound Design", "VFX", "Storytelling", "Video Compression"],
-       "profileImage": "assets/your-actual-profile-image.jpg" 
+        "profileImage": "assets/default-profile.jpg"
     },
     "testimonials": [
         {
