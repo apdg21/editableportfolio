@@ -1,199 +1,115 @@
 {
-  "logo": "Video Editor Portfolio",
-  "hero": {
-    "title": "Crafting Stories Through Photography",
-    "subtitle": "Bringing Visions to Life, Frame by Frame",
-    "backgroundImage": ""
-  },
-  "projects": [
-    {
-      "title": "Dynamic Promo Video",
-      "description": "Engaging promotional video for a tech startup, highlighting key features and benefits.",
-      "image": "assets/sample1.jpg",
-      "highResUrl": "",
-      "categories": [
-        "portrait"
-      ]
+    "siteName": "Elena Ray",
+    "copyrightText": "© 2023 Elena Ray Photography. All rights reserved.",
+    "hero": {
+        "title": "Capturing Life's Beautiful Moments",
+        "subtitle": "Professional photography for portraits, landscapes, and special events",
+        "backgroundImage": "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
     },
-    {
-      "title": "Corporate Explainer",
-      "description": "Animated explainer video simplifying complex corporate services for a broader audience.",
-      "image": "assets/sample2.jpg",
-      "highResUrl": "",
-      "categories": [
-        "landscape"
-      ]
+    "projects": [
+        {
+            "title": "Urban Portrait Series",
+            "description": "A collection of portraits taken in various urban environments, showcasing the contrast between people and city landscapes.",
+            "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80",
+            "categories": ["portrait"],
+            "highResUrl": "https://example.com/highres/urban-portrait"
+        },
+        {
+            "title": "Mountain Sunrise",
+            "description": "Captured during a hiking trip in the Rockies, this landscape showcases the breathtaking colors of sunrise over mountain peaks.",
+            "image": "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+            "categories": ["landscape"],
+            "highResUrl": "https://example.com/highres/mountain-sunrise"
+        },
+        {
+            "title": "Product Photography - Watches",
+            "description": "Commercial product photography for a luxury watch brand, highlighting craftsmanship and details.",
+            "image": "https://images.unsplash.com/photo-1523170335258-f5ed11844a49?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80",
+            "categories": ["product"],
+            "highResUrl": "https://example.com/highres/watch-product"
+        },
+        {
+            "title": "Wedding Day",
+            "description": "Candid moments from a beautiful outdoor wedding ceremony and reception.",
+            "image": "https://images.unsplash.com/photo-1519225421980-715cb0215aed?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+            "categories": ["event"],
+            "highResUrl": "https://example.com/highres/wedding-day"
+        },
+        {
+            "title": "Beach Portrait",
+            "description": "Environmental portrait session at sunset on Malibu Beach.",
+            "image": "https://images.unsplash.com/photo-1503104834685-7205e8607eb9?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80",
+            "categories": ["portrait"],
+            "highResUrl": "https://example.com/highres/beach-portrait"
+        },
+        {
+            "title": "Desert Landscape",
+            "description": "The stark beauty of the Arizona desert captured at golden hour.",
+            "image": "https://images.unsplash.com/photo-1418065460487-3e41a6c84dc5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+            "categories": ["landscape"],
+            "highResUrl": "https://example.com/highres/desert-landscape"
+        },
+        {
+            "title": "Jewelry Collection",
+            "description": "Product photography for a boutique jewelry designer's new collection.",
+            "image": "https://images.unsplash.com/photo-1605100804763-247f67b3557e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+            "categories": ["product"],
+            "highResUrl": "https://example.com/highres/jewelry-collection"
+        },
+        {
+            "title": "Corporate Event",
+            "description": "Coverage of a tech company's annual conference and party.",
+            "image": "https://images.unsplash.com/photo-1527529482837-4698179dc6ce?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+            "categories": ["event"],
+            "highResUrl": "https://example.com/highres/corporate-event"
+        }
+    ],
+    "about": {
+        "bio": "<p>I'm Elena Ray, a professional photographer with over 10 years of experience capturing special moments and creating visual stories. My passion lies in finding the perfect light and composition to create images that evoke emotion and tell a story.</p><p>After studying Fine Arts at the University of Washington, I began my career as a photojournalist before transitioning to commercial and portrait photography. My work has been featured in several publications and exhibitions.</p><p>When I'm not behind the camera, you can find me hiking in the mountains or teaching photography workshops to aspiring photographers.</p>",
+        "skills": [
+            "Portrait Photography",
+            "Landscape Photography",
+            "Product Photography",
+            "Event Photography",
+            "Adobe Photoshop",
+            "Adobe Lightroom",
+            "Lighting Techniques",
+            "Photo Editing",
+            "Color Grading",
+            "Studio Lighting"
+        ],
+        "profileImage": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80"
     },
-    {
-      "title": "Event Highlight Reel",
-      "description": "Capturing the energy and key moments of a major industry conference.",
-      "image": "assets/sample3.jpg",
-      "highResUrl": "",
-      "categories": []
-    },
-    {
-      "title": "Product Launch Cinematic",
-      "description": "High-production value video for a new product, focusing on aesthetics and user experience.",
-      "image": "assets/sample4.jpg",
-      "highResUrl": "",
-      "categories": []
-    },
-    {
-      "title": "Social Media Ad Campaign",
-      "description": "Series of short, punchy videos optimized for various social media platforms.",
-      "image": "assets/sample5.jpg",
-      "highResUrl": "",
-      "categories": []
-    },
-    {
-      "title": "Documentary Short",
-      "description": "Compelling short documentary exploring a local community initiative.",
-      "image": "assets/sample6.jpg",
-      "highResUrl": "",
-      "categories": []
-    },
-    {
-      "title": "Music Video Production",
-      "description": "Creative and visually stunning music video for an indie artist.",
-      "image": "assets/sample7.jpg",
-      "highResUrl": "",
-      "categories": []
-    },
-    {
-      "title": "Educational Content Series",
-      "description": "Editing a series of educational videos for an online learning platform.",
-      "image": "assets/sample8.jpg",
-      "highResUrl": "",
-      "categories": []
-    },
-    {
-      "title": "Real Estate Walkthrough",
-      "description": "Immersive video tour of a luxury property, showcasing its unique features.",
-      "image": "assets/sample9.jpg",
-      "highResUrl": "",
-      "categories": []
-    },
-    {
-      "title": "Travel Vlog Montage",
-      "description": "Fast-paced and exciting montage from a travel vlog, capturing adventure.",
-      "image": "assets/sample10.jpg",
-      "highResUrl": "",
-      "categories": []
-    },
-    {
-      "title": "Fitness Training Series",
-      "description": "Energetic and clear training videos for a fitness coach's online program.",
-      "image": "assets/sample11.jpg",
-      "highResUrl": "",
-      "categories": []
-    },
-    {
-      "title": "Wedding Highlight Film",
-      "description": "Emotionally resonant and beautifully crafted highlight film of a wedding day.",
-      "image": "assets/sample12.jpg",
-      "highResUrl": "",
-      "categories": []
-    },
-    {
-      "title": "Game Trailer Edit",
-      "description": "Dynamic trailer for an upcoming video game, building excitement and anticipation.",
-      "image": "assets/sample13.jpg",
-      "highResUrl": "",
-      "categories": []
-    },
-    {
-      "title": "Exploration of Nature",
-      "description": "Calm and mesmerizing video showcasing the beauty of a natural landscape.",
-      "image": "assets/sample14.jpg",
-      "highResUrl": "",
-      "categories": []
-    },
-    {
-      "title": "Food & Recipe Series",
-      "description": "Appetizing and instructional videos for a cooking channel.",
-      "image": "assets/sample15.jpg",
-      "highResUrl": "",
-      "categories": []
-    },
-    {
-      "title": "Fashion Lookbook",
-      "description": "Stylish and modern video presenting a new fashion collection.",
-      "image": "assets/sample16.jpg",
-      "highResUrl": "",
-      "categories": []
-    },
-    {
-      "title": "Company Profile Video",
-      "description": "Comprehensive video introducing a company, its values, and team.",
-      "image": "assets/sample17.jpg",
-      "highResUrl": "",
-      "categories": []
-    },
-    {
-      "title": "Short Film Post-Production",
-      "description": "Full post-production for an independent short film, including color grading and sound design.",
-      "image": "assets/sample18.jpg",
-      "highResUrl": "",
-      "categories": []
-    },
-    {
-      "title": "Interview Series",
-      "description": "Clean and professional edits for a series of expert interviews.",
-      "image": "assets/sample19.jpg",
-      "highResUrl": "",
-      "categories": []
-    },
-    {
-      "title": "Sports Action Montage",
-      "description": "High-energy montage capturing peak moments from various sports events.",
-      "image": "assets/sample20.jpg",
-      "highResUrl": "",
-      "categories": []
-    }
-  ],
-  "about": {
-    "bio": "",
-    "profileImage": "assets/profile.jpg",
-    "skills": [
-      "Adobe Premiere Pro",
-      "After Effects",
-      "DaVinci Resolve",
-      "Final Cut Pro",
-      "Motion Graphics",
-      "Color Grading",
-      "Sound Design",
-      "VFX",
-      "Storytelling",
-      "Video Compression"
+    "testimonials": [
+        {
+            "text": "Elena captured our wedding day perfectly. Her ability to find the right moments and compose beautiful shots is incredible. We'll cherish these photos forever.",
+            "author": "Sarah & Michael Johnson"
+        },
+        {
+            "text": "Working with Elena on our product campaign was a pleasure. She understood our brand aesthetic immediately and delivered stunning images that boosted our sales.",
+            "author": "David Chen, Luxe Watches"
+        },
+        {
+            "text": "The family portraits Elena took for us are absolutely beautiful. She made us all feel comfortable and captured our family's personality perfectly.",
+            "author": "The Williams Family"
+        }
+    ],
+    "socialLinks": [
+        {
+            "platform": "instagram",
+            "url": "https://instagram.com"
+        },
+        {
+            "platform": "500px",
+            "url": "https://500px.com"
+        },
+        {
+            "platform": "flickr",
+            "url": "https://flickr.com"
+        },
+        {
+            "platform": "behance",
+            "url": "https://behance.net"
+        }
     ]
-  },
-  "testimonials": [
-    {
-      "text": "The video editor delivered exceptional work! They perfectly captured our brand's essence and the final video exceeded all our expectations. Highly recommended!",
-      "author": "Client A"
-    },
-    {
-      "text": "An absolute professional. Their keen eye for detail and understanding of pacing transformed our raw footage into a masterpiece. We'll definitely be working with them again.",
-      "author": "Client B"
-    },
-    {
-      "text": "Outstanding creativity and technical skill. The video editor took our complex ideas and translated them into a clear, engaging, and visually stunning piece.",
-      "author": "Client C"
-    }
-  ],
-  "contact": {
-    "email": "videoeditor@example.com",
-    "successMessage": "Thank you for your message! I'll get back to you soon."
-  },
-  "footer": {
-    "text": "© 2025 Video Editor Portfolio"
-  },
-  "social": {
-    "linkedin": "https://linkedin.com/in/yourvideoeditor",
-    "twitter": "https://twitter.com/yourvideoeditor",
-    "github": "https://github.com/yourvideoeditor"
-  },
-  "socialLinks": [],
-  "siteName": "Andrew de Guzman",
-  "copyrightText": ""
 }
