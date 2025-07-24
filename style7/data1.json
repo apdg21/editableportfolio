@@ -1,0 +1,160 @@
+{
+  "logo": "Juan de la Cruz",
+  "hero": {
+    "title": "Creative Copywriting That Converts",
+    "subtitle": "Crafting compelling stories that engage and persuade."
+  },
+  "projects": [
+    {
+      "title": "Ad Copy for Tech Startup",
+      "description": "Wrote a series of ad copies for a tech startup's product launch, increasing click-through rates by 35%.",
+      "image": "assets/ad_copy.jpg",
+      "link": "samples/ad_copy.txt"
+    },
+    {
+      "title": "Blog Post on Wellness",
+      "description": "Crafted an SEO-optimized blog post for a wellness brand, driving 20% more organic traffic.",
+      "image": "assets/blog_post.jpg",
+      "link": "samples/blog_post.txt"
+    },
+    {
+      "title": "Email Campaign for Retail",
+      "description": "Developed a 5-part email series for a retail client, boosting open rates by 30%.",
+      "image": "assets/email_campaign.jpg",
+      "link": "samples/email_campaign.txt"
+    },
+    {
+      "title": "Social Media Posts for Fashion",
+      "description": "Created engaging social media content for a fashion brand, growing engagement by 25%.",
+      "image": "assets/social_media.jpg",
+      "link": "samples/social_media.txt"
+    },
+    {
+      "title": "Product Description for E-commerce",
+      "description": "Wrote compelling product descriptions for an e-commerce site, increasing conversions by 15%.",
+      "image": "assets/product_description.jpg",
+      "link": "samples/product_description.txt"
+    },
+    {
+      "title": "Case Study for SaaS Company",
+      "description": "Authored a detailed case study for a SaaS company, highlighting client success and boosting credibility.",
+      "image": "assets/case_study.jpg",
+      "link": "samples/case_study.txt"
+    },
+    {
+      "title": "Newsletter for Non-Profit",
+      "description": "Crafted a monthly newsletter for a non-profit, increasing donor engagement by 20%.",
+      "image": "assets/newsletter.jpg",
+      "link": "samples/newsletter.txt"
+    },
+    {
+      "title": "Landing Page for Fitness App",
+      "description": "Wrote persuasive copy for a fitness app landing page, boosting sign-ups by 40%.",
+      "image": "assets/landing_page.jpg",
+      "link": "samples/landing_page.txt"
+    },
+    {
+      "title": "Press Release for Product Launch",
+      "description": "Authored a press release for a new product, gaining coverage in 5 major outlets.",
+      "image": "assets/press_release.jpg",
+      "link": "samples/press_release.txt"
+    },
+    {
+      "title": "Video Script for Brand Ad",
+      "description": "Created a script for a 30-second brand video, viewed over 100,000 times.",
+      "image": "assets/video_script.jpg",
+      "link": "samples/video_script.txt"
+    },
+    {
+      "title": "White Paper for Tech Firm",
+      "description": "Wrote a comprehensive white paper establishing thought leadership in AI.",
+      "image": "assets/white_paper.jpg",
+      "link": "samples/white_paper.txt"
+    },
+    {
+      "title": "SEO Article for Travel Blog",
+      "description": "Crafted an SEO article for a travel blog, ranking on page 1 of Google.",
+      "image": "assets/seo_article.jpg",
+      "link": "samples/seo_article.txt"
+    },
+    {
+      "title": "Brochure for Real Estate",
+      "description": "Developed compelling brochure copy for a real estate agency, driving inquiries.",
+      "image": "assets/brochure.jpg",
+      "link": "samples/brochure.txt"
+    },
+    {
+      "title": "Slogan for Beverage Brand",
+      "description": "Created a catchy slogan for a beverage brand, used in national campaigns.",
+      "image": "assets/slogan.jpg",
+      "link": "samples/slogan.txt"
+    },
+    {
+      "title": "Website Copy for Startup",
+      "description": "Wrote engaging website copy for a startup, improving user retention.",
+      "image": "assets/website_copy.jpg",
+      "link": "samples/website_copy.txt"
+    },
+    {
+      "title": "Social Ad for Food Delivery",
+      "description": "Crafted targeted social ads for a food delivery service, increasing orders by 30%.",
+      "image": "assets/social_ad.jpg",
+      "link": "samples/social_ad.txt"
+    },
+    {
+      "title": "Email Welcome Series",
+      "description": "Developed a welcome email series for a subscription service, boosting engagement.",
+      "image": "assets/welcome_series.jpg",
+      "link": "samples/welcome_series.txt"
+    },
+    {
+      "title": "Blog Post on Tech Trends",
+      "description": "Wrote a blog post on emerging tech trends, shared over 1,000 times.",
+      "image": "assets/tech_trends.jpg",
+      "link": "samples/tech_trends.txt"
+    },
+    {
+      "title": "Product Review for Gadget",
+      "description": "Authored a detailed product review for a gadget, driving affiliate sales.",
+      "image": "assets/product_review.jpg",
+      "link": "samples/product_review.txt"
+    },
+    {
+      "title": "FAQ Copy for E-commerce",
+      "description": "Wrote clear FAQ copy for an e-commerce site, reducing customer inquiries.",
+      "image": "assets/faq_copy.jpg",
+      "link": "samples/faq_copy.txt"
+    }
+  ],
+  "about": {
+    "text": "I'm a passionate copywriter with 5+ years of experience creating persuasive content for brands worldwide.",
+    "skills": [
+      "SEO Copywriting",
+      "Content Strategy",
+      "Brand Storytelling",
+      "Email Marketing"
+    ]
+  },
+  "testimonials": [
+    {
+      "text": "Their words brought our brand to life!",
+      "author": "Jane Doe, Marketing Director"
+    },
+    {
+      "text": "Exceptional copy that drives results.",
+      "author": "John Smith, CEO"
+    }
+  ],
+  "contact": {
+    "email": "your-email@example.com",
+    "successMessage": "Thank you for your message! I'll get back to you soon."
+  },
+  "footer": {
+    "text": "© 2025 Juan de la Cruz. All rights reserved."
+  },
+  "social": {
+    "linkedin": "https://linkedin.com/in/juan",
+    "twitter": "https://twitter.com/juan",
+    "github": "https://github.com/juan"
+  }
+}
