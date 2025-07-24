@@ -7,8 +7,11 @@ const addProjectBtn = document.getElementById('addProject');
 const addTestimonialBtn = document.getElementById('addTestimonial');
 const downloadJsonBtn = document.getElementById('downloadJson');
 const saveStatusMessage = document.getElementById('saveStatus');
+const profileImageInput = document.getElementById('profileImageInput');
+const profileImagePreview = document.getElementById('profileImagePreview');
+const removeProfileImageBtn = document.getElementById('removeProfileImage');
 
-// Default data (should match the structure in main.js)
+// Default data (updated to include profileImage)
 const defaultData = {
     "logo": "Video Editor Portfolio",
     "hero": {
@@ -31,7 +34,8 @@ const defaultData = {
     ],
     "about": {
         "text": "Hello! I'm a passionate video editor with over 8 years of experience in crafting compelling visual narratives. From dynamic promotional content to intricate documentary edits, my goal is always to bring stories to life with precision and creativity. I specialize in post-production, color grading, sound design, and motion graphics, using industry-standard software to deliver high-quality results. I believe that every frame has a purpose, and I'm dedicated to ensuring that your vision not only looks incredible but also resonates deeply with your audience. Let's create something unforgettable together!",
-        "skills": ["Adobe Premiere Pro", "After Effects", "DaVinci Resolve", "Final Cut Pro", "Motion Graphics", "Color Grading", "Sound Design", "VFX", "Storytelling", "Video Compression"]
+        "skills": ["Adobe Premiere Pro", "After Effects", "DaVinci Resolve", "Final Cut Pro", "Motion Graphics", "Color Grading", "Sound Design", "VFX", "Storytelling", "Video Compression"],
+        "profileImage": "" // Added profileImage field
     },
     "testimonials": [
         {
@@ -53,7 +57,6 @@ const defaultData = {
     }
 };
 
-
 /**
  * Populates the form fields with data.
  * @param {object} data - The portfolio data.
@@ -70,6 +73,17 @@ function populateForm(data) {
     document.getElementById('socialLinkedin').value = data.social.linkedin || '';
     document.getElementById('socialTwitter').value = data.social.twitter || '';
     document.getElementById('socialGithub').value = data.social.github || '';
+
+    // Populate profile image
+    if (data.about.profileImage) {
+        profileImagePreview.src = data.about.profileImage;
+        profileImagePreview.classList.remove('hidden');
+        removeProfileImageBtn.classList.remove('hidden');
+    } else {
+        profileImagePreview.src = '';
+        profileImagePreview.classList.add('hidden');
+        removeProfileImageBtn.classList.add('hidden');
+    }
 
     populateProjects(data.projects || []);
     populateTestimonials(data.testimonials || []);
@@ -204,6 +218,69 @@ function reIndexItems(type) {
     });
 }
 
+/**
+ * Handles profile image upload and preview.
+ * @param {Event} event - The change event from file input.
+ */
+function handleProfileImage(event) {
+    const file = event.target.files[0];
+    if (file) {
+        if (file.size > 500 * 1024) {
+            alert('File size exceeds 500KB. Please choose a smaller image.');
+            event.target.value = '';
+            return;
+        }
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            profileImagePreview.src = e.target.result;
+            profileImagePreview.classList.remove('hidden');
+            removeProfileImageBtn.classList.remove('hidden');
+            portfolioData.about = portfolioData.about || {};
+            portfolioData.about.profileImage = e.target.result; // Store base64 string
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+/**
+ * Removes the profile image.
+ */
+function removeProfileImage() {
+    if (confirm('Are you sure you want to remove the profile image?')) {
+        profileImageInput.value = '';
+        profileImagePreview.src = '';
+        profileImagePreview.classList.add('hidden');
+        removeProfileImageBtn.classList.add('hidden');
+        portfolioData.about = portfolioData.about || {};
+        portfolioData.about.profileImage = '';
+    }
+}
+
+/**
+ * Handles loading JSON file from local PC.
+ * @param {Event} event - The change event from file input.
+ */
+function handleJsonUpload(event) {
+    const file = event.target.files[0];
+    if (file && file.type === 'application/json') {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                portfolioData = JSON.parse(e.target.result);
+                console.log('Loaded data from uploaded JSON:', portfolioData);
+                populateForm(portfolioData);
+                saveChanges(); // Save to localStorage
+                alert('JSON data loaded successfully!');
+            } catch (e) {
+                console.error('Error parsing uploaded JSON:', e);
+                alert('Invalid JSON file. Please upload a valid portfolio data JSON.');
+            }
+        };
+        reader.readAsText(file);
+    } else {
+        alert('Please select a valid JSON file.');
+    }
+}
 
 /**
  * Gathers data from the form and updates the portfolioData object.
@@ -219,7 +296,8 @@ function getFormData() {
         projects: [],
         about: {
             text: document.getElementById('aboutText').value,
-            skills: document.getElementById('aboutSkills').value.split(',').map(s => s.trim()).filter(s => s !== '')
+            skills: document.getElementById('aboutSkills').value.split(',').map(s => s.trim()).filter(s => s !== ''),
+            profileImage: portfolioData.about?.profileImage || '' // Include profile image
         },
         testimonials: [],
         contact: {
@@ -304,6 +382,23 @@ editForm.addEventListener('submit', (event) => {
 addProjectBtn.addEventListener('click', () => addProjectField());
 addTestimonialBtn.addEventListener('click', () => addTestimonialField());
 downloadJsonBtn.addEventListener('click', downloadJson);
+profileImageInput.addEventListener('change', handleProfileImage);
+removeProfileImageBtn.addEventListener('click', removeProfileImage);
+
+// Create JSON file input for manual loading
+const jsonUploadInput = document.createElement('input');
+jsonUploadInput.type = 'file';
+jsonUploadInput.accept = 'application/json';
+jsonUploadInput.id = 'jsonUpload';
+jsonUploadInput.style.margin = '10px 0';
+const jsonUploadLabel = document.createElement('label');
+jsonUploadLabel.htmlFor = 'jsonUpload';
+jsonUploadLabel.textContent = 'Load JSON File: ';
+jsonUploadLabel.style.marginRight = '10px';
+const formActions = document.querySelector('.form-actions');
+formActions.insertBefore(jsonUploadInput, formActions.firstChild);
+formActions.insertBefore(jsonUploadLabel, jsonUploadInput);
+jsonUploadInput.addEventListener('change', handleJsonUpload);
 
 // Load data on page load
 document.addEventListener('DOMContentLoaded', () => {

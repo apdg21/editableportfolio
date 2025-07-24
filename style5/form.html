@@ -51,6 +51,16 @@
                 <input type="text" id="aboutSkills" name="aboutSkills">
             </div>
 
+	    <div class="form-group">
+            <label for="profileImageInput">Profile Image:</label>
+            <input type="file" id="profileImageInput" accept="image/*">
+            <small>Upload a new profile image (JPG, PNG, GIF). Max 500KB recommended.</small>
+            <div class="profile-image-preview-container">
+                <img id="profileImagePreview" src="" alt="Profile Image Preview" class="hidden">
+            </div>
+            <button type="button" id="removeProfileImage" class="button remove-button hidden">Remove Image</button>
+        </div>
+
             <h2 class="section-title">Testimonials</h2>
             <div id="testimonialsContainer">
                 </div>
