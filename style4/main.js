@@ -33,7 +33,7 @@ function renderPortfolio() {
 function renderSamples() {
   const grid = document.getElementById('samples-grid');
   grid.innerHTML = '';
-  samplesPerPage = window.innerWidth <= 768 ? 4 : 8;
+  samplesPerPage = window.innerWidth <= 768 ? 4 : 9;
   const start = (currentPage - 1) * samplesPerPage;
   const paginated = data.samples.slice(start, start + samplesPerPage);
 
