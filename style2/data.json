@@ -145,7 +145,7 @@
   "about": {
     "title": "About Me",
     "content": "With 7+ years specializing in email design and development, I create pixel-perfect campaigns that render flawlessly across 90+ email clients. My technical expertise ensures maximum deliverability and engagement.",
-    "image": "profile.jpg",
+    "image": "profile1.jpg",
     "skills": [
       "HTML Email Development",
       "Responsive Design",
@@ -166,13 +166,13 @@
         "text": "Our open rates increased by 40% after implementing their email templates. The mobile optimization was particularly impressive.",
         "authorName": "Sarah Johnson",
         "authorPosition": "Marketing Director",
-        "authorImage": "profile1.jpg"
+        "authorImage": "profile2.jpg"
       },
       {
         "text": "Fixed rendering issues we'd struggled with for years across Outlook and Apple Mail. Worth every penny.",
         "authorName": "Michael Chen",
         "authorPosition": "E-commerce Manager",
-        "authorImage": "profile2.jpg"
+        "authorImage": "profile3.jpg"
       }
     ]
   },
