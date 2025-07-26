@@ -17,8 +17,8 @@
 [data-theme="dark"] {
     --primary-color: white;
     --secondary-color: white;;
-    --accent-color: white;
-    --light-color: white;
+    --accent-color: black;
+    --light-color: black;
     --dark-color: #ecf0f1;
     --text-color: #ecf0f1;
     --text-light: #bdc3c7;
