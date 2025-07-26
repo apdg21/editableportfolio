@@ -1,0 +1,73 @@
+{
+  "siteDetails": {
+    "logo": "Jane Doe | Journalist",
+    "heroText": "Crafting Stories That Matter",
+    "footer": "© 2025 Jane Doe. All rights reserved.",
+    "backgroundType": "image",
+    "backgroundValue": "assets/background.jpg"
+  },
+  "projects": [
+    {
+      "title": "The Rise of Urban Farming",
+      "description": "An in-depth look at how urban farming is transforming city landscapes.",
+      "image": "assets/1.jpg",
+      "linkToCopy": "https://example.com/urban-farming"
+    },
+    {
+      "title": "Tech's Impact on Education",
+      "description": "Exploring how technology is reshaping classrooms worldwide.",
+      "image": "assets/2.jpg",
+      "linkToCopy": "https://example.com/tech-education"
+    },
+    {
+      "title": "Climate Change Policies",
+      "description": "Analysis of global policies tackling climate change.",
+      "image": "assets/3.jpg",
+      "linkToCopy": "https://example.com/climate-policies"
+    },
+    {
+      "title": "The Gig Economy Boom",
+      "description": "How the gig economy is redefining work.",
+      "image": "assets/4.jpg",
+      "linkToCopy": "https://example.com/gig-economy"
+    },
+    {
+      "title": "Mental Health Awareness",
+      "description": "Breaking the stigma around mental health in workplaces.",
+      "image": "assets/5.jpg",
+      "linkToCopy": "https://example.com/mental-health"
+    },
+    {
+      "title": "Sustainable Fashion Trends",
+      "description": "How the fashion industry is going green.",
+      "image": "assets/6.jpg",
+      "linkToCopy": "https://example.com/sustainable-fashion"
+    }
+  ],
+  "about": {
+    "text": "I'm Jane Doe, a passionate journalist with over a decade of experience covering technology, culture, and environmental issues. My work has been featured in leading publications, and I strive to tell stories that inform and inspire.",
+    "skills": [
+      "Investigative Reporting",
+      "Feature Writing",
+      "SEO",
+      "Editing",
+      "Social Media Strategy"
+    ],
+    "profileImage": "assets/profile.jpg"
+  },
+  "testimonials": [
+    {
+      "text": "Jane's articles are always well-researched and engaging. A true professional!",
+      "author": "John Smith, Editor at News Daily"
+    },
+    {
+      "text": "Her ability to distill complex topics into compelling stories is unmatched.",
+      "author": "Sarah Lee, Publisher"
+    }
+  ],
+  "socialLinks": {
+    "twitter": "https://twitter.com/janedoe",
+    "linkedin": "https://linkedin.com/in/janedoe",
+    "medium": "https://medium.com/@janedoe"
+  }
+}
