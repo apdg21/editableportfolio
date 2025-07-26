@@ -16,15 +16,16 @@
 /* Dark mode variables */
 [data-theme="dark"] {
     --primary-color: white;
-    --secondary-color: white;;
-    --accent-color: black;
-    --light-color: black;
+     --secondary-color: #e74c3c;
+    --accent-color: #3498db;
+    --light-color: #2c3e50;
     --dark-color: #ecf0f1;
     --text-color: #ecf0f1;
     --text-light: #bdc3c7;
     --bg-color: #2c3e50;
     --overlay-color: rgba(0, 0, 0, 0.9);
 }
+
 
 * {
     margin: 0;
