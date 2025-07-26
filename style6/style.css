@@ -15,7 +15,7 @@
 
 /* Dark mode variables */
 [data-theme="dark"] {
-    --primary-color: white;
+    --primary-color: #e74c3c;
      --secondary-color: #e74c3c;
     --accent-color: #3498db;
     --light-color: #2c3e50;
