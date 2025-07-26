@@ -79,7 +79,7 @@ body {
     background: white;
 }
 
-.sidebar .nav-links a:hover {
+.sidebar .nav-links-sidebar a:hover {
     background-color: rgba(52, 152, 219, 0.7);
     color: #2c3e50;
 }
