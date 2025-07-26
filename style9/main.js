@@ -1,25 +1,69 @@
+// main.js
 let portfolioData = {};
 let currentPage = 1;
 const projectsPerPage = 6;
 
-// DOM Elements
-const loadButtonContainer = document.querySelector('.load-button-wrapper');
-const dataFileInput = document.getElementById('loadJsonFile');
-const refreshButton = document.createElement('button');
-
-// Core Functions
-function toggleSidebar() {
-    document.querySelector('.sidebar').classList.toggle('active');
+// Initialize UI based on network status
+function updateUIForNetworkStatus() {
+    const isOnline = navigator.onLine;
+    const loadButton = document.querySelector('#loadButtonContainer');
+    
+    if (loadButton) {
+        loadButton.style.display = isOnline ? 'none' : 'block';
+    }
+    
+    // Load data automatically if online
+    if (isOnline) {
+        fetchData();
+    }
 }
 
-function toggleTheme() {
-    document.body.classList.toggle('dark-mode');
-    localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+// Load data from file
+function handleFileLoad(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        try {
+            const data = JSON.parse(e.target.result);
+            localStorage.setItem('portfolioData', JSON.stringify(data));
+            loadData(data);
+            alert('Data loaded successfully!');
+        } catch (error) {
+            console.error('Error parsing JSON file:', error);
+            alert('Invalid JSON file. Please check the format.');
+        }
+    };
+    reader.readAsText(file);
 }
 
+// Fetch data from server
+async function fetchData() {
+    try {
+        const response = await fetch('data.json');
+        if (!response.ok) throw new Error('Network response was not ok');
+        const data = await response.json();
+        localStorage.setItem('portfolioData', JSON.stringify(data));
+        loadData(data);
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        // Fallback to cached data if available
+        const cachedData = localStorage.getItem('portfolioData');
+        if (cachedData) {
+            try {
+                loadData(JSON.parse(cachedData));
+            } catch (parseError) {
+                console.error('Error parsing cached data:', parseError);
+            }
+        }
+    }
+}
+
+// Main data loading function
 function loadData(data) {
     if (!data) return;
-    
+
     portfolioData = data;
     
     // Update site details
@@ -94,94 +138,43 @@ function changePage(page) {
     renderProjects();
 }
 
-// Network Functions
-function updateNetworkUI() {
-    const isOnline = navigator.onLine;
-    
-    // Show/hide load button
-    if (loadButtonContainer) {
-        loadButtonContainer.style.display = isOnline ? 'none' : 'block';
-    }
-    
-    // Update refresh button
-    if (refreshButton) {
-        refreshButton.style.display = isOnline ? 'inline-block' : 'none';
-    }
+function toggleSidebar() {
+    document.querySelector('.sidebar').classList.toggle('active');
 }
 
-function loadFromFile(file) {
-    const reader = new FileReader();
-    reader.onload = (event) => {
-        try {
-            const data = JSON.parse(event.target.result);
-            localStorage.setItem('portfolioData', JSON.stringify(data));
-            loadData(data);
-        } catch (error) {
-            console.error('Error loading file:', error);
-            alert('Invalid JSON file. Please check the file format.');
-        }
-    };
-    reader.readAsText(file);
+function toggleTheme() {
+    document.body.classList.toggle('dark-mode');
+    localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
 }
 
-async function fetchData() {
-    try {
-        const response = await fetch('data.json');
-        if (!response.ok) throw new Error('Network response was not ok');
-        const data = await response.json();
-        localStorage.setItem('portfolioData', JSON.stringify(data));
-        loadData(data);
-    } catch (error) {
-        console.error('Fetch error:', error);
-        const savedData = localStorage.getItem('portfolioData');
-        if (savedData) {
-            try {
-                loadData(JSON.parse(savedData));
-            } catch (parseError) {
-                console.error('Error parsing saved data:', parseError);
-            }
-        }
-    }
-}
-
-// Event Listeners
-document.getElementById('contactForm')?.addEventListener('submit', (e) => {
-    e.preventDefault();
-    alert('Message sent! (This is a demo, no actual submission occurs.)');
-});
-
-dataFileInput?.addEventListener('change', (e) => {
-    if (e.target.files[0]) loadFromFile(e.target.files[0]);
-});
-
-refreshButton.textContent = 'Refresh Data';
-refreshButton.style.margin = '10px';
-refreshButton.style.display = 'none';
-refreshButton.addEventListener('click', fetchData);
-document.body.appendChild(refreshButton);
-
-// Initialize
+// Initialize the application
 document.addEventListener('DOMContentLoaded', () => {
+    // Set up network status listeners
+    window.addEventListener('online', updateUIForNetworkStatus);
+    window.addEventListener('offline', updateUIForNetworkStatus);
+    
     // Set theme
     if (localStorage.getItem('theme') === 'dark') {
         document.body.classList.add('dark-mode');
     }
     
-    // Set up network listeners
-    window.addEventListener('online', updateNetworkUI);
-    window.addEventListener('offline', updateNetworkUI);
-    updateNetworkUI();
+    // Set up file input listener
+    document.getElementById('dataFileInput')?.addEventListener('change', handleFileLoad);
     
-    // Load data
+    // Initial UI setup
+    updateUIForNetworkStatus();
+    
+    // Load initial data
     if (navigator.onLine) {
-        fetchData();
+        fetchData(); // Automatic load when online
     } else {
-        const savedData = localStorage.getItem('portfolioData');
-        if (savedData) {
+        // Try to use cached data when offline
+        const cachedData = localStorage.getItem('portfolioData');
+        if (cachedData) {
             try {
-                loadData(JSON.parse(savedData));
+                loadData(JSON.parse(cachedData));
             } catch (error) {
-                console.error('Error loading saved data:', error);
+                console.error('Error loading cached data:', error);
             }
         }
     }
