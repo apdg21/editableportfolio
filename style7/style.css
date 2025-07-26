@@ -58,6 +58,8 @@ body {
     gap: 0.75rem;
     list-style: none;
     text-align: center;
+    font-weight: bold;
+    font-size: 18px;
 }
 
 .sidebar .nav-links-sidebar a {
@@ -67,6 +69,14 @@ body {
     text-align: center;
     text-decoration: none;
     transition: background-color 0.3s;
+}
+.nav-links-sidebar li {
+    border: 1px solid;
+    border-radius: 10px;
+}
+.nav-links-sidebar li:hover {
+    color: #2c3e50;
+    background: white;
 }
 
 .sidebar .nav-links a:hover {
@@ -405,7 +415,7 @@ body {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
-    justify-content: center;
+    justify-content: left;
 }
 
 .skills li {
