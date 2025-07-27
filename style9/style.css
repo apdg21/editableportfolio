@@ -64,10 +64,11 @@ nav ul li a:hover {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    margin-top: 180px;
 }
 
 .content {
-    padding: 2rem;
+    padding: 0;
 }
 
 #home {
