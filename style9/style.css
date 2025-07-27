@@ -244,6 +244,9 @@ body.dark-mode nav ul li a, body.dark-mode .social-links a {
 body.dark-mode .project-card a {
     color: #66b3ff;
 }
+body.dark-mode #skillsList li {
+    color: #2a2a2a;
+}
 
 @media (max-width: 768px) {
     .container {
