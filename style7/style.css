@@ -548,6 +548,9 @@ p#about-text {
         flex-direction: column;
         text-align: center;
     }
+    .skills {
+        justify-content: center;
+    }
 }
 /* ===== Mobile Profile ===== */
 .profile-img-mobile {
