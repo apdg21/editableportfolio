@@ -311,4 +311,7 @@ p#about-text {
         flex-direction: column;
         text-align: center;
     }
+    .skills {
+        justify-content: center;
+    }
 }
