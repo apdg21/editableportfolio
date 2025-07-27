@@ -100,9 +100,8 @@
             <footer id="footerText"></footer>
         </main>
     </div>
-    <input type="file" id="dataFileInput" accept=".json" style="display: none;">
-    <button onclick="document.getElementById('dataFileInput').click()">Load Data</button>
-<div id="loadButtonContainer" style="display: none;">
+    <!-- Simplified button container - will show only for file:// protocol -->
+<div id="loadButtonContainer">
     <input type="file" id="dataFileInput" accept=".json" style="display: none;">
     <button onclick="document.getElementById('dataFileInput').click()">Load Data</button>
 </div>
