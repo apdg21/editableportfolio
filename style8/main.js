@@ -29,6 +29,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const testimonialsGrid = document.querySelector('.testimonials-grid');
     const socialLinks = document.querySelector('.social-links');
     const heroSection = document.querySelector('.hero');
+    const editButton = document.querySelector('.edit-btn');
+
+    // Hide edit button if not local and no valid edit parameter
+    if (editButton && !isLocal && (!urlParams.has('edit') || urlParams.get('edit') !== EDIT_PASSWORD)) {
+        editButton.style.display = 'none';
+    }
 
     if (yearSpan) { yearSpan.textContent = new Date().getFullYear(); }
 
