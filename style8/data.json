@@ -1,0 +1,115 @@
+{
+  "siteName": "Aura Designs",
+  "copyrightText": "© 2023 Aura Designs. All rights reserved.",
+  "hero": {
+    "title": "Crafting Elegance Through Fabric",
+    "subtitle": "Innovative fashion designs that blend classic sophistication with modern trends.",
+    "backgroundImage": "assets/background.jpg"
+  },
+  "projects": [
+    {
+      "title": "Spring/Summer '24 Collection",
+      "description": "A vibrant ready-to-wear collection inspired by blooming florals and soft pastels.",
+      "image": "assets/1.jpg",
+      "highResUrl": "https://example.com/collection/spring-summer-24",
+      "categories": []
+    },
+    {
+      "title": "Étoile de Nuit (Haute Couture)",
+      "description": "An exquisite haute couture gown, meticulously handcrafted with intricate beadwork and flowing silk.",
+      "image": "assets/2.jpg",
+      "highResUrl": "https://example.com/collection/etoile-de-nuit",
+      "categories": []
+    },
+    {
+      "title": "Bridal Bliss Gown",
+      "description": "A timeless bridal gown featuring delicate lace, a flattering silhouette, and a cathedral train.",
+      "image": "assets/3.jpg",
+      "highResUrl": "https://example.com/collection/bridal-bliss",
+      "categories": []
+    },
+    {
+      "title": "Leather Accessories Line",
+      "description": "A sophisticated line of handcrafted leather bags and wallets, emphasizing durability and style.",
+      "image": "assets/4.jpg",
+      "highResUrl": "https://example.com/collection/leather-accessories",
+      "categories": []
+    },
+    {
+      "title": "Autumn/Winter '23 Collection",
+      "description": "Warm textures and rich earthy tones define this cozy yet chic ready-to-wear collection.",
+      "image": "assets/5.jpg",
+      "highResUrl": "https://example.com/collection/autumn-winter-23",
+      "categories": []
+    },
+    {
+      "title": "Le Jardin Secret (Haute Couture)",
+      "description": "A bespoke creation inspired by a secret garden, featuring hand-painted details and delicate organza.",
+      "image": "assets/6.jpg",
+      "highResUrl": "https://example.com/collection/le-jardin-secret",
+      "categories": []
+    },
+    {
+      "title": "The Modern Bride Collection",
+      "description": "Contemporary bridal wear for the minimalist bride, with clean lines and sophisticated simplicity.",
+      "image": "assets/7.jpg",
+      "highResUrl": "https://example.com/collection/modern-bride",
+      "categories": []
+    },
+    {
+      "title": "Silk Scarf Collection",
+      "description": "Limited edition silk scarves with unique digital prints, adding a touch of luxury to any outfit.",
+      "image": "assets/8.jpg",
+      "highResUrl": "https://example.com/collection/silk-scarves",
+      "categories": []
+    }
+  ],
+  "about": {
+    "bio": "<p>I'm Alexia Vance, a passionate fashion designer dedicated to creating timeless and innovative pieces. My journey began with a fascination for textiles and a desire to tell stories through garments. I believe fashion is not just about clothing, but about expressing identity and embracing artistry.</p><p>After graduating from the Central Saint Martins, I honed my skills working with renowned fashion houses in Paris and Milan. My collections often draw inspiration from art, nature, and cultural narratives, blending classic techniques with a contemporary vision.</p><p>Every stitch, every fabric choice, and every silhouette is carefully considered to ensure a harmonious balance of aesthetics and wearability. I am committed to sustainable practices and ethical production, striving to make a positive impact on the industry.</p>",
+    "profileImage": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=1976&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "skills": [
+      "Fashion Illustration",
+      "Pattern Making",
+      "Draping",
+      "Textile Selection",
+      "Garment Construction",
+      "Trend Forecasting",
+      "Adobe Illustrator",
+      "Adobe Photoshop",
+      "Sustainable Design",
+      "Haute Couture Techniques"
+    ]
+  },
+  "testimonials": [
+    {
+      "text": "Alexia's designs are truly breathtaking. She created a custom gown for me that was beyond anything I imagined – elegant, unique, and perfectly fitted.",
+      "author": "Isabella Rossi"
+    },
+    {
+      "text": "The attention to detail in Aura Designs' ready-to-wear line is exceptional. Their pieces are not only stylish but also incredibly comfortable and well-made.",
+      "author": "Marcus Thorne, Fashion Critic"
+    },
+    {
+      "text": "Working with Alexia on my bridal gown was a dream. She listened to my vision and brought it to life with such professionalism and artistry.",
+      "author": "Olivia Chen"
+    }
+  ],
+  "socialLinks": [
+    {
+      "platform": "instagram",
+      "url": "https://instagram.com/yourfashionbrand"
+    },
+    {
+      "platform": "pinterest",
+      "url": "https://pinterest.com/yourfashionbrand"
+    },
+    {
+      "platform": "instagram",
+      "url": "https://linkedin.com/in/yourfashiondesigner"
+    },
+    {
+      "platform": "behance",
+      "url": "https://behance.net/yourfashiondesigner"
+    }
+  ]
+}
