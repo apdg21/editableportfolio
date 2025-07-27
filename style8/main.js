@@ -113,24 +113,30 @@ document.addEventListener('DOMContentLoaded', function() {
     loadPortfolioData();
 
     // Set current year in footer
-    document.getElementById('year').textContent = new Date().getFullYear();
+    const yearSpan = document.getElementById('year');
+    if (yearSpan) { // Added check
+        yearSpan.textContent = new Date().getFullYear();
+    }
 
     // Mobile navigation toggle
     const hamburger = document.querySelector('.hamburger');
     const navList = document.querySelector('.nav-list');
 
-    hamburger.addEventListener('click', function() {
-        this.classList.toggle('active');
-        navList.classList.toggle('active');
-    });
-
-    // Close mobile menu when clicking a link
-    document.querySelectorAll('.nav-list a').forEach(link => {
-        link.addEventListener('click', function() {
-            hamburger.classList.remove('active');
-            navList.classList.remove('active');
+    if (hamburger && navList) { // Added check
+        hamburger.addEventListener('click', function() {
+            this.classList.toggle('active');
+            navList.classList.toggle('active');
         });
-    });
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.nav-list a').forEach(link => {
+            link.addEventListener('click', function() {
+                hamburger.classList.remove('active');
+                navList.classList.remove('active');
+            });
+        });
+    }
+
 
     // Smooth scrolling for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -154,9 +160,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const header = document.querySelector('.header');
     window.addEventListener('scroll', function() {
         if (window.scrollY > 50) {
-            header.classList.add('scrolled');
+            if (header) header.classList.add('scrolled'); // Added check
         } else {
-            header.classList.remove('scrolled');
+            if (header) header.classList.remove('scrolled'); // Added check
         }
     });
 
@@ -194,24 +200,30 @@ document.addEventListener('DOMContentLoaded', function() {
             const highResUrl = projectCard?.querySelector('.project-links a[target="_blank"]')?.getAttribute('href');
             const imgAlt = e.target.getAttribute('alt');
 
-            lightboxImg.setAttribute('src', highResUrl || e.target.getAttribute('src')); // Use high-res if available
-            lightboxCaption.textContent = imgAlt;
-            lightbox.classList.add('show');
+            if (lightboxImg) lightboxImg.setAttribute('src', highResUrl || e.target.getAttribute('src')); // Added check
+            if (lightboxCaption) lightboxCaption.textContent = imgAlt; // Added check
+            if (lightbox) lightbox.classList.add('show'); // Added check
             document.body.style.overflow = 'hidden';
         }
     });
 
-    closeLightbox.addEventListener('click', function() {
-        lightbox.classList.remove('show');
-        document.body.style.overflow = 'auto';
-    });
-
-    lightbox.addEventListener('click', function(e) {
-        if (e.target === lightbox) {
-            lightbox.classList.remove('show');
+    if (closeLightbox) { // Added check
+        closeLightbox.addEventListener('click', function() {
+            if (lightbox) lightbox.classList.remove('show'); // Added check
             document.body.style.overflow = 'auto';
-        }
-    });
+        });
+    }
+
+
+    if (lightbox) { // Added check
+        lightbox.addEventListener('click', function(e) {
+            if (e.target === lightbox) {
+                lightbox.classList.remove('show');
+                document.body.style.overflow = 'auto';
+            }
+        });
+    }
+
 
     // Theme toggle functionality
     const themeToggle = document.createElement('div');
@@ -219,23 +231,29 @@ document.addEventListener('DOMContentLoaded', function() {
     themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
     document.body.appendChild(themeToggle);
 
-    themeToggle.addEventListener('click', function() {
-        const currentTheme = document.documentElement.getAttribute('data-theme');
-        const icon = this.querySelector('i');
+    if (themeToggle) { // Added check
+        themeToggle.addEventListener('click', function() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const icon = this.querySelector('i');
 
-        if (currentTheme === 'dark') {
-            document.documentElement.removeAttribute('data-theme');
-            icon.classList.replace('fa-sun', 'fa-moon');
-        } else {
-            document.documentElement.setAttribute('data-theme', 'dark');
-            icon.classList.replace('fa-moon', 'fa-sun');
-        }
-    });
+            if (currentTheme === 'dark') {
+                document.documentElement.removeAttribute('data-theme');
+                if (icon) icon.classList.replace('fa-sun', 'fa-moon'); // Added check
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                if (icon) icon.classList.replace('fa-moon', 'fa-sun'); // Added check
+            }
+        });
+    }
+
 
     // Check for saved theme preference
     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
         document.documentElement.setAttribute('data-theme', 'dark');
-        themeToggle.querySelector('i').classList.replace('fa-moon', 'fa-sun');
+        if (themeToggle) { // Added check
+            const icon = themeToggle.querySelector('i');
+            if (icon) icon.classList.replace('fa-moon', 'fa-sun'); // Added check
+        }
     }
 
     // Function to get platform icon
@@ -260,19 +278,26 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Render site name/logo
         const logo = document.querySelector('.logo');
-        if (portfolioData.siteName) {
-            logo.textContent = portfolioData.siteName;
-        } else {
-            logo.textContent = 'My Portfolio'; // Default if not set
+        if (logo) { // Added check
+            if (portfolioData.siteName) {
+                logo.textContent = portfolioData.siteName;
+            } else {
+                logo.textContent = 'My Portfolio'; // Default if not set
+            }
         }
+
 
         // Render copyright text
         const copyright = document.querySelector('.copyright');
-        if (portfolioData.copyrightText) {
-            copyright.textContent = portfolioData.copyrightText;
-        } else {
-            copyright.textContent = `© ${new Date().getFullYear()} ${portfolioData.siteName || 'Aura Designs'}. All rights reserved.`;
+        const yearSpan = document.getElementById('year');
+        if (copyright && yearSpan) { // Added check
+            if (portfolioData.copyrightText) {
+                copyright.textContent = portfolioData.copyrightText;
+            } else {
+                copyright.textContent = `© ${new Date().getFullYear()} ${portfolioData.siteName || 'Aura Designs'}. All rights reserved.`;
+            }
         }
+
 
         // Render hero section
         if (portfolioData.hero) {
@@ -282,17 +307,22 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             const heroTitle = document.querySelector('.hero h1');
-            if (heroTitle && portfolioData.hero.title) {
-                heroTitle.textContent = portfolioData.hero.title;
-            } else if (heroTitle) { // Clear if no title
-                heroTitle.textContent = '';
+            if (heroTitle) { // Added check
+                if (portfolioData.hero.title) {
+                    heroTitle.textContent = portfolioData.hero.title;
+                } else { // Clear if no title
+                    heroTitle.textContent = '';
+                }
             }
 
+
             const heroSubtitle = document.querySelector('.hero p');
-            if (heroSubtitle && portfolioData.hero.subtitle) {
-                heroSubtitle.textContent = portfolioData.hero.subtitle;
-            } else if (heroSubtitle) { // Clear if no subtitle
-                heroSubtitle.textContent = '';
+            if (heroSubtitle) { // Added check
+                if (portfolioData.hero.subtitle) {
+                    heroSubtitle.textContent = portfolioData.hero.subtitle;
+                } else { // Clear if no subtitle
+                    heroSubtitle.textContent = '';
+                }
             }
         }
 
@@ -310,7 +340,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Render about section
         if (portfolioData.about) {
             const bioText = document.querySelector('.bio-text');
-            if (bioText && portfolioData.about.bio) {
+            if (bioText && portfolioData.about.bio) { // Added check
                 bioText.innerHTML = portfolioData.about.bio;
             } else if (bioText) {
                 bioText.innerHTML = '';
@@ -318,19 +348,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (portfolioData.about.skills && portfolioData.about.skills.length > 0) {
                 const skillsList = document.querySelector('.skills-list');
-                skillsList.innerHTML = portfolioData.about.skills.map(skill =>
-                    `<li>${skill}</li>`
-                ).join('');
+                if (skillsList) { // Added check
+                    skillsList.innerHTML = portfolioData.about.skills.map(skill =>
+                        `<li>${skill}</li>`
+                    ).join('');
+                }
             } else {
                 const skillsList = document.querySelector('.skills-list');
                 if (skillsList) skillsList.innerHTML = ''; // Clear if no skills
             }
 
             const profileImg = document.getElementById('profile-img');
-            if (profileImg && portfolioData.about.profileImage) {
-                profileImg.setAttribute('src', portfolioData.about.profileImage);
-            } else if (profileImg) { // Set a placeholder or hide if no image
-                profileImg.setAttribute('src', 'https://via.placeholder.com/150'); // Example placeholder
+            if (profileImg) { // Added check
+                if (portfolioData.about.profileImage) {
+                    profileImg.setAttribute('src', portfolioData.about.profileImage);
+                } else { // Set a placeholder or hide if no image
+                    profileImg.setAttribute('src', 'https://via.placeholder.com/150'); // Example placeholder
+                }
             }
         }
 
@@ -345,7 +379,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Render social links
         const socialLinksContainer = document.querySelector('.social-links');
-        if (socialLinksContainer) {
+        if (socialLinksContainer) { // Added check
             if (portfolioData.socialLinks && portfolioData.socialLinks.length > 0) {
                 socialLinksContainer.innerHTML = portfolioData.socialLinks.map(link =>
                     `<a href="${link.url}" class="social-link" target="_blank"><i class="${getPlatformIcon(link.platform)}"></i></a>`
@@ -390,36 +424,42 @@ document.addEventListener('DOMContentLoaded', function() {
             const paginatedProjects = filteredProjects.slice(startIndex, startIndex + projectsPerPage);
 
             // Render projects
-            projectsGrid.innerHTML = paginatedProjects.map(project => `
-                <div class="project-card" data-categories="${project.categories ? project.categories.join(' ') : ''}">
-                    <img src="${project.image}" alt="${project.title}" class="project-img">
-                    <div class="project-info">
-                        <h3 class="project-title">${project.title}</h3>
-                        ${project.categories && project.categories.length > 0 ? `<span class="project-category">${project.categories[0]}</span>` : ''}
-                        <p class="project-desc">${project.description}</p>
-                        <div class="project-links">
-                            ${project.highResUrl ? `<a href="${project.highResUrl}" target="_blank"><i class="fas fa-expand"></i> View Details</a>` : ''}
+            if (projectsGrid) { // Added check
+                projectsGrid.innerHTML = paginatedProjects.map(project => `
+                    <div class="project-card" data-categories="${project.categories ? project.categories.join(' ') : ''}">
+                        <img src="${project.image}" alt="${project.title}" class="project-img">
+                        <div class="project-info">
+                            <h3 class="project-title">${project.title}</h3>
+                            ${project.categories && project.categories.length > 0 ? `<span class="project-category">${project.categories[0]}</span>` : ''}
+                            <p class="project-desc">${project.description}</p>
+                            <div class="project-links">
+                                ${project.highResUrl ? `<a href="${project.highResUrl}" target="_blank"><i class="fas fa-expand"></i> View Details</a>` : ''}
+                            </div>
                         </div>
                     </div>
-                </div>
-            `).join('');
+                `).join('');
+            }
+
 
             // Update pagination buttons
-            paginationPrev.disabled = currentPage === 1;
-            paginationNext.disabled = currentPage === totalPages || totalPages === 0;
+            if (paginationPrev) paginationPrev.disabled = currentPage === 1; // Added check
+            if (paginationNext) paginationNext.disabled = currentPage === totalPages || totalPages === 0; // Added check
 
             // Render page numbers
-            pageNumbersContainer.innerHTML = '';
-            for (let i = 1; i <= totalPages; i++) {
-                const pageNumber = document.createElement('span');
-                pageNumber.className = `page-number ${i === currentPage ? 'active' : ''}`;
-                pageNumber.textContent = i;
-                pageNumber.addEventListener('click', () => {
-                    currentPage = i;
-                    renderFilteredProjects();
-                });
-                pageNumbersContainer.appendChild(pageNumber);
+            if (pageNumbersContainer) { // Added check
+                pageNumbersContainer.innerHTML = '';
+                for (let i = 1; i <= totalPages; i++) {
+                    const pageNumber = document.createElement('span');
+                    pageNumber.className = `page-number ${i === currentPage ? 'active' : ''}`;
+                    pageNumber.textContent = i;
+                    pageNumber.addEventListener('click', () => {
+                        currentPage = i;
+                        renderFilteredProjects();
+                    });
+                    pageNumbersContainer.appendChild(pageNumber);
+                }
             }
+
         }
 
         // Initialize filter buttons
@@ -432,27 +472,32 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         // Pagination event listeners
-        paginationPrev.addEventListener('click', function() {
-            if (currentPage > 1) {
-                currentPage--;
-                renderFilteredProjects();
-            }
-        });
+        if (paginationPrev) { // Added check
+            paginationPrev.addEventListener('click', function() {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderFilteredProjects();
+                }
+            });
+        }
 
-        paginationNext.addEventListener('click', function() {
-            const filteredProjects = currentFilter === 'all'
-                ? projects
-                : projects.filter(project =>
-                    project.categories && project.categories.includes(currentFilter)
-                );
 
-            const totalPages = Math.ceil(filteredProjects.length / projectsPerPage);
+        if (paginationNext) { // Added check
+            paginationNext.addEventListener('click', function() {
+                const filteredProjects = currentFilter === 'all'
+                    ? projects
+                    : projects.filter(project =>
+                        project.categories && project.categories.includes(currentFilter)
+                    );
 
-            if (currentPage < totalPages) {
-                currentPage++;
-                renderFilteredProjects();
-            }
-        });
+                const totalPages = Math.ceil(filteredProjects.length / projectsPerPage);
+
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderFilteredProjects();
+                }
+            });
+        }
 
         // Initial render
         renderFilteredProjects();
