@@ -38,10 +38,10 @@ document.addEventListener('DOMContentLoaded', () => {
         editButton.style.display = 'none';
     }
 
-    // Show load button if offline or fetch fails
-    function updateLoadButtonVisibility(isOffline = !navigator.onLine) {
+    // Show/hide load button based on online/offline status
+    function updateLoadButtonVisibility(showButton = false) {
         if (uploadJsonBtn) {
-            uploadJsonBtn.style.display = isOffline ? 'block' : 'none';
+            uploadJsonBtn.style.display = showButton ? 'block' : 'none';
         }
     }
 
@@ -126,6 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function loadPortfolioData() {
         updateLoadButtonVisibility(false); // Hide button initially
+        
         return fetch(`data.json?_=${cacheBust}`)
             .then(response => {
                 if (!response.ok) throw new Error('Network response was not ok');
@@ -135,9 +136,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 portfolioData = data;
                 renderPortfolio();
                 updateLoadButtonVisibility(false); // Ensure hidden on success
+                return data; // Return the data for potential chaining
             })
             .catch(error => {
                 console.error('Error loading portfolio data from data.json:', error);
+                // Set default data
                 portfolioData = {
                     siteName: 'Aura Designs',
                     hero: { title: 'Welcome', subtitle: '', backgroundImage: '' },
@@ -149,11 +152,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 };
                 renderPortfolio();
                 updateLoadButtonVisibility(true); // Show button on failure
-                const errorMessage = document.createElement('div');
-                errorMessage.className = 'error-message';
-                errorMessage.textContent = 'Failed to load portfolio data. Displaying default content or upload a local file.';
-                document.body.prepend(errorMessage);
+                showErrorMessage();
+                throw error; // Re-throw the error for potential handling elsewhere
             });
+    }
+
+    function showErrorMessage() {
+        const existingError = document.querySelector('.error-message');
+        if (!existingError) {
+            const errorMessage = document.createElement('div');
+            errorMessage.className = 'error-message';
+            errorMessage.textContent = 'Failed to load portfolio data. Displaying default content or upload a local file.';
+            document.body.prepend(errorMessage);
+        }
     }
 
     function renderPortfolio() {
@@ -336,8 +347,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    window.addEventListener('online', () => updateLoadButtonVisibility(false));
-    window.addEventListener('offline', () => updateLoadButtonVisibility(true));
+    window.addEventListener('online', () => {
+        // When coming back online, try to load data again
+        loadPortfolioData().catch(() => {
+            // If it still fails, keep the button visible
+            updateLoadButtonVisibility(true);
+        });
+    });
 
-    loadPortfolioData();
+    window.addEventListener('offline', () => {
+        // When going offline, show the button
+        updateLoadButtonVisibility(true);
+    });
+
+    // Initial load based on online status
+    if (navigator.onLine) {
+        loadPortfolioData().catch(() => {
+            updateLoadButtonVisibility(true);
+        });
+    } else {
+        updateLoadButtonVisibility(true);
+    }
 });
