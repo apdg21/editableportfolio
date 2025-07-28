@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const hamburger = document.querySelector('.hamburger');
     const navList = document.querySelector('.nav-list');
     const yearSpan = document.getElementById('year');
-    const themeToggle = document.querySelector('.theme-toggle'); // Changed to class
+    const themeToggle = document.querySelector('.theme-toggle');
     const contactForm = document.getElementById('contact-form');
     const lightbox = document.querySelector('.lightbox');
     const closeLightbox = document.querySelector('.close-lightbox');
@@ -38,18 +38,10 @@ document.addEventListener('DOMContentLoaded', () => {
         editButton.style.display = 'none';
     }
 
-    // Show load button if offline or local with fetch failure
-    function updateLoadButtonVisibility() {
+    // Show load button if offline or fetch fails
+    function updateLoadButtonVisibility(isOffline = !navigator.onLine) {
         if (uploadJsonBtn) {
-            uploadJsonBtn.style.display = 'none'; // Default to hidden
-            if (!navigator.onLine || (isLocal && window.location.protocol === 'file:')) {
-                uploadJsonBtn.style.display = 'block'; // Show offline or local file access
-            } else {
-                fetch(`data.json?_=${cacheBust}`)
-                    .catch(() => {
-                        uploadJsonBtn.style.display = 'block'; // Show if fetch fails
-                    });
-            }
+            uploadJsonBtn.style.display = isOffline ? 'block' : 'none';
         }
     }
 
@@ -133,6 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setupThemeToggle();
 
     function loadPortfolioData() {
+        updateLoadButtonVisibility(false); // Hide button initially
         return fetch(`data.json?_=${cacheBust}`)
             .then(response => {
                 if (!response.ok) throw new Error('Network response was not ok');
@@ -141,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(data => {
                 portfolioData = data;
                 renderPortfolio();
-                updateLoadButtonVisibility(); // Hide button if fetch succeeds
+                updateLoadButtonVisibility(false); // Ensure hidden on success
             })
             .catch(error => {
                 console.error('Error loading portfolio data from data.json:', error);
@@ -155,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     copyrightText: `© ${new Date().getFullYear()} Aura Designs.`
                 };
                 renderPortfolio();
-                updateLoadButtonVisibility(); // Show button if fetch fails
+                updateLoadButtonVisibility(true); // Show button on failure
                 const errorMessage = document.createElement('div');
                 errorMessage.className = 'error-message';
                 errorMessage.textContent = 'Failed to load portfolio data. Displaying default content or upload a local file.';
@@ -343,9 +336,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    window.addEventListener('online', updateLoadButtonVisibility);
-    window.addEventListener('offline', updateLoadButtonVisibility);
+    window.addEventListener('online', () => updateLoadButtonVisibility(false));
+    window.addEventListener('offline', () => updateLoadButtonVisibility(true));
 
-    updateLoadButtonVisibility(); // Initial check
     loadPortfolioData();
 });
