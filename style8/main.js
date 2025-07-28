@@ -137,7 +137,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-
     // Smooth scrolling for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
@@ -200,7 +199,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const highResUrl = projectCard?.querySelector('.project-links a[target="_blank"]')?.getAttribute('href');
             const imgAlt = e.target.getAttribute('alt');
 
-            if (lightboxImg) lightboxImg.setAttribute('src', highResUrl || e.target.getAttribute('src')); // Added check
+            if (lightboxImg) lightboxImg.setAttribute('src', highResUrl || e.target.getAttribute('src')); // Use local path
             if (lightboxCaption) lightboxCaption.textContent = imgAlt; // Added check
             if (lightbox) lightbox.classList.add('show'); // Added check
             document.body.style.overflow = 'hidden';
@@ -214,7 +213,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-
     if (lightbox) { // Added check
         lightbox.addEventListener('click', function(e) {
             if (e.target === lightbox) {
@@ -223,7 +221,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-
 
     // Theme toggle functionality
     const themeToggle = document.createElement('div');
@@ -245,7 +242,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-
 
     // Check for saved theme preference
     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -286,7 +282,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-
         // Render copyright text
         const copyright = document.querySelector('.copyright');
         const yearSpan = document.getElementById('year');
@@ -298,12 +293,11 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-
         // Render hero section
         if (portfolioData.hero) {
             const heroSection = document.querySelector('.hero');
             if (heroSection && portfolioData.hero.backgroundImage) {
-                heroSection.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${portfolioData.hero.backgroundImage})`;
+                heroSection.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(assets/${portfolioData.hero.backgroundImage})`; // Use local path
             }
 
             const heroTitle = document.querySelector('.hero h1');
@@ -314,7 +308,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     heroTitle.textContent = '';
                 }
             }
-
 
             const heroSubtitle = document.querySelector('.hero p');
             if (heroSubtitle) { // Added check
@@ -335,7 +328,6 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             if (projectsSection) projectsSection.style.display = 'none'; // Hide if no projects
         }
-
 
         // Render about section
         if (portfolioData.about) {
@@ -361,9 +353,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const profileImg = document.getElementById('profile-img');
             if (profileImg) { // Added check
                 if (portfolioData.about.profileImage) {
-                    profileImg.setAttribute('src', portfolioData.about.profileImage);
+                    profileImg.setAttribute('src', `assets/${portfolioData.about.profileImage}`); // Use local path
                 } else { // Set a placeholder or hide if no image
-                    profileImg.setAttribute('src', 'https://via.placeholder.com/150'); // Example placeholder
+                    profileImg.setAttribute('src', 'assets/placeholder.jpg'); // Local placeholder
                 }
             }
         }
@@ -427,19 +419,18 @@ document.addEventListener('DOMContentLoaded', function() {
             if (projectsGrid) { // Added check
                 projectsGrid.innerHTML = paginatedProjects.map(project => `
                     <div class="project-card" data-categories="${project.categories ? project.categories.join(' ') : ''}">
-                        <img src="${project.image}" alt="${project.title}" class="project-img">
+                        <img src="assets/${project.image}" alt="${project.title}" class="project-img"> <!-- Use local path -->
                         <div class="project-info">
                             <h3 class="project-title">${project.title}</h3>
                             ${project.categories && project.categories.length > 0 ? `<span class="project-category">${project.categories[0]}</span>` : ''}
                             <p class="project-desc">${project.description}</p>
                             <div class="project-links">
-                                ${project.highResUrl ? `<a href="${project.highResUrl}" target="_blank"><i class="fas fa-expand"></i> View Details</a>` : ''}
+                                ${project.highResUrl ? `<a href="assets/${project.highResUrl}" target="_blank"><i class="fas fa-expand"></i> View Details</a>` : ''} <!-- Use local path -->
                             </div>
                         </div>
                     </div>
                 `).join('');
             }
-
 
             // Update pagination buttons
             if (paginationPrev) paginationPrev.disabled = currentPage === 1; // Added check
@@ -459,7 +450,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     pageNumbersContainer.appendChild(pageNumber);
                 }
             }
-
         }
 
         // Initialize filter buttons
@@ -480,7 +470,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
         }
-
 
         if (paginationNext) { // Added check
             paginationNext.addEventListener('click', function() {
