@@ -25,7 +25,16 @@
     --bg-color: #262626; /* Darker Gray */
     --overlay-color: rgba(0, 0, 0, 0.9);
 }
-
+[data-theme="dark"] .theme-toggle, [data-theme="dark"] .filter-btn.active, [data-theme="dark"] .footer, [data-theme="dark"] a.social-link, [data-theme="dark"] .pagination-btn {
+     background: black;
+}
+[data-theme="dark"] .filter-btn:hover, [data-theme="dark"] .btn:hover {
+     color: black;
+}
+[data-theme="dark"] .filter-btn.active:hover {
+     color: white;
+}
+ 
 * {
     margin: 0;
     padding: 0;
@@ -772,4 +781,41 @@ ul {
     .contact-form {
         padding: 20px;
     }
+}
+.theme-toggle {
+    position: fixed;
+    bottom: 30px; /* Increased from 20px for more padding */
+    right: 30px; /* Increased from 20px for more padding */
+    background-color: var(--primary-color);
+    border: none;
+    border-radius: 50%;
+    width: 50px; /* Increased from 40px */
+    height: 50px; /* Increased from 40px */
+    cursor: pointer;
+    font-size: 22px; /* Increased from 18px for a larger icon */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow);
+    z-index: 1001; /* Increased from 1000 to ensure it stays above other elements */
+    transition: var(--transition);
+}
+
+.theme-toggle:hover {
+    background-color: var(--secondary-color);
+}
+
+[data-theme="dark"] .theme-toggle {
+    background-color: var(--dark-color);
+    color: var(--text-light);
+}
+
+[data-theme="dark"] .theme-toggle:hover {
+    background-color: var(--accent-color);
+}
+
+/* Ensure footer doesn't overlap */
+.footer {
+    position: relative;
+    z-index: 1000; /* Lower than theme-toggle to avoid overlap */
 }
