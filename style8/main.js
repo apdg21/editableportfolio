@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const hamburger = document.querySelector('.hamburger');
     const navList = document.querySelector('.nav-list');
     const yearSpan = document.getElementById('year');
-    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggle = document.querySelector('.theme-toggle'); // Changed to class
     const contactForm = document.getElementById('contact-form');
     const lightbox = document.querySelector('.lightbox');
     const closeLightbox = document.querySelector('.close-lightbox');
@@ -30,10 +30,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const socialLinks = document.querySelector('.social-links');
     const heroSection = document.querySelector('.hero');
     const editButton = document.querySelector('.edit-btn');
+    const uploadJsonBtn = document.getElementById('upload-json-btn-main');
+    const uploadJsonInput = document.getElementById('upload-json-input-main');
 
     // Hide edit button if not local and no valid edit parameter
     if (editButton && !isLocal && (!urlParams.has('edit') || urlParams.get('edit') !== EDIT_PASSWORD)) {
         editButton.style.display = 'none';
+    }
+
+    // Show load button if offline or local with fetch failure
+    function updateLoadButtonVisibility() {
+        if (uploadJsonBtn) {
+            uploadJsonBtn.style.display = 'none'; // Default to hidden
+            if (!navigator.onLine || (isLocal && window.location.protocol === 'file:')) {
+                uploadJsonBtn.style.display = 'block'; // Show offline or local file access
+            } else {
+                fetch(`data.json?_=${cacheBust}`)
+                    .catch(() => {
+                        uploadJsonBtn.style.display = 'block'; // Show if fetch fails
+                    });
+            }
+        }
     }
 
     if (yearSpan) { yearSpan.textContent = new Date().getFullYear(); }
@@ -90,27 +107,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function setupThemeToggle() {
         if (themeToggle) {
-            console.log('Theme toggle button found, id:', themeToggle.id);
+            console.log('Theme toggle button found, class:', themeToggle.className);
             themeToggle.addEventListener('click', toggleTheme);
             const savedTheme = localStorage.getItem('theme') || 'light';
             document.documentElement.setAttribute('data-theme', savedTheme);
             console.log('Initial theme loaded:', savedTheme);
         } else {
             console.log('Theme toggle button not found in DOM. Retrying...');
-            // Retry after a short delay in case of async loading
             setTimeout(() => {
-                const retryToggle = document.getElementById('theme-toggle');
+                const retryToggle = document.querySelector('.theme-toggle');
                 if (retryToggle) {
                     themeToggle = retryToggle;
-                    console.log('Theme toggle button found on retry, id:', themeToggle.id);
+                    console.log('Theme toggle button found on retry, class:', themeToggle.className);
                     themeToggle.addEventListener('click', toggleTheme);
                     const savedTheme = localStorage.getItem('theme') || 'light';
                     document.documentElement.setAttribute('data-theme', savedTheme);
                     console.log('Initial theme loaded on retry:', savedTheme);
                 } else {
-                    console.warn('Theme toggle button still not found. Please add <button id="theme-toggle"><i class="fas fa-moon"></i></button> to your HTML.');
+                    console.warn('Theme toggle button still not found. Please add <button class="theme-toggle"><i class="fas fa-moon"></i></button> to your HTML.');
                 }
-            }, 500); // 500ms delay
+            }, 500);
         }
     }
 
@@ -125,6 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(data => {
                 portfolioData = data;
                 renderPortfolio();
+                updateLoadButtonVisibility(); // Hide button if fetch succeeds
             })
             .catch(error => {
                 console.error('Error loading portfolio data from data.json:', error);
@@ -138,9 +155,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     copyrightText: `© ${new Date().getFullYear()} Aura Designs.`
                 };
                 renderPortfolio();
+                updateLoadButtonVisibility(); // Show button if fetch fails
                 const errorMessage = document.createElement('div');
                 errorMessage.className = 'error-message';
-                errorMessage.textContent = 'Failed to load portfolio data. Displaying default content.';
+                errorMessage.textContent = 'Failed to load portfolio data. Displaying default content or upload a local file.';
                 document.body.prepend(errorMessage);
             });
     }
@@ -298,16 +316,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    window.addEventListener('scroll', () => {
-        const header = document.querySelector('.header');
-        if (header) {
-            header.classList.toggle('scrolled', window.scrollY > 0);
-        }
-    });
-
-    const uploadJsonBtn = document.getElementById('upload-json-btn-main');
-    const uploadJsonInput = document.getElementById('upload-json-input-main');
-
     if (uploadJsonBtn && uploadJsonInput) {
         uploadJsonBtn.addEventListener('click', () => uploadJsonInput.click());
         uploadJsonInput.addEventListener('change', (e) => {
@@ -318,6 +326,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     try {
                         portfolioData = JSON.parse(event.target.result);
                         renderPortfolio();
+                        uploadJsonBtn.style.display = 'none'; // Hide after successful load
                     } catch (error) {
                         console.error('Error parsing JSON file:', error);
                     }
@@ -327,5 +336,16 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    window.addEventListener('scroll', () => {
+        const header = document.querySelector('.header');
+        if (header) {
+            header.classList.toggle('scrolled', window.scrollY > 0);
+        }
+    });
+
+    window.addEventListener('online', updateLoadButtonVisibility);
+    window.addEventListener('offline', updateLoadButtonVisibility);
+
+    updateLoadButtonVisibility(); // Initial check
     loadPortfolioData();
 });
