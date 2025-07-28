@@ -1,310 +1,518 @@
-const EDIT_PASSWORD = "fashiondesigner123";
-const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
-const urlParams = new URLSearchParams(window.location.search);
-const cacheBust = Date.now();
+document.addEventListener('DOMContentLoaded', function() {
+    // ===== EDIT BUTTON VISIBILITY ===== //
+    const showEditButton = () => {
+        const isLocal =
+            window.location.hostname === "localhost" ||
+            window.location.hostname === "127.0.0.1" ||
+            window.location.protocol === "file:";
 
-if (!isLocal && urlParams.has('edit') && urlParams.get('edit') !== EDIT_PASSWORD) {
-    window.location.href = window.location.pathname;
-}
+        const urlParams = new URLSearchParams(window.location.search);
+        const EDIT_PASSWORD = "fashiondesigner123"; // 🔑 Set your password here!
 
-document.addEventListener('DOMContentLoaded', () => {
-    const hamburger = document.querySelector('.hamburger');
-    const navList = document.querySelector('.nav-list');
-    const yearSpan = document.getElementById('year');
-    const themeToggle = document.getElementById('theme-toggle');
-    const contactForm = document.getElementById('contact-form');
-    const lightbox = document.querySelector('.lightbox');
-    const closeLightbox = document.querySelector('.close-lightbox');
-    const lightboxImg = document.querySelector('.lightbox-img');
-    const lightboxCaption = document.querySelector('.lightbox-caption');
-    const projectsSection = document.getElementById('collections');
-    const projectsGrid = document.querySelector('.projects-grid');
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    const paginationPrev = document.querySelector('.pagination-btn.prev');
-    const paginationNext = document.querySelector('.pagination-btn.next');
-    const pageNumbers = document.querySelector('.page-numbers');
-    const profileImg = document.getElementById('profile-img');
-    const bioText = document.querySelector('.bio-text');
-    const skillsList = document.querySelector('.skills-list');
-    const testimonialsGrid = document.querySelector('.testimonials-grid');
-    const socialLinks = document.querySelector('.social-links');
-    const heroSection = document.querySelector('.hero');
-    const editButton = document.querySelector('.edit-btn');
-
-    // Hide edit button if not local and no valid edit parameter
-    if (editButton && !isLocal && (!urlParams.has('edit') || urlParams.get('edit') !== EDIT_PASSWORD)) {
-        editButton.style.display = 'none';
-    }
-
-    if (yearSpan) { yearSpan.textContent = new Date().getFullYear(); }
-
-    let portfolioData = {};
-    let currentFilter = 'all';
-    let currentPage = 1;
-    const itemsPerPage = 4;
-
-    const icons = {
-        'instagram': 'fab fa-instagram',
-        'pinterest': 'fab fa-pinterest-p',
-        'linkedin': 'fab fa-linkedin-in',
-        'facebook': 'fab fa-facebook-f',
-        'twitter': 'fab fa-twitter',
-        'behance': 'fab fa-behance'
-    };
-
-    function getPlatformIcon(platform) {
-        return icons[platform.toLowerCase()] || 'fas fa-link';
-    }
-
-    function toggleMobileMenu() {
-        if (hamburger && navList) {
-            hamburger.classList.toggle('active');
-            navList.classList.toggle('active');
+        if (isLocal || urlParams.get('edit') === EDIT_PASSWORD) {
+            const editBtn = document.querySelector('.edit-btn');
+            if (editBtn) { // Check if the button exists before trying to display it
+                editBtn.style.display = 'block';
+            }
+            // If the edit parameter is correct, also show the local load button (useful for quick previews)
+            const uploadJsonBtn = document.getElementById('upload-json-btn-main'); // New ID for main.js button
+            if (uploadJsonBtn) {
+                uploadJsonBtn.style.display = 'inline-block'; // Or 'block', depending on your layout
+            }
+        } else {
+            const editBtn = document.querySelector('.edit-btn');
+            if (editBtn) {
+                editBtn.style.display = 'none';
+            }
+            const uploadJsonBtn = document.getElementById('upload-json-btn-main');
+            if (uploadJsonBtn) {
+                uploadJsonBtn.style.display = 'none';
+            }
         }
-    }
 
-    if (hamburger && navList) {
-        hamburger.addEventListener('click', toggleMobileMenu);
-        // Close menu when a nav item is clicked
-        navList.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                if (window.innerWidth <= 768) { // Check mobile viewport
-                    hamburger.classList.remove('active');
-                    navList.classList.remove('active');
-                }
-            });
-        });
-    }
+        // Optional: Redirect if wrong password (online only)
+        if (!isLocal && urlParams.has('edit') && urlParams.get('edit') !== EDIT_PASSWORD) {
+            window.location.href = window.location.pathname;
+        }
+    };
+    showEditButton();
 
-    function toggleTheme() {
-        console.log('Toggling theme...'); // Debug log
-        const currentTheme = document.documentElement.getAttribute('data-theme');
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        document.documentElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
-        console.log('Theme set to:', newTheme); // Debug log
-    }
+    // Load portfolio data
+    let portfolioData = {};
+    const isLocal =
+        window.location.hostname === "localhost" ||
+        window.location.hostname === "127.0.0.1" ||
+        window.location.protocol === "file:";
 
-    if (themeToggle) {
-        console.log('Theme toggle button found'); // Debug log
-        themeToggle.addEventListener('click', toggleTheme);
-        const savedTheme = localStorage.getItem('theme') || 'light';
-        document.documentElement.setAttribute('data-theme', savedTheme);
-        console.log('Initial theme loaded:', savedTheme); // Debug log
-    } else {
-        console.log('Theme toggle button not found'); // Debug log
-    }
-
+    // Function to load and render portfolio data
     function loadPortfolioData() {
-        return fetch(`data.json?_=${cacheBust}`)
+        const cacheBust = new Date().getTime();
+
+        // Priority 1: Check localStorage for immediately saved data (from form editor)
+        const savedData = JSON.parse(localStorage.getItem('portfolioData'));
+        if (savedData && Object.keys(savedData).length > 0) {
+            portfolioData = savedData;
+            renderPortfolio();
+            // console.log('Portfolio data loaded from localStorage.'); // For debugging
+            return; // Exit if data is found in localStorage
+        }
+
+        // Priority 2: Fetch data.json from server
+        fetch(`data.json?_=${cacheBust}`)
             .then(response => {
-                if (!response.ok) throw new Error('Network response was not ok');
+                if (!response.ok) {
+                    throw new Error('Failed to load data.json');
+                }
                 return response.json();
             })
             .then(data => {
                 portfolioData = data;
+                // localStorage.setItem('portfolioData', JSON.stringify(data)); // Optionally cache the server data
                 renderPortfolio();
+                // console.log('Portfolio data loaded from data.json.'); // For debugging
             })
             .catch(error => {
                 console.error('Error loading portfolio data from data.json:', error);
-                portfolioData = {
-                    siteName: 'Aura Designs',
-                    hero: { title: 'Welcome', subtitle: '', backgroundImage: '' },
-                    projects: [],
-                    about: { bio: '', skills: [], profileImage: '' },
-                    testimonials: [],
-                    socialLinks: [],
-                    copyrightText: `© ${new Date().getFullYear()} Aura Designs.`
-                };
-                renderPortfolio();
+                // Display error message to user
                 const errorMessage = document.createElement('div');
                 errorMessage.className = 'error-message';
-                errorMessage.textContent = 'Failed to load portfolio data. Displaying default content.';
+                errorMessage.textContent = 'Failed to load portfolio data. Please ensure data.json exists and try again later.';
                 document.body.prepend(errorMessage);
             });
     }
 
+    // --- New Functionality: Load data.json from local PC ---
+    // Handle uploaded JSON file for immediate preview on main page
+    document.getElementById('upload-json-input-main')?.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                try {
+                    const uploadedData = JSON.parse(event.target.result);
+                    portfolioData = uploadedData;
+                    localStorage.setItem('portfolioData', JSON.stringify(uploadedData)); // Update localStorage
+                    renderPortfolio(); // Re-render the portfolio with the uploaded data
+                    alert('Portfolio data loaded from local file successfully!');
+                } catch (error) {
+                    console.error('Error parsing uploaded JSON:', error);
+                    alert('Error: Could not parse uploaded file. Please ensure it is a valid JSON file.');
+                }
+            };
+            reader.readAsText(file);
+        }
+    });
+
+    // Handle button click for local file upload (to trigger the hidden input)
+    document.getElementById('upload-json-btn-main')?.addEventListener('click', function() {
+        document.getElementById('upload-json-input-main').click();
+    });
+    // --- End of new functionality ---
+
+    // Load portfolio data on page load
+    loadPortfolioData();
+
+    // Set current year in footer
+    const yearSpan = document.getElementById('year');
+    if (yearSpan) { // Added check
+        yearSpan.textContent = new Date().getFullYear();
+    }
+
+    // Mobile navigation toggle
+    const hamburger = document.querySelector('.hamburger');
+    const navList = document.querySelector('.nav-list');
+
+    if (hamburger && navList) { // Added check
+        hamburger.addEventListener('click', function() {
+            this.classList.toggle('active');
+            navList.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.nav-list a').forEach(link => {
+            link.addEventListener('click', function() {
+                hamburger.classList.remove('active');
+                navList.classList.remove('active');
+            });
+        });
+    }
+
+
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const targetId = this.getAttribute('href');
+            if (targetId === '#') return;
+
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+                window.scrollTo({
+                    top: targetElement.offsetTop - 70,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+
+    // Header scroll effect
+    const header = document.querySelector('.header');
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 50) {
+            if (header) header.classList.add('scrolled'); // Added check
+        } else {
+            if (header) header.classList.remove('scrolled'); // Added check
+        }
+    });
+
+    // Contact form submission
+    const contactForm = document.getElementById('contact-form');
+    if (contactForm) {
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Get form values
+            const formData = new FormData(this);
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+
+            // Here you would typically send the data to a server
+            console.log('Form submitted:', data);
+
+            // Show success message (can be customized using portfolioData.contact.successMessage if you add it)
+            alert('Thank you for your message! I will get back to you soon.');
+            this.reset();
+        });
+    }
+
+    // Lightbox functionality
+    const lightbox = document.querySelector('.lightbox');
+    const lightboxImg = document.querySelector('.lightbox-img');
+    const lightboxCaption = document.querySelector('.lightbox-caption');
+    const closeLightbox = document.querySelector('.close-lightbox');
+
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('project-img')) {
+            const projectCard = e.target.closest('.project-card');
+            const highResUrl = projectCard?.querySelector('.project-links a[target="_blank"]')?.getAttribute('href');
+            const imgAlt = e.target.getAttribute('alt');
+
+            if (lightboxImg) lightboxImg.setAttribute('src', highResUrl || e.target.getAttribute('src')); // Added check
+            if (lightboxCaption) lightboxCaption.textContent = imgAlt; // Added check
+            if (lightbox) lightbox.classList.add('show'); // Added check
+            document.body.style.overflow = 'hidden';
+        }
+    });
+
+    if (closeLightbox) { // Added check
+        closeLightbox.addEventListener('click', function() {
+            if (lightbox) lightbox.classList.remove('show'); // Added check
+            document.body.style.overflow = 'auto';
+        });
+    }
+
+
+    if (lightbox) { // Added check
+        lightbox.addEventListener('click', function(e) {
+            if (e.target === lightbox) {
+                lightbox.classList.remove('show');
+                document.body.style.overflow = 'auto';
+            }
+        });
+    }
+
+
+    // Theme toggle functionality
+    const themeToggle = document.createElement('div');
+    themeToggle.className = 'theme-toggle';
+    themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+    document.body.appendChild(themeToggle);
+
+    if (themeToggle) { // Added check
+        themeToggle.addEventListener('click', function() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const icon = this.querySelector('i');
+
+            if (currentTheme === 'dark') {
+                document.documentElement.removeAttribute('data-theme');
+                if (icon) icon.classList.replace('fa-sun', 'fa-moon'); // Added check
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                if (icon) icon.classList.replace('fa-moon', 'fa-sun'); // Added check
+            }
+        });
+    }
+
+
+    // Check for saved theme preference
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        if (themeToggle) { // Added check
+            const icon = themeToggle.querySelector('i');
+            if (icon) icon.classList.replace('fa-moon', 'fa-sun'); // Added check
+        }
+    }
+
+    // Function to get platform icon
+    function getPlatformIcon(platform) {
+        const icons = {
+            'instagram': 'fab fa-instagram',
+            'pinterest': 'fab fa-pinterest-p',
+            'linkedin': 'fab fa-linkedin-in',
+            'facebook': 'fab fa-facebook-f',
+            'twitter': 'fab fa-twitter',
+            'behance': 'fab fa-behance'
+        };
+        return icons[platform] || 'fas fa-link';
+    }
+
+    // Function to render the entire portfolio
     function renderPortfolio() {
         if (!portfolioData || Object.keys(portfolioData).length === 0) {
-            console.warn("No portfolio data to render.");
+            // console.warn("No portfolio data to render."); // For debugging
             return;
         }
 
-        if (heroSection && portfolioData.hero) {
-            if (portfolioData.hero.title) heroSection.querySelector('h1').textContent = portfolioData.hero.title;
-            if (portfolioData.hero.subtitle) heroSection.querySelector('p').textContent = portfolioData.hero.subtitle;
-            if (portfolioData.hero.backgroundImage) {
-                heroSection.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${portfolioData.hero.backgroundImage || 'https://via.placeholder.com/1200'})`;
+        // Render site name/logo
+        const logo = document.querySelector('.logo');
+        if (logo) { // Added check
+            if (portfolioData.siteName) {
+                logo.textContent = portfolioData.siteName;
+            } else {
+                logo.textContent = 'My Portfolio'; // Default if not set
             }
         }
 
-        if (profileImg && portfolioData.about && portfolioData.about.profileImage) {
-            profileImg.setAttribute('src', portfolioData.about.profileImage || 'https://via.placeholder.com/300');
+
+        // Render copyright text
+        const copyright = document.querySelector('.copyright');
+        const yearSpan = document.getElementById('year');
+        if (copyright && yearSpan) { // Added check
+            if (portfolioData.copyrightText) {
+                copyright.textContent = portfolioData.copyrightText;
+            } else {
+                copyright.textContent = `© ${new Date().getFullYear()} ${portfolioData.siteName || 'Aura Designs'}. All rights reserved.`;
+            }
         }
 
-        if (bioText && portfolioData.about && portfolioData.about.bio) {
-            bioText.innerHTML = portfolioData.about.bio;
+
+        // Render hero section
+        if (portfolioData.hero) {
+            const heroSection = document.querySelector('.hero');
+            if (heroSection && portfolioData.hero.backgroundImage) {
+                heroSection.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${portfolioData.hero.backgroundImage})`;
+            }
+
+            const heroTitle = document.querySelector('.hero h1');
+            if (heroTitle) { // Added check
+                if (portfolioData.hero.title) {
+                    heroTitle.textContent = portfolioData.hero.title;
+                } else { // Clear if no title
+                    heroTitle.textContent = '';
+                }
+            }
+
+
+            const heroSubtitle = document.querySelector('.hero p');
+            if (heroSubtitle) { // Added check
+                if (portfolioData.hero.subtitle) {
+                    heroSubtitle.textContent = portfolioData.hero.subtitle;
+                } else { // Clear if no subtitle
+                    heroSubtitle.textContent = '';
+                }
+            }
         }
 
-        if (skillsList && portfolioData.about && portfolioData.about.skills) {
-            skillsList.innerHTML = portfolioData.about.skills.map(skill => `<li>${skill}</li>`).join('');
-        }
-
-        if (socialLinks && portfolioData.socialLinks) {
-            socialLinks.innerHTML = portfolioData.socialLinks.map(link => `
-                <a href="${link.url}" target="_blank" class="social-link"><i class="${getPlatformIcon(link.platform)}"></i></a>
-            `).join('');
-        }
-
-        if (testimonialsGrid && portfolioData.testimonials) {
-            testimonialsGrid.innerHTML = portfolioData.testimonials.map(testimonial => `
-                <div class="testimonial-card">
-                    <p class="testimonial-text">${testimonial.text}</p>
-                    <p class="testimonial-author">${testimonial.author}</p>
-                </div>
-            `).join('');
-        }
-
+        // Render projects
+        // Ensure the projects section is visible if there are projects, hidden otherwise
+        const projectsSection = document.getElementById('collections'); // Changed ID to 'collections'
         if (portfolioData.projects && portfolioData.projects.length > 0) {
             renderProjects(portfolioData.projects);
             if (projectsSection) projectsSection.style.display = 'block';
         } else {
-            if (projectsSection) projectsSection.style.display = 'none';
+            if (projectsSection) projectsSection.style.display = 'none'; // Hide if no projects
         }
 
-        if (document.querySelector('.copyright') && portfolioData.copyrightText) {
-            document.querySelector('.copyright').textContent = portfolioData.copyrightText;
+
+        // Render about section
+        if (portfolioData.about) {
+            const bioText = document.querySelector('.bio-text');
+            if (bioText && portfolioData.about.bio) { // Added check
+                bioText.innerHTML = portfolioData.about.bio;
+            } else if (bioText) {
+                bioText.innerHTML = '';
+            }
+
+            if (portfolioData.about.skills && portfolioData.about.skills.length > 0) {
+                const skillsList = document.querySelector('.skills-list');
+                if (skillsList) { // Added check
+                    skillsList.innerHTML = portfolioData.about.skills.map(skill =>
+                        `<li>${skill}</li>`
+                    ).join('');
+                }
+            } else {
+                const skillsList = document.querySelector('.skills-list');
+                if (skillsList) skillsList.innerHTML = ''; // Clear if no skills
+            }
+
+            const profileImg = document.getElementById('profile-img');
+            if (profileImg) { // Added check
+                if (portfolioData.about.profileImage) {
+                    profileImg.setAttribute('src', portfolioData.about.profileImage);
+                } else { // Set a placeholder or hide if no image
+                    profileImg.setAttribute('src', 'https://via.placeholder.com/150'); // Example placeholder
+                }
+            }
+        }
+
+        // Render testimonials
+        const testimonialsSection = document.getElementById('testimonials'); // Assuming your testimonials section has this ID
+        if (portfolioData.testimonials && portfolioData.testimonials.length > 0) {
+            renderTestimonials(portfolioData.testimonials);
+            if (testimonialsSection) testimonialsSection.style.display = 'block';
+        } else {
+            if (testimonialsSection) testimonialsSection.style.display = 'none'; // Hide if no testimonials
+        }
+
+        // Render social links
+        const socialLinksContainer = document.querySelector('.social-links');
+        if (socialLinksContainer) { // Added check
+            if (portfolioData.socialLinks && portfolioData.socialLinks.length > 0) {
+                socialLinksContainer.innerHTML = portfolioData.socialLinks.map(link =>
+                    `<a href="${link.url}" class="social-link" target="_blank"><i class="${getPlatformIcon(link.platform)}"></i></a>`
+                ).join('');
+            } else {
+                socialLinksContainer.innerHTML = ''; // Clear if no social links
+            }
         }
     }
 
+    // Function to render projects with pagination and filtering
     function renderProjects(projects) {
-        const filteredProjects = projects.filter(project =>
-            currentFilter === 'all' || (project.categories && project.categories.includes(currentFilter))
-        );
-        const totalPages = Math.ceil(filteredProjects.length / itemsPerPage);
-        const paginatedProjects = filteredProjects.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+        const projectsGrid = document.querySelector('.projects-grid');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const paginationPrev = document.querySelector('.pagination-btn.prev');
+        const paginationNext = document.querySelector('.pagination-btn.next');
+        const pageNumbersContainer = document.querySelector('.page-numbers');
 
-        if (projectsGrid) {
-            projectsGrid.innerHTML = paginatedProjects.map(project => `
-                <div class="project-card" data-categories="${project.categories ? project.categories.join(' ') : ''}">
-                    <img src="${project.image || 'https://via.placeholder.com/300'}" alt="${project.title}" class="project-img" data-high-res="${project.highResUrl || ''}">
-                    <div class="project-info">
-                        <h3 class="project-title">${project.title}</h3>
-                        ${project.categories && project.categories.length > 0 ? `<span class="project-category">${project.categories[0]}</span>` : ''}
-                        <p class="project-desc">${project.description}</p>
-                        <div class="project-links">
-                            ${project.highResUrl ? `<a href="${project.highResUrl}" target="_blank"><i class="fas fa-expand"></i> View Details</a>` : ''}
+        let currentPage = 1;
+        let currentFilter = 'all';
+        const projectsPerPage = 6;
+
+        // Filter projects
+        function filterProjects(filter) {
+            currentFilter = filter;
+            currentPage = 1;
+            renderFilteredProjects();
+        }
+
+        // Render filtered projects with pagination
+        function renderFilteredProjects() {
+            let filteredProjects = projects;
+
+            if (currentFilter !== 'all') {
+                filteredProjects = projects.filter(project =>
+                    project.categories && project.categories.includes(currentFilter)
+                );
+            }
+
+            const totalPages = Math.ceil(filteredProjects.length / projectsPerPage);
+            const startIndex = (currentPage - 1) * projectsPerPage;
+            const paginatedProjects = filteredProjects.slice(startIndex, startIndex + projectsPerPage);
+
+            // Render projects
+            if (projectsGrid) { // Added check
+                projectsGrid.innerHTML = paginatedProjects.map(project => `
+                    <div class="project-card" data-categories="${project.categories ? project.categories.join(' ') : ''}">
+                        <img src="${project.image}" alt="${project.title}" class="project-img">
+                        <div class="project-info">
+                            <h3 class="project-title">${project.title}</h3>
+                            ${project.categories && project.categories.length > 0 ? `<span class="project-category">${project.categories[0]}</span>` : ''}
+                            <p class="project-desc">${project.description}</p>
+                            <div class="project-links">
+                                ${project.highResUrl ? `<a href="${project.highResUrl}" target="_blank"><i class="fas fa-expand"></i> View Details</a>` : ''}
+                            </div>
                         </div>
                     </div>
-                </div>
-            `).join('');
-
-            projectsGrid.querySelectorAll('.project-img').forEach(img => {
-                img.addEventListener('click', () => {
-                    if (img.dataset.highRes) {
-                        lightboxImg.setAttribute('src', img.dataset.highRes);
-                        lightboxCaption.textContent = img.alt;
-                        lightbox.classList.add('show');
-                    }
-                });
-            });
-        }
-
-        if (pageNumbers) {
-            pageNumbers.innerHTML = '';
-            for (let i = 1; i <= totalPages; i++) {
-                pageNumbers.innerHTML += `<span class="page-number ${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</span>`;
+                `).join('');
             }
+
+
+            // Update pagination buttons
+            if (paginationPrev) paginationPrev.disabled = currentPage === 1; // Added check
+            if (paginationNext) paginationNext.disabled = currentPage === totalPages || totalPages === 0; // Added check
+
+            // Render page numbers
+            if (pageNumbersContainer) { // Added check
+                pageNumbersContainer.innerHTML = '';
+                for (let i = 1; i <= totalPages; i++) {
+                    const pageNumber = document.createElement('span');
+                    pageNumber.className = `page-number ${i === currentPage ? 'active' : ''}`;
+                    pageNumber.textContent = i;
+                    pageNumber.addEventListener('click', () => {
+                        currentPage = i;
+                        renderFilteredProjects();
+                    });
+                    pageNumbersContainer.appendChild(pageNumber);
+                }
+            }
+
         }
 
-        if (paginationPrev && paginationNext) {
-            paginationPrev.disabled = currentPage === 1;
-            paginationNext.disabled = currentPage === totalPages;
-        }
-    }
-
-    if (filterButtons && filterButtons.length > 0) {
+        // Initialize filter buttons
         filterButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                currentFilter = button.getAttribute('data-filter');
+            button.addEventListener('click', function() {
                 filterButtons.forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
-                currentPage = 1;
-                renderProjects(portfolioData.projects);
+                this.classList.add('active');
+                filterProjects(this.dataset.filter);
             });
         });
-    }
 
-    if (pageNumbers) {
-        pageNumbers.addEventListener('click', (e) => {
-            if (e.target.classList.contains('page-number')) {
-                currentPage = parseInt(e.target.getAttribute('data-page'));
-                renderProjects(portfolioData.projects);
-            }
-        });
-    }
-
-    if (paginationPrev && paginationNext) {
-        paginationPrev.addEventListener('click', () => {
-            if (currentPage > 1) {
-                currentPage--;
-                renderProjects(portfolioData.projects);
-            }
-        });
-        paginationNext.addEventListener('click', () => {
-            const totalPages = Math.ceil((portfolioData.projects || []).filter(p => currentFilter === 'all' || (p.categories && p.categories.includes(currentFilter))).length / itemsPerPage);
-            if (currentPage < totalPages) {
-                currentPage++;
-                renderProjects(portfolioData.projects);
-            }
-        });
-    }
-
-    if (contactForm) {
-        contactForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const formData = new FormData(contactForm);
-            console.log('Form submitted with:', Object.fromEntries(formData));
-            alert('Thank you for your message! (This is a demo, no email is sent)');
-            contactForm.reset();
-        });
-    }
-
-    if (closeLightbox && lightbox) {
-        closeLightbox.addEventListener('click', () => lightbox.classList.remove('show'));
-        lightbox.addEventListener('click', (e) => {
-            if (e.target === lightbox) lightbox.classList.remove('show');
-        });
-    }
-
-    window.addEventListener('scroll', () => {
-        const header = document.querySelector('.header');
-        if (header) {
-            header.classList.toggle('scrolled', window.scrollY > 0);
+        // Pagination event listeners
+        if (paginationPrev) { // Added check
+            paginationPrev.addEventListener('click', function() {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderFilteredProjects();
+                }
+            });
         }
-    });
 
-    const uploadJsonBtn = document.getElementById('upload-json-btn-main');
-    const uploadJsonInput = document.getElementById('upload-json-input-main');
 
-    if (uploadJsonBtn && uploadJsonInput) {
-        uploadJsonBtn.addEventListener('click', () => uploadJsonInput.click());
-        uploadJsonInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    try {
-                        portfolioData = JSON.parse(event.target.result);
-                        renderPortfolio();
-                    } catch (error) {
-                        console.error('Error parsing JSON file:', error);
-                    }
-                };
-                reader.readAsText(file);
-            }
-        });
+        if (paginationNext) { // Added check
+            paginationNext.addEventListener('click', function() {
+                const filteredProjects = currentFilter === 'all'
+                    ? projects
+                    : projects.filter(project =>
+                        project.categories && project.categories.includes(currentFilter)
+                    );
+
+                const totalPages = Math.ceil(filteredProjects.length / projectsPerPage);
+
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderFilteredProjects();
+                }
+            });
+        }
+
+        // Initial render
+        renderFilteredProjects();
     }
 
-    loadPortfolioData();
+    // Function to render testimonials
+    function renderTestimonials(testimonials) {
+        const testimonialsGrid = document.querySelector('.testimonials-grid');
+        if (!testimonialsGrid) return; // Ensure element exists
+
+        testimonialsGrid.innerHTML = testimonials.map(testimonial => `
+            <div class="testimonial-card">
+                <p class="testimonial-text">"${testimonial.text}"</p>
+                <p class="testimonial-author">— ${testimonial.author}</p>
+            </div>
+        `).join('');
+    }
 });
