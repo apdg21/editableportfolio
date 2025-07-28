@@ -65,19 +65,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (hamburger && navList) {
         hamburger.addEventListener('click', toggleMobileMenu);
+        // Close menu when a nav item is clicked
+        navList.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) { // Check mobile viewport
+                    hamburger.classList.remove('active');
+                    navList.classList.remove('active');
+                }
+            });
+        });
     }
 
     function toggleTheme() {
+        console.log('Toggling theme...'); // Debug log
         const currentTheme = document.documentElement.getAttribute('data-theme');
         const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
         document.documentElement.setAttribute('data-theme', newTheme);
         localStorage.setItem('theme', newTheme);
+        console.log('Theme set to:', newTheme); // Debug log
     }
 
     if (themeToggle) {
+        console.log('Theme toggle button found'); // Debug log
         themeToggle.addEventListener('click', toggleTheme);
         const savedTheme = localStorage.getItem('theme') || 'light';
         document.documentElement.setAttribute('data-theme', savedTheme);
+        console.log('Initial theme loaded:', savedTheme); // Debug log
+    } else {
+        console.log('Theme toggle button not found'); // Debug log
     }
 
     function loadPortfolioData() {
