@@ -30,33 +30,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const socialLinks = document.querySelector('.social-links');
     const heroSection = document.querySelector('.hero');
     const editButton = document.querySelector('.edit-btn');
-    const uploadJsonBtn = document.getElementById('upload-json-btn-main');
-    const uploadJsonInput = document.getElementById('upload-json-input-main');
+    const loadJsonBtn = document.getElementById('load-json');
+    const jsonFileInput = document.getElementById('json-file');
+
+    // Hide admin controls when deployed online
+    if (window.location.protocol === 'http:' || window.location.protocol === 'https:') {
+        document.querySelector('.admin-controls')?.classList.add('hidden');
+    }
 
     // Hide edit button if not local and no valid edit parameter
     if (editButton && !isLocal && (!urlParams.has('edit') || urlParams.get('edit') !== EDIT_PASSWORD)) {
         editButton.style.display = 'none';
     }
 
-    // Initialize upload button as hidden
-    if (uploadJsonBtn) {
-        uploadJsonBtn.style.display = 'none';
-    }
-
-    // Show/hide load button based on online status and fetch success
-    function updateLoadButtonVisibility(show = false) {
-        if (uploadJsonBtn) {
-            uploadJsonBtn.style.display = show ? 'block' : 'none';
-        }
-    }
-
-    function showErrorMessage() {
-        const existingError = document.querySelector('.error-message');
-        if (!existingError) {
-            const errorMessage = document.createElement('div');
-            errorMessage.className = 'error-message';
-            errorMessage.textContent = 'Failed to load portfolio data. Displaying default content or upload a local file.';
-            document.body.prepend(errorMessage);
+    // Show/hide load button based on online/offline status
+    function updateLoadButtonVisibility(showButton = false) {
+        if (loadJsonBtn) {
+            loadJsonBtn.style.display = showButton ? 'block' : 'none';
         }
     }
 
@@ -100,11 +90,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function toggleTheme() {
+        console.log('Toggling theme...');
         const html = document.documentElement;
         const currentTheme = html.getAttribute('data-theme');
         const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
         html.setAttribute('data-theme', newTheme);
         localStorage.setItem('theme', newTheme);
+        console.log('Theme set to:', newTheme, 'on element:', html);
         html.style.display = 'none';
         html.offsetHeight;
         html.style.display = '';
@@ -112,17 +104,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function setupThemeToggle() {
         if (themeToggle) {
+            console.log('Theme toggle button found, class:', themeToggle.className);
             themeToggle.addEventListener('click', toggleTheme);
             const savedTheme = localStorage.getItem('theme') || 'light';
             document.documentElement.setAttribute('data-theme', savedTheme);
+            console.log('Initial theme loaded:', savedTheme);
         } else {
+            console.log('Theme toggle button not found in DOM. Retrying...');
             setTimeout(() => {
                 const retryToggle = document.querySelector('.theme-toggle');
                 if (retryToggle) {
                     themeToggle = retryToggle;
+                    console.log('Theme toggle button found on retry, class:', themeToggle.className);
                     themeToggle.addEventListener('click', toggleTheme);
                     const savedTheme = localStorage.getItem('theme') || 'light';
                     document.documentElement.setAttribute('data-theme', savedTheme);
+                    console.log('Initial theme loaded on retry:', savedTheme);
+                } else {
+                    console.warn('Theme toggle button still not found. Please add <button class="theme-toggle"><i class="fas fa-moon"></i></button> to your HTML.');
                 }
             }, 500);
         }
@@ -131,6 +130,8 @@ document.addEventListener('DOMContentLoaded', () => {
     setupThemeToggle();
 
     function loadPortfolioData() {
+        updateLoadButtonVisibility(false); // Hide button initially
+        
         return fetch(`data.json?_=${cacheBust}`)
             .then(response => {
                 if (!response.ok) throw new Error('Network response was not ok');
@@ -139,11 +140,12 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(data => {
                 portfolioData = data;
                 renderPortfolio();
-                updateLoadButtonVisibility(false); // Hide button on success
-                return data;
+                updateLoadButtonVisibility(false); // Ensure hidden on success
+                return data; // Return the data for potential chaining
             })
             .catch(error => {
-                console.error('Error loading portfolio data:', error);
+                console.error('Error loading portfolio data from data.json:', error);
+                // Set default data
                 portfolioData = {
                     siteName: 'Aura Designs',
                     hero: { title: 'Welcome', subtitle: '', backgroundImage: '' },
@@ -156,8 +158,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 renderPortfolio();
                 updateLoadButtonVisibility(true); // Show button on failure
                 showErrorMessage();
-                throw error;
+                throw error; // Re-throw the error for potential handling elsewhere
             });
+    }
+
+    function showErrorMessage() {
+        const existingError = document.querySelector('.error-message');
+        if (!existingError) {
+            const errorMessage = document.createElement('div');
+            errorMessage.className = 'error-message';
+            errorMessage.textContent = 'Failed to load portfolio data. Displaying default content or upload a local file.';
+            document.body.prepend(errorMessage);
+        }
     }
 
     function renderPortfolio() {
@@ -313,9 +325,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    if (uploadJsonBtn && uploadJsonInput) {
-        uploadJsonBtn.addEventListener('click', () => uploadJsonInput.click());
-        uploadJsonInput.addEventListener('change', (e) => {
+    if (loadJsonBtn && jsonFileInput) {
+        loadJsonBtn.addEventListener('click', () => jsonFileInput.click());
+        jsonFileInput.addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
@@ -324,8 +336,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         portfolioData = JSON.parse(event.target.result);
                         renderPortfolio();
                         updateLoadButtonVisibility(false); // Hide after successful load
-                        const errorMessage = document.querySelector('.error-message');
-                        if (errorMessage) errorMessage.remove();
                     } catch (error) {
                         console.error('Error parsing JSON file:', error);
                     }
@@ -342,18 +352,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Network status event listeners
     window.addEventListener('online', () => {
+        // When coming back online, try to load data again
         loadPortfolioData().catch(() => {
+            // If it still fails, keep the button visible
             updateLoadButtonVisibility(true);
         });
     });
 
     window.addEventListener('offline', () => {
+        // When going offline, show the button
         updateLoadButtonVisibility(true);
     });
 
-    // Initial load based on network status
+    // Initial load based on online status
     if (navigator.onLine) {
         loadPortfolioData().catch(() => {
             updateLoadButtonVisibility(true);
