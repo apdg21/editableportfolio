@@ -1,0 +1,204 @@
+{
+  "basicInfo": {
+    "title": "Juan dela Cruz Portfolio",
+    "logo": "Juan dela Cruz"
+  },
+  "navigation": [
+    {
+      "text": "Work",
+      "link": "#work"
+    },
+    {
+      "text": "About",
+      "link": "#about"
+    },
+    {
+      "text": "Testimonials",
+      "link": "#testimonials"
+    },
+    {
+      "text": "Contact",
+      "link": "#contact"
+    }
+  ],
+  "hero": {
+    "title": "Professional Email Designer & Developer",
+    "subtitle": "I create beautiful, responsive emails that drive engagement and conversions for your business.",
+    "buttonText": "View My Work",
+    "image": "profile.jpg",
+    "bgColor": "#f5f7fa"
+  },
+  "work": {
+    "title": "My Email Design Projects",
+    "projects": [
+      {
+        "title": "E-commerce Newsletter",
+        "description": "Monthly newsletter for fashion retailer with dynamic product blocks and promo codes.",
+        "image": "project1.jpg",
+        "file": "newsletter1.pdf",
+        "tags": [
+          "HTML",
+          "CSS",
+          "Responsive"
+        ]
+      },
+      {
+        "title": "Product Launch Campaign",
+        "description": "Interactive email announcing new tech product with animated CTA buttons.",
+        "image": "project2.jpg",
+        "link": "https://example.com/launch-campaign",
+        "tags": [
+          "AMP",
+          "Animation",
+          "Mobile-first"
+        ]
+      },
+      {
+        "title": "Corporate Newsletter",
+        "description": "Quarterly update for financial services firm with data visualization.",
+        "image": "project3.jpg",
+        "file": "corporate-newsletter.pdf",
+        "tags": [
+          "Branded",
+          "Accessibility",
+          "Dark Mode"
+        ]
+      },
+      {
+        "title": "Welcome Series",
+        "description": "5-part onboarding sequence with personalized content blocks.",
+        "image": "project4.jpg",
+        "file": "welcome-series.pdf",
+        "tags": [
+          "Automation",
+          "Dynamic Content",
+          "A/B Testing"
+        ]
+      },
+      {
+        "title": "Black Friday Sale",
+        "description": "High-conversion promotional email with countdown timer.",
+        "image": "project5.jpg",
+        "link": "https://example.com/black-friday",
+        "tags": [
+          "Promotional",
+          "Urgency",
+          "Responsive"
+        ]
+      },
+      {
+        "title": "Event Invitation",
+        "description": "Virtual conference invite with calendar integration and speaker profiles.",
+        "image": "project6.jpg",
+        "file": "event-invite.pdf",
+        "tags": [
+          "iCal",
+          "Interactive",
+          "Registration"
+        ]
+      },
+      {
+        "title": "Transactional Receipt",
+        "description": "Post-purchase email with order details and recommendation engine.",
+        "image": "project7.jpg",
+        "link": "https://example.com/transactional-email",
+        "tags": [
+          "Dynamic Data",
+          "Personalization",
+          "Upsell"
+        ]
+      },
+      {
+        "title": "Nonprofit Appeal",
+        "description": "Donation request email with storytelling layout and impact metrics.",
+        "image": "project8.jpg",
+        "file": "nonprofit-appeal.pdf",
+        "tags": [
+          "Storytelling",
+          "Responsive",
+          "Accessible"
+        ]
+      },
+      {
+        "title": "Holiday Greeting",
+        "description": "Animated holiday card with snow effect and personalized message.",
+        "image": "project9.jpg",
+        "file": "holiday-card.pdf",
+        "tags": [
+          "Animation",
+          "Festive",
+          "Interactive"
+        ]
+      },
+      {
+        "title": "Survey Request",
+        "description": "Customer feedback email with embedded rating system.",
+        "image": "project10.jpg",
+        "link": "https://example.com/survey-email",
+        "tags": [
+          "Feedback",
+          "Embedded Widget",
+          "Mobile-optimized"
+        ]
+      }
+    ]
+  },
+  "about": {
+    "title": "About Me",
+    "content": "With 7+ years specializing in email design and development, I create pixel-perfect campaigns that render flawlessly across 90+ email clients. My technical expertise ensures maximum deliverability and engagement.",
+    "image": "profile1.jpg",
+    "skills": [
+      "HTML Email Development",
+      "Responsive Design",
+      "Email Marketing Strategy",
+      "CSS Animation",
+      "AMP for Email",
+      "Litmus Testing",
+      "Mailchimp Templates",
+      "HubSpot Module Development",
+      "Accessibility Compliance",
+      "Dynamic Content"
+    ]
+  },
+  "testimonials": {
+    "title": "Client Testimonials",
+    "items": [
+      {
+        "text": "Our open rates increased by 40% after implementing their email templates. The mobile optimization was particularly impressive.",
+        "authorName": "Sarah Johnson",
+        "authorPosition": "Marketing Director",
+        "authorImage": "profile2.jpg"
+      },
+      {
+        "text": "Fixed rendering issues we'd struggled with for years across Outlook and Apple Mail. Worth every penny.",
+        "authorName": "Michael Chen",
+        "authorPosition": "E-commerce Manager",
+        "authorImage": "profile3.jpg"
+      }
+    ]
+  },
+  "contact": {
+    "title": "Get In Touch",
+    "description": "Ready to elevate your email campaigns? Let's talk.",
+    "recipientEmail": "your.email@example.com",
+    "successMessage": "Thanks for your message! I'll respond within 24 hours."
+  },
+  "footer": {
+    "content": "Specializing in responsive email design since 2016",
+    "socialLinks": [
+      {
+        "icon": "linkedin",
+        "url": "https://linkedin.com/in/yourprofile"
+      },
+      {
+        "icon": "dribbble",
+        "url": "https://dribbble.com/yourprofile"
+      },
+      {
+        "icon": "github",
+        "url": "https://github.com/yourprofile"
+      }
+    ],
+    "copyright": "© 2023 Juan dela Cruz. All rights reserved."
+  }
+}

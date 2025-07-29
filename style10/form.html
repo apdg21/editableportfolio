@@ -1,0 +1,163 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="form.js" defer></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Edit Portfolio Content</h1>
+        <label class="btn load-btn" id="load-existing">Load Existing JSON</label>
+        <input type="file" id="existing-json" accept=".json" class="hidden">
+
+        <form id="portfolio-form">
+            <h2>Basic Information</h2>
+            <div class="form-group">
+                <label for="title">Page Title:</label>
+                <input type="text" id="title" placeholder="My Portfolio" required>
+            </div>
+            <div class="form-group">
+                <label for="logo">Logo Text:</label>
+                <input type="text" id="logo" placeholder="My Name" required>
+            </div>
+
+            <h2>Navigation</h2>
+            <div id="navigation-items"></div>
+            <button type="button" class="btn" id="add-nav-item">Add Navigation Item</button>
+
+            <h2>Hero Section</h2>
+            <div class="form-group">
+                <label for="hero-title">Title:</label>
+                <input type="text" id="hero-title" placeholder="Professional Email Designer & Developer" required>
+            </div>
+            <div class="form-group">
+                <label for="hero-subtitle">Subtitle:</label>
+                <input type="text" id="hero-subtitle" placeholder="I create beautiful, responsive emails..." required>
+            </div>
+            <div class="form-group">
+                <label for="hero-button-text">Button Text:</label>
+                <input type="text" id="hero-button-text" placeholder="View My Work" required>
+            </div>
+            <div class="form-group">
+                <label for="hero-image">Profile Image (filename in assets folder):</label>
+                <input type="text" id="hero-image" placeholder="profile.jpg" required>
+            </div>
+            <div class="form-group">
+                <label for="hero-bg-color">Background Color:</label>
+                <input type="color" id="hero-bg-color" value="#f5f7fa">
+            </div>
+
+            <h2>Work Section</h2>
+            <div class="form-group">
+                <label for="work-title">Section Title:</label>
+                <input type="text" id="work-title" placeholder="My Email Design Projects" required>
+            </div>
+            <div id="projects"></div>
+            <button type="button" class="btn" id="add-project">Add Project</button>
+
+            <h2>About Section</h2>
+            <div class="form-group">
+                <label for="about-title">Title:</label>
+                <input type="text" id="about-title" placeholder="About Me" required>
+            </div>
+            <div class="form-group">
+                <label for="about-content">Content:</label>
+                <textarea id="about-content" placeholder="With 7+ years specializing in..." required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="about-image">Sidebar About Image (filename in assets folder):</label>
+                <input type="text" id="about-image" placeholder="profile1.jpg" required>
+            </div>
+            <div id="skills"></div>
+            <button type="button" class="btn" id="add-skill">Add Skill</button>
+
+            <h2>Testimonials</h2>
+            <div class="form-group">
+                <label for="testimonials-title">Section Title:</label>
+                <input type="text" id="testimonials-title" placeholder="Client Testimonials" required>
+            </div>
+            <div id="testimonial-items"></div>
+            <button type="button" class="btn" id="add-testimonial">Add Testimonial</button>
+
+            <h2>Contact Form</h2>
+            <div class="form-group">
+                <label for="contact-title">Section Title:</label>
+                <input type="text" id="contact-title" placeholder="Get In Touch" required>
+            </div>
+            <div class="form-group">
+                <label for="contact-description">Description:</label>
+                <textarea id="contact-description" placeholder="Ready to elevate your email campaigns?" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="contact-email">Recipient Email:</label>
+                <input type="email" id="contact-email" placeholder="your.email@example.com" required>
+            </div>
+            <div class="form-group">
+                <label for="contact-success">Success Message:</label>
+                <input type="text" id="contact-success" placeholder="Thanks for your message!" required>
+            </div>
+
+            <h2>Footer</h2>
+            <div class="form-group">
+                <label for="footer-content">Content:</label>
+                <input type="text" id="footer-content" placeholder="Specializing in responsive email design since 2016" required>
+            </div>
+            <div class="form-group">
+                <label for="copyright">Copyright Text:</label>
+                <input type="text" id="copyright" placeholder="© 2023 Your Name. All rights reserved." required>
+            </div>
+            <div id="social-links-form"></div>
+            <button type="button" class="btn" id="add-social-link">Add Social Link</button>
+
+            <div class="form-actions">
+                <button type="submit" class="btn">Save Changes</button>
+                <button type="button" class="btn" id="download-json">Download JSON</button>
+                <button type="button" class="btn" id="preview">Preview Portfolio</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
