@@ -67,7 +67,7 @@ body.no-scroll {
 
 .sidebar-header {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     padding: 1rem;
     border-bottom: 1px solid #eee;
@@ -93,6 +93,7 @@ body.no-scroll {
 .sidebar ul {
     list-style: none;
     padding: 1rem;
+    text-align: center;
 }
 
 .sidebar ul li {
