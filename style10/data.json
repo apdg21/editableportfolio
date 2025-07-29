@@ -1,7 +1,7 @@
 {
   "basicInfo": {
-    "title": "Juan dela Cruz Portfolio",
-    "logo": "Juan dela Cruz"
+    "title": "Jessica Jone's Portfolio",
+    "logo": "Jessica Jones"
   },
   "navigation": [
     {
@@ -22,183 +22,183 @@
     }
   ],
   "hero": {
-    "title": "Professional Email Designer & Developer",
-    "subtitle": "I create beautiful, responsive emails that drive engagement and conversions for your business.",
-    "buttonText": "View My Work",
+    "title": "Conversion-Driven Landing Page Designer",
+    "subtitle": "I craft high-performing landing pages that convert visitors into leads and customers for your business.",
+    "buttonText": "See My Designs",
     "image": "profile.jpg",
-    "bgColor": "#f5f7fa"
+    "bgColor": "#f0f2f5"
   },
   "work": {
-    "title": "My Email Design Projects",
+    "title": "My Landing Page Designs",
     "projects": [
       {
-        "title": "E-commerce Newsletter",
-        "description": "Monthly newsletter for fashion retailer with dynamic product blocks and promo codes.",
-        "image": "project1.jpg",
-        "file": "newsletter1.pdf",
+        "title": "SaaS Product Showcase",
+        "description": "Designed a clean, engaging landing page to highlight key features and benefits for a new SaaS platform.",
+        "image": "landing_saas.jpg",
+        "link": "https://example.com/saas-landing-page",
         "tags": [
-          "HTML",
-          "CSS",
+          "UI/UX",
+          "Lead Gen",
           "Responsive"
         ]
       },
       {
-        "title": "Product Launch Campaign",
-        "description": "Interactive email announcing new tech product with animated CTA buttons.",
-        "image": "project2.jpg",
-        "link": "https://example.com/launch-campaign",
+        "title": "E-commerce Product Launch",
+        "description": "High-impact page for a new consumer product, focusing on compelling visuals and clear calls to action.",
+        "image": "landing_ecommerce.jpg",
+        "link": "https://example.com/ecommerce-launch",
         "tags": [
-          "AMP",
-          "Animation",
-          "Mobile-first"
-        ]
-      },
-      {
-        "title": "Corporate Newsletter",
-        "description": "Quarterly update for financial services firm with data visualization.",
-        "image": "project3.jpg",
-        "file": "corporate-newsletter.pdf",
-        "tags": [
-          "Branded",
-          "Accessibility",
-          "Dark Mode"
-        ]
-      },
-      {
-        "title": "Welcome Series",
-        "description": "5-part onboarding sequence with personalized content blocks.",
-        "image": "project4.jpg",
-        "file": "welcome-series.pdf",
-        "tags": [
-          "Automation",
-          "Dynamic Content",
+          "Conversion",
+          "Mobile-first",
           "A/B Testing"
         ]
       },
       {
-        "title": "Black Friday Sale",
-        "description": "High-conversion promotional email with countdown timer.",
-        "image": "project5.jpg",
-        "link": "https://example.com/black-friday",
+        "title": "Webinar Registration Page",
+        "description": "Optimized page to maximize sign-ups for a marketing webinar, with trust signals and clear agenda.",
+        "image": "landing_webinar.jpg",
+        "file": "webinar_lp_mockup.pdf",
         "tags": [
-          "Promotional",
-          "Urgency",
-          "Responsive"
+          "Event",
+          "Optimized",
+          "Forms"
         ]
       },
       {
-        "title": "Event Invitation",
-        "description": "Virtual conference invite with calendar integration and speaker profiles.",
-        "image": "project6.jpg",
-        "file": "event-invite.pdf",
+        "title": "Real Estate Lead Capture",
+        "description": "Developed a localized landing page for property inquiries with integrated map and contact form.",
+        "image": "landing_realestate.jpg",
+        "file": "real_estate_lp_case_study.pdf",
         "tags": [
-          "iCal",
-          "Interactive",
-          "Registration"
+          "Local SEO",
+          "CRM Integration",
+          "Geo-targeting"
         ]
       },
       {
-        "title": "Transactional Receipt",
-        "description": "Post-purchase email with order details and recommendation engine.",
-        "image": "project7.jpg",
-        "link": "https://example.com/transactional-email",
+        "title": "Fitness Program Enrollment",
+        "description": "Designed a persuasive page for a fitness challenge, featuring testimonials and progress tracking.",
+        "image": "landing_fitness.jpg",
+        "link": "https://example.com/fitness-program",
         "tags": [
-          "Dynamic Data",
-          "Personalization",
-          "Upsell"
+          "Health",
+          "Motivation",
+          "Video"
         ]
       },
       {
-        "title": "Nonprofit Appeal",
-        "description": "Donation request email with storytelling layout and impact metrics.",
-        "image": "project8.jpg",
-        "file": "nonprofit-appeal.pdf",
+        "title": "Financial Services Consult",
+        "description": "Professional and trustworthy page for booking financial consultations, emphasizing security and expertise.",
+        "image": "landing_finance.jpg",
+        "file": "finance_lp_report.pdf",
         "tags": [
-          "Storytelling",
-          "Responsive",
-          "Accessible"
+          "B2B",
+          "Trust",
+          "Booking"
         ]
       },
       {
-        "title": "Holiday Greeting",
-        "description": "Animated holiday card with snow effect and personalized message.",
-        "image": "project9.jpg",
-        "file": "holiday-card.pdf",
+        "title": "Mobile App Download Page",
+        "description": "Sleek landing page designed to drive app installations with direct links to app stores and feature highlights.",
+        "image": "landing_app.jpg",
+        "link": "https://example.com/app-download",
         "tags": [
-          "Animation",
-          "Festive",
-          "Interactive"
+          "App Marketing",
+          "Minimalist",
+          "Speed"
         ]
       },
       {
-        "title": "Survey Request",
-        "description": "Customer feedback email with embedded rating system.",
-        "image": "project10.jpg",
-        "link": "https://example.com/survey-email",
+        "title": "Educational Course Enrollment",
+        "description": "Engaging page for online course sign-ups, showcasing curriculum, instructor bios, and student reviews.",
+        "image": "landing_education.jpg",
+        "file": "course_lp_guide.pdf",
         "tags": [
-          "Feedback",
-          "Embedded Widget",
-          "Mobile-optimized"
+          "E-learning",
+          "Enrollment",
+          "Testimonials"
+        ]
+      },
+      {
+        "title": "Charity Donation Campaign",
+        "description": "Emotionally resonant landing page for a fundraising appeal, emphasizing impact and ease of giving.",
+        "image": "landing_charity.jpg",
+        "file": "charity_lp_impact.pdf",
+        "tags": [
+          "Non-profit",
+          "Fundraising",
+          "Storytelling"
+        ]
+      },
+      {
+        "title": "Software Demo Request",
+        "description": "Clean and concise page for requesting a software demo, focusing on a clear form and benefit-driven copy.",
+        "image": "landing_software_demo.jpg",
+        "link": "https://example.com/software-demo",
+        "tags": [
+          "B2B",
+          "Demo",
+          "Simplicity"
         ]
       }
     ]
   },
   "about": {
-    "title": "About Me",
-    "content": "With 7+ years specializing in email design and development, I create pixel-perfect campaigns that render flawlessly across 90+ email clients. My technical expertise ensures maximum deliverability and engagement.",
+    "title": "About Jessica Jones",
+    "content": "I'm a dedicated landing page designer with over 6 years of experience, specializing in creating high-converting web experiences. My passion lies in combining aesthetic design with strategic user psychology to drive measurable results for businesses across various industries. I'm adept at A/B testing, user journey mapping, and collaborating with marketing teams to exceed KPIs.",
     "image": "profile1.jpg",
     "skills": [
-      "HTML Email Development",
-      "Responsive Design",
-      "Email Marketing Strategy",
-      "CSS Animation",
-      "AMP for Email",
-      "Litmus Testing",
-      "Mailchimp Templates",
-      "HubSpot Module Development",
-      "Accessibility Compliance",
-      "Dynamic Content"
+      "Conversion Rate Optimization (CRO)",
+      "UI/UX Design",
+      "A/B Testing & Optimization",
+      "HTML5 & CSS3",
+      "Responsive Web Design",
+      "Figma / Sketch / Adobe XD",
+      "Google Analytics",
+      "Heatmaps & Session Recordings",
+      "Copywriting Principles",
+      "Marketing Automation Integration"
     ]
   },
   "testimonials": {
-    "title": "Client Testimonials",
+    "title": "Client Success Stories",
     "items": [
       {
-        "text": "Our open rates increased by 40% after implementing their email templates. The mobile optimization was particularly impressive.",
-        "authorName": "Sarah Johnson",
-        "authorPosition": "Marketing Director",
+        "text": "Jessica's landing pages increased our lead conversion rate by 25% in the first quarter alone. Her attention to detail and understanding of our target audience was exceptional.",
+        "authorName": "David Lee",
+        "authorPosition": "Head of Digital Marketing, Tech Solutions Inc.",
         "authorImage": "profile2.jpg"
       },
       {
-        "text": "Fixed rendering issues we'd struggled with for years across Outlook and Apple Mail. Worth every penny.",
-        "authorName": "Michael Chen",
-        "authorPosition": "E-commerce Manager",
+        "text": "The new landing page Jessica designed for our product launch significantly boosted our sign-ups. Her designs are not only beautiful but also incredibly effective.",
+        "authorName": "Emily White",
+        "authorPosition": "Product Manager, Creative Brands Co.",
         "authorImage": "profile3.jpg"
       }
     ]
   },
   "contact": {
-    "title": "Get In Touch",
-    "description": "Ready to elevate your email campaigns? Let's talk.",
-    "recipientEmail": "your.email@example.com",
-    "successMessage": "Thanks for your message! I'll respond within 24 hours."
+    "title": "Let's Build High-Converting Pages",
+    "description": "Ready to turn more visitors into customers? Reach out and let's discuss your next project.",
+    "recipientEmail": "jessica.jones.design@example.com",
+    "successMessage": "Your message is on its way! I'll get back to you within one business day."
   },
   "footer": {
-    "content": "Specializing in responsive email design since 2016",
+    "content": "Crafting compelling digital experiences since 2018",
     "socialLinks": [
       {
         "icon": "linkedin",
-        "url": "https://linkedin.com/in/yourprofile"
+        "url": "https://linkedin.com/in/jessicajones-lpdesigner"
       },
       {
-        "icon": "dribbble",
-        "url": "https://dribbble.com/yourprofile"
+        "icon": "behance",
+        "url": "https://behance.net/jessicajonesdesigns"
       },
       {
-        "icon": "github",
-        "url": "https://github.com/yourprofile"
+        "icon": "twitter",
+        "url": "https://twitter.com/jessicajoneslp"
       }
     ],
-    "copyright": "© 2023 Juan dela Cruz. All rights reserved."
+    "copyright": "© 2025 Jessica Jones. All rights reserved."
   }
 }
