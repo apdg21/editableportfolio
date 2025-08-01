@@ -96,8 +96,6 @@ document.addEventListener('DOMContentLoaded', function() {
     initEditButton();
     initLoadButton();
 
-    
-
     // Rest of your existing code remains the same...
     // Load portfolio data on page load
     loadPortfolioData();
@@ -254,9 +252,9 @@ document.addEventListener('DOMContentLoaded', function() {
         // Render copyright text
         const copyright = document.querySelector('.copyright');
         if (portfolioData.copyrightText) {
-            copyright.innerHTML = portfolioData.copyrightText;
+            copyright.textContent = portfolioData.copyrightText;
         } else {
-            copyright.innerHTML = `© ${new Date().getFullYear()} ${portfolioData.siteName || 'Elena Ray'} Photography. All rights reserved.`;
+            copyright.textContent = `© ${new Date().getFullYear()} ${portfolioData.siteName || 'Elena Ray'} Photography. All rights reserved.`;
         }
         
         // Render hero section
