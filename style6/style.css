@@ -15,8 +15,8 @@
 
 /* Dark mode variables */
 [data-theme="dark"] {
-    --primary-color: #ffffff;
-    --secondary-color: #e74c3c;
+    --primary-color: #e74c3c;
+     --secondary-color: #e74c3c;
     --accent-color: #3498db;
     --light-color: #2c3e50;
     --dark-color: #ecf0f1;
@@ -25,6 +25,7 @@
     --bg-color: #2c3e50;
     --overlay-color: rgba(0, 0, 0, 0.9);
 }
+
 
 * {
     margin: 0;
@@ -706,50 +707,3 @@ ul {
         padding: 20px;
     }
 }
-```css
-.status {
-    margin-top: 20px;
-    padding: 10px;
-    border-radius: 4px;
-    display: none;
-}
-.status.success {
-    background-color: #d4edda;
-    color: #155724;
-    display: block;
-}
-.status.error {
-    background-color: #f8d7da;
-    color: #721c24;
-    display: block;
-}
-.btn {
-    display: inline-block;
-    background-color: #e74c3c;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: all 0.3s ease;
-}
-.btn:hover {
-    background-color: #c0392b;
-}
-.upload-container {
-    margin: 20px;
-    text-align: center;
-}
-
-button#upload-json-btn-main {
-    background-color: var(--accent-color);
-    color: white;
-    padding: 8px 15px;
-    border-radius: var(--border-radius);
-    font-size: 0.9rem;
-}
-
-button#upload-json-btn-main:hover {
-background-color: var(--primary-color);
-}   
