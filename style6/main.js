@@ -1,100 +1,154 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // ===== SHARED VISIBILITY CHECK ===== //
+    // ===== EDIT BUTTON VISIBILITY ===== //
+    const showEditButton = () => {
+        const isLocal = 
+            window.location.hostname === "localhost" || 
+            window.location.hostname === "127.0.0.1" ||
+            window.location.protocol === "file:";
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const EDIT_PASSWORD = "photography123"; // 🔑 Set your password here!
+
+        if (isLocal || urlParams.get('edit') === EDIT_PASSWORD) {
+            document.querySelector('.edit-btn').style.display = 'block';
+        } else {
+            document.querySelector('.edit-btn').style.display = 'none';
+        }
+        
+
+        // Optional: Redirect if wrong password (online only)
+        if (!isLocal && urlParams.has('edit') && urlParams.get('edit') !== EDIT_PASSWORD) {
+            window.location.href = window.location.pathname;
+        }
+    };
+    showEditButton();
+
+    // Load portfolio data
+    let portfolioData = {};
     const isLocal = 
         window.location.hostname === "localhost" || 
         window.location.hostname === "127.0.0.1" ||
         window.location.protocol === "file:";
-    
-    const urlParams = new URLSearchParams(window.location.search);
-    const EDIT_PASSWORD = "photography123";
 
-    // ===== BUTTON VISIBILITY CONTROL ===== //
-    function setButtonVisibility(selector, show) {
-        const btn = document.querySelector(selector);
-        if (btn) btn.style.display = show ? 'block' : 'none';
-    }
-
-    // ===== EDIT BUTTON ===== //
-    function initEditButton() {
-        const shouldShow = isLocal || urlParams.get('edit') === EDIT_PASSWORD;
-        setButtonVisibility('.edit-btn', shouldShow);
-
-        // Redirect if wrong password (online only)
-        if (!isLocal && urlParams.has('edit') && urlParams.get('edit') !== EDIT_PASSWORD) {
-            window.location.href = window.location.pathname;
-        }
-    }
-
-    // ===== LOAD BUTTON ===== //
-    function initLoadButton() {
-        const shouldShow = isLocal || urlParams.get('edit') === EDIT_PASSWORD;
+    // Create file input element for JSON loading
+    const createFileInput = () => {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.accept = '.json';
+        fileInput.style.display = 'none';
+        fileInput.id = 'json-file-input';
+        document.body.appendChild(fileInput);
         
-        if (shouldShow) {
-            // Create file input
-            const fileInput = document.createElement('input');
-            fileInput.type = 'file';
-            fileInput.accept = '.json';
-            fileInput.style.display = 'none';
-            fileInput.id = 'json-file-input';
-            document.body.appendChild(fileInput);
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
             
-            fileInput.addEventListener('change', function(e) {
-                const file = e.target.files[0];
-                if (!file) return;
-                
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    try {
-                        const jsonData = JSON.parse(e.target.result);
-                        portfolioData = jsonData;
-                        localStorage.setItem('portfolioData', JSON.stringify(jsonData));
-                        renderPortfolio();
-                        showMessage('Portfolio data loaded successfully!', 'success');
-                    } catch (error) {
-                        showMessage('Invalid JSON file', 'error');
-                        console.error('JSON parse error:', error);
-                    }
-                };
-                reader.readAsText(file);
-            });
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const jsonData = JSON.parse(e.target.result);
+                    portfolioData = jsonData;
+                    localStorage.setItem('portfolioData', JSON.stringify(jsonData));
+                    renderPortfolio();
+                    alert('Portfolio data loaded successfully!');
+                } catch (error) {
+                    alert('Error parsing JSON file. Please make sure it is a valid data.json file.');
+                    console.error('Error parsing JSON:', error);
+                }
+            };
+            reader.readAsText(file);
+        });
+    };
 
-            // Create load button
-            const loadBtn = document.createElement('button');
-            loadBtn.className = 'load-json-btn';
-            loadBtn.innerHTML = '<i class="fas fa-upload"></i> Load Portfolio Data';
-            
-            // Apply styles (better to put in CSS)
-            Object.assign(loadBtn.style, {
-                position: 'fixed',
-                bottom: '20px',
-                right: '20px',
-                zIndex: '1000',
-                padding: '10px 15px',
-                backgroundColor: '#4CAF50',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                fontSize: '14px'
-            });
-            
-            loadBtn.addEventListener('click', () => fileInput.click());
-            document.body.appendChild(loadBtn);
+    // Create load JSON button
+    const createLoadJsonButton = () => {
+        const loadBtn = document.createElement('button');
+        loadBtn.className = 'load-json-btn';
+        loadBtn.innerHTML = '<i class="fas fa-upload"></i> Load Portfolio Data';
+        loadBtn.style.position = 'fixed';
+        loadBtn.style.bottom = '20px';
+        loadBtn.style.right = '20px';
+        loadBtn.style.zIndex = '1000';
+        loadBtn.style.padding = '10px 15px';
+        loadBtn.style.backgroundColor = '#4CAF50';
+        loadBtn.style.color = 'white';
+        loadBtn.style.border = 'none';
+        loadBtn.style.borderRadius = '4px';
+        loadBtn.style.cursor = 'pointer';
+        loadBtn.style.fontSize = '14px';
+        
+        loadBtn.addEventListener('click', function() {
+            document.getElementById('json-file-input').click();
+        });
+        
+        document.body.appendChild(loadBtn);
+    };
+
+    // Initialize file input and load button
+    createFileInput();
+    createLoadJsonButton();
+
+    // Function to load and render portfolio data
+    function loadPortfolioData() {
+        const cacheBust = new Date().getTime();
+        // Always try to fetch data.json when online
+        if (!isLocal) {
+            fetch(`data.json?_=${cacheBust}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to load data.json');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    portfolioData = data;
+                    localStorage.setItem('portfolioData', JSON.stringify(data));
+                    renderPortfolio();
+                })
+                .catch(error => {
+                    console.error('Error loading portfolio data:', error);
+                    // Fallback to localStorage if fetch fails
+                    const savedData = JSON.parse(localStorage.getItem('portfolioData'));
+                    if (savedData && Object.keys(savedData).length > 0) {
+                        portfolioData = savedData;
+                        renderPortfolio();
+                    } else {
+                        // Display error message to user
+                        const errorMessage = document.createElement('div');
+                        errorMessage.className = 'error-message';
+                        errorMessage.textContent = 'Failed to load portfolio data. Please try again later or load a data.json file.';
+                        document.body.prepend(errorMessage);
+                    }
+                });
+        } else {
+            // Offline: Check localStorage first, then fall back to data.json
+            const savedData = JSON.parse(localStorage.getItem('portfolioData'));
+            if (savedData && Object.keys(savedData).length > 0) {
+                portfolioData = savedData;
+                renderPortfolio();
+            } else {
+                fetch(`data.json?_=${cacheBust}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to load data.json');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        portfolioData = data;
+                        localStorage.setItem('portfolioData', JSON.stringify(data));
+                        renderPortfolio();
+                    })
+                    .catch(error => {
+                        console.error('Error loading portfolio data:', error);
+                        const errorMessage = document.createElement('div');
+                        errorMessage.className = 'error-message';
+                        errorMessage.textContent = 'Failed to load portfolio data. Please load a data.json file.';
+                        document.body.prepend(errorMessage);
+                    });
+            }
         }
     }
-
-    // ===== MESSAGE DISPLAY ===== //
-    function showMessage(text, type) {
-        const msg = document.createElement('div');
-        msg.className = `load-message ${type}`;
-        msg.textContent = text;
-        document.body.appendChild(msg);
-        setTimeout(() => msg.remove(), 3000);
-    }
-
-    // Initialize buttons
-    initEditButton();
-    initLoadButton();
 
     // Rest of your existing code remains the same...
     // Load portfolio data on page load
