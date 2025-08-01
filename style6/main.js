@@ -14,6 +14,25 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             document.querySelector('.edit-btn').style.display = 'none';
         }
+        
+// ===== LOAD BUTTON VISIBILITY ===== //
+const showLoadButton = () => {
+    const isLocal = 
+        window.location.hostname === "localhost" || 
+        window.location.hostname === "127.0.0.1" ||
+        window.location.protocol === "file:";
+
+    // Same conditions as edit button
+    if (isLocal) {
+        initFileLoading(); // Show button
+    } else {
+        // Online production - hide load button
+        if (document.querySelector('.load-json-btn')) {
+            document.querySelector('.load-json-btn').style.display = 'none';
+        }
+    }
+};
+
 
         // Optional: Redirect if wrong password (online only)
         if (!isLocal && urlParams.has('edit') && urlParams.get('edit') !== EDIT_PASSWORD) {
