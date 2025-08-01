@@ -29,6 +29,64 @@ document.addEventListener('DOMContentLoaded', function() {
         window.location.hostname === "127.0.0.1" ||
         window.location.protocol === "file:";
 
+    // Create file input element for JSON loading
+    const createFileInput = () => {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.accept = '.json';
+        fileInput.style.display = 'none';
+        fileInput.id = 'json-file-input';
+        document.body.appendChild(fileInput);
+        
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const jsonData = JSON.parse(e.target.result);
+                    portfolioData = jsonData;
+                    localStorage.setItem('portfolioData', JSON.stringify(jsonData));
+                    renderPortfolio();
+                    alert('Portfolio data loaded successfully!');
+                } catch (error) {
+                    alert('Error parsing JSON file. Please make sure it is a valid data.json file.');
+                    console.error('Error parsing JSON:', error);
+                }
+            };
+            reader.readAsText(file);
+        });
+    };
+
+    // Create load JSON button
+    const createLoadJsonButton = () => {
+        const loadBtn = document.createElement('button');
+        loadBtn.className = 'load-json-btn';
+        loadBtn.innerHTML = '<i class="fas fa-upload"></i> Load Portfolio Data';
+        loadBtn.style.position = 'fixed';
+        loadBtn.style.bottom = '20px';
+        loadBtn.style.right = '20px';
+        loadBtn.style.zIndex = '1000';
+        loadBtn.style.padding = '10px 15px';
+        loadBtn.style.backgroundColor = '#4CAF50';
+        loadBtn.style.color = 'white';
+        loadBtn.style.border = 'none';
+        loadBtn.style.borderRadius = '4px';
+        loadBtn.style.cursor = 'pointer';
+        loadBtn.style.fontSize = '14px';
+        
+        loadBtn.addEventListener('click', function() {
+            document.getElementById('json-file-input').click();
+        });
+        
+        document.body.appendChild(loadBtn);
+    };
+
+    // Initialize file input and load button
+    createFileInput();
+    createLoadJsonButton();
+
     // Function to load and render portfolio data
     function loadPortfolioData() {
         const cacheBust = new Date().getTime();
@@ -57,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         // Display error message to user
                         const errorMessage = document.createElement('div');
                         errorMessage.className = 'error-message';
-                        errorMessage.textContent = 'Failed to load portfolio data. Please try again later.';
+                        errorMessage.textContent = 'Failed to load portfolio data. Please try again later or load a data.json file.';
                         document.body.prepend(errorMessage);
                     }
                 });
@@ -84,13 +142,14 @@ document.addEventListener('DOMContentLoaded', function() {
                         console.error('Error loading portfolio data:', error);
                         const errorMessage = document.createElement('div');
                         errorMessage.className = 'error-message';
-                        errorMessage.textContent = 'Failed to load portfolio data. Please try again later.';
+                        errorMessage.textContent = 'Failed to load portfolio data. Please load a data.json file.';
                         document.body.prepend(errorMessage);
                     });
             }
         }
     }
 
+    // Rest of your existing code remains the same...
     // Load portfolio data on page load
     loadPortfolioData();
     
