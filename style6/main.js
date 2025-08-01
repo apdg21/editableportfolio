@@ -254,9 +254,9 @@ document.addEventListener('DOMContentLoaded', function() {
         // Render copyright text
         const copyright = document.querySelector('.copyright');
         if (portfolioData.copyrightText) {
-            copyright.textContent = portfolioData.copyrightText;
+            copyright.innerHTML = portfolioData.copyrightText;
         } else {
-            copyright.textContent = `© ${new Date().getFullYear()} ${portfolioData.siteName || 'Elena Ray'} Photography. All rights reserved.`;
+            copyright.innerHTML = `© ${new Date().getFullYear()} ${portfolioData.siteName || 'Elena Ray'} Photography. All rights reserved.`;
         }
         
         // Render hero section
