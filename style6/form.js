@@ -1,8 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Load portfolio data from localStorage
-    let portfolioData = JSON.parse(localStorage.getItem('portfolioData')) || {};
+    let portfolioData = {}; // Initialize with an empty object
 
-    // Tab functionality
+    // Tab functionality (existing code, unchanged)
     const tabs = document.querySelectorAll('.tab');
     const tabContents = document.querySelectorAll('.tab-content');
 
@@ -20,47 +19,73 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    // --- Initial Data Loading Logic (Adapted from the working template) ---
+    function loadInitialData() {
+        if (localStorage.getItem('portfolioData')) {
+            try {
+                portfolioData = JSON.parse(localStorage.getItem('portfolioData'));
+                initializeForm();
+                showStatusMessage('Data loaded from local storage.', 'success');
+            } catch (error) {
+                console.error('Error parsing localStorage JSON:', error);
+                showStatusMessage('Error parsing local storage data. Attempting to load from data.json.', 'error');
+                loadJsonFromServer();
+            }
+        } else {
+            loadJsonFromServer();
+        }
+    }
+
+    function loadJsonFromServer() {
+        const cacheBust = new Date().getTime(); // Prevent caching
+        const dataPath = './data.json';
+        fetch(`${dataPath}?_=${cacheBust}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Failed to load ${dataPath}: ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                portfolioData = data;
+                localStorage.setItem('portfolioData', JSON.stringify(data)); // Save to localStorage for future use
+                initializeForm();
+                showStatusMessage('Data loaded from data.json successfully!', 'success');
+            })
+            .catch(error => {
+                console.error('Error loading data.json:', error);
+                showStatusMessage(`Error loading ${dataPath}. Please ensure the file exists and you are using a local server (e.g., http-server).`, 'error');
+            });
+    }
+    // --- End Initial Data Loading Logic ---
+
     // Initialize form with current data
     function initializeForm() {
         // Site name
-        if (portfolioData.siteName) {
-            document.getElementById('site-name').value = portfolioData.siteName;
-        }
+        document.getElementById('site-name').value = portfolioData.siteName || '';
 
         // Hero section
-        if (portfolioData.hero) {
-            document.getElementById('hero-title').value = portfolioData.hero.title || '';
-            document.getElementById('hero-subtitle').value = portfolioData.hero.subtitle || '';
-            document.getElementById('hero-background').value = portfolioData.hero.backgroundImage || '';
-        }
+        document.getElementById('hero-title').value = portfolioData.hero?.title || '';
+        document.getElementById('hero-subtitle').value = portfolioData.hero?.subtitle || '';
+        document.getElementById('hero-background').value = portfolioData.hero?.backgroundImage || '';
 
         // About section
-        if (portfolioData.about) {
-            document.getElementById('about-bio').value = portfolioData.about.bio || '';
-            document.getElementById('profile-image-url').value = portfolioData.about.profileImage || '';
-            document.getElementById('profile-image-preview').src = portfolioData.about.profileImage || '';
+        document.getElementById('about-bio').value = portfolioData.about?.bio || '';
+        document.getElementById('profile-image-url').value = portfolioData.about?.profileImage || '';
+        document.getElementById('profile-image-preview').src = portfolioData.about?.profileImage || '';
 
-            // Skills
-            const skillsContainer = document.getElementById('skills-container');
-            skillsContainer.innerHTML = '';
-
-            if (portfolioData.about.skills && portfolioData.about.skills.length > 0) {
-                portfolioData.about.skills.forEach((skill, index) => {
-                    const skillDiv = document.createElement('div');
-                    skillDiv.className = 'array-item';
-                    skillDiv.innerHTML = `
-                        <input type="text" class="skill-input" value="${skill}" placeholder="Enter skill">
-                        <button class="remove-item" data-index="${index}">×</button>
-                    `;
-                    skillsContainer.appendChild(skillDiv);
-                });
-            }
+        // Skills
+        const skillsContainer = document.getElementById('skills-container');
+        skillsContainer.innerHTML = '';
+        if (portfolioData.about?.skills && portfolioData.about.skills.length > 0) {
+            portfolioData.about.skills.forEach((skill, index) => {
+                addSkillForm(skill, index);
+            });
         }
 
         // Projects
         const projectsContainer = document.getElementById('projects-container');
         projectsContainer.innerHTML = '';
-
         if (portfolioData.projects && portfolioData.projects.length > 0) {
             portfolioData.projects.forEach((project, index) => {
                 addProjectForm(project, index);
@@ -70,7 +95,6 @@ document.addEventListener('DOMContentLoaded', function() {
         // Testimonials
         const testimonialsContainer = document.getElementById('testimonials-container');
         testimonialsContainer.innerHTML = '';
-
         if (portfolioData.testimonials && portfolioData.testimonials.length > 0) {
             portfolioData.testimonials.forEach((testimonial, index) => {
                 addTestimonialForm(testimonial, index);
@@ -80,7 +104,6 @@ document.addEventListener('DOMContentLoaded', function() {
         // Social Links
         const socialLinksContainer = document.getElementById('social-links-container');
         socialLinksContainer.innerHTML = '';
-
         if (portfolioData.socialLinks && portfolioData.socialLinks.length > 0) {
             portfolioData.socialLinks.forEach((link, index) => {
                 addSocialLinkForm(link, index);
@@ -88,9 +111,19 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // Footer
-        if (portfolioData.copyrightText) {
-            document.getElementById('copyright-text').value = portfolioData.copyrightText;
-        }
+        document.getElementById('copyright-text').value = portfolioData.copyrightText || '';
+    }
+
+    // Helper function to add a skill input
+    function addSkillForm(skill = '', index) {
+        const skillsContainer = document.getElementById('skills-container');
+        const skillDiv = document.createElement('div');
+        skillDiv.className = 'array-item';
+        skillDiv.innerHTML = `
+            <input type="text" class="skill-input" value="${skill}" placeholder="Enter skill">
+            <button class="remove-item" data-index="${index}">×</button>
+        `;
+        skillsContainer.appendChild(skillDiv);
     }
 
     // Add project form
@@ -199,19 +232,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Add new skill
     document.getElementById('add-skill').addEventListener('click', function() {
-        const skillsContainer = document.getElementById('skills-container');
-        const skillDiv = document.createElement('div');
-        skillDiv.className = 'array-item';
-
-        skillDiv.innerHTML = `
-            <input type="text" class="skill-input" value="" placeholder="Enter skill">
-            <button class="remove-item" data-index="${document.querySelectorAll('.array-item').length}">×</button>
-        `;
-
-        skillsContainer.appendChild(skillDiv);
+        addSkillForm('', document.querySelectorAll('#skills-container .array-item').length);
     });
 
-    // Remove item
+    // Remove item (general handler for all 'remove-item' buttons)
     document.addEventListener('click', function(e) {
         if (e.target.classList.contains('remove-item')) {
             e.target.closest('.array-item').remove();
@@ -231,47 +255,32 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Load data.json manually (from server)
+    // --- Status Message Helper ---
+    function showStatusMessage(message, type) {
+        const statusMessage = document.getElementById('status-message');
+        statusMessage.textContent = message;
+        statusMessage.className = `status ${type}`; // 'success' or 'error'
+        setTimeout(() => {
+            statusMessage.className = 'status';
+            statusMessage.textContent = '';
+        }, 5000);
+    }
+
+    // --- Button Event Listeners ---
+
+    // Load data.json manually (from server) - now calls the dedicated function
     document.getElementById('load-json-btn').addEventListener('click', function() {
         if (confirm('Are you sure you want to load data from data.json? This will overwrite any unsaved changes.')) {
-            const cacheBust = new Date().getTime();
-            const dataPath = './data.json';
-            fetch(`${dataPath}?_=${cacheBust}`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`Failed to load ${dataPath}: ${response.statusText}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    portfolioData = data;
-                    localStorage.setItem('portfolioData', JSON.stringify(data));
-                    initializeForm();
-
-                    const statusMessage = document.getElementById('status-message');
-                    statusMessage.textContent = 'Data loaded from data.json successfully!';
-                    statusMessage.className = 'status success';
-
-                    setTimeout(() => {
-                        statusMessage.className = 'status';
-                        statusMessage.textContent = '';
-                    }, 5000);
-                })
-                .catch(error => {
-                    console.error('Error loading data.json:', error);
-                    const statusMessage = document.getElementById('status-message');
-                    statusMessage.textContent = `Error loading ${dataPath}. Please ensure the file exists in the same directory as form.html and try using a local server (e.g., http-server).`;
-                    statusMessage.className = 'status error';
-
-                    setTimeout(() => {
-                        statusMessage.className = 'status';
-                        statusMessage.textContent = '';
-                    }, 5000);
-                });
+            loadJsonFromServer();
         }
     });
 
-    // --- New functionality: Load JSON from local PC ---
+    // Upload JSON from local PC (trigger hidden input)
+    document.getElementById('upload-json-btn').addEventListener('click', function() {
+        document.getElementById('upload-json-input').click();
+    });
+
+    // Handle uploaded JSON file
     document.getElementById('upload-json-input').addEventListener('change', function(e) {
         const file = e.target.files[0];
         if (file) {
@@ -283,75 +292,21 @@ document.addEventListener('DOMContentLoaded', function() {
                         portfolioData = uploadedData;
                         localStorage.setItem('portfolioData', JSON.stringify(uploadedData));
                         initializeForm();
-
-                        const statusMessage = document.getElementById('status-message');
-                        statusMessage.textContent = 'Data loaded from uploaded file successfully!';
-                        statusMessage.className = 'status success';
-                        setTimeout(() => {
-                            statusMessage.className = 'status';
-                            statusMessage.textContent = '';
-                        }, 5000);
+                        showStatusMessage('Data loaded from uploaded file successfully!', 'success');
                     }
                 } catch (error) {
                     console.error('Error parsing uploaded JSON:', error);
-                    const statusMessage = document.getElementById('status-message');
-                    statusMessage.textContent = 'Error: Could not parse uploaded file. Please ensure it is a valid JSON file.';
-                    statusMessage.className = 'status error';
-                    setTimeout(() => {
-                        statusMessage.className = 'status';
-                        statusMessage.textContent = '';
-                    }, 5000);
+                    showStatusMessage('Error: Could not parse uploaded file. Please ensure it is a valid JSON file.', 'error');
                 }
             };
             reader.readAsText(file);
         }
     });
 
-    // Handle button click for local file upload (to trigger the hidden input)
-    document.getElementById('upload-json-btn').addEventListener('click', function() {
-        document.getElementById('upload-json-input').click();
-    });
-
-    // --- End of new functionality ---
-
     // Download JSON
     document.getElementById('download-btn').addEventListener('click', function() {
-        // Update portfolio data before downloading
-        portfolioData.siteName = document.getElementById('site-name').value;
-        portfolioData.hero = {
-            title: document.getElementById('hero-title').value,
-            subtitle: document.getElementById('hero-subtitle').value,
-            backgroundImage: document.getElementById('hero-background').value
-        };
-        portfolioData.about = {
-            bio: document.getElementById('about-bio').value,
-            profileImage: document.getElementById('profile-image-url').value,
-            skills: Array.from(document.querySelectorAll('.skill-input')).map(input => input.value).filter(Boolean)
-        };
-        portfolioData.projects = Array.from(document.querySelectorAll('#projects-container .array-item')).map(item => {
-            const categories = Array.from(item.querySelector('.project-categories').selectedOptions)
-                .map(option => option.value);
-            return {
-                title: item.querySelector('.project-title').value,
-                description: item.querySelector('.project-desc').value,
-                image: item.querySelector('.project-image').value,
-                highResUrl: item.querySelector('.project-highres').value,
-                categories: categories
-            };
-        }).filter(project => project.title);
-        portfolioData.testimonials = Array.from(document.querySelectorAll('#testimonials-container .array-item')).map(item => {
-            return {
-                text: item.querySelector('.testimonial-text').value,
-                author: item.querySelector('.testimonial-author').value
-            };
-        }).filter(testimonial => testimonial.text);
-        portfolioData.socialLinks = Array.from(document.querySelectorAll('#social-links-container .array-item')).map(item => {
-            return {
-                platform: item.querySelector('.social-platform').value,
-                url: item.querySelector('.social-url').value
-            };
-        }).filter(link => link.url);
-        portfolioData.copyrightText = document.getElementById('copyright-text').value;
+        // First, update portfolioData with current form values
+        updatePortfolioDataFromForm();
 
         // Create JSON blob
         const jsonString = JSON.stringify(portfolioData, null, 2);
@@ -369,85 +324,58 @@ document.addEventListener('DOMContentLoaded', function() {
         document.body.removeChild(link);
         URL.revokeObjectURL(url);
 
-        // Show success message
-        const statusMessage = document.getElementById('status-message');
-        statusMessage.textContent = 'Portfolio data downloaded successfully!';
-        statusMessage.className = 'status success';
-
-        // Hide message after 5 seconds
-        setTimeout(() => {
-            statusMessage.className = 'status';
-            statusMessage.textContent = '';
-        }, 5000);
+        showStatusMessage('Portfolio data downloaded successfully!', 'success');
     });
 
-    // Save data
+    // Save data to localStorage
     document.getElementById('save-btn').addEventListener('click', function() {
-        // Update site name
-        portfolioData.siteName = document.getElementById('site-name').value;
+        updatePortfolioDataFromForm(); // Update data object from form inputs
+        localStorage.setItem('portfolioData', JSON.stringify(portfolioData)); // Save to localStorage
+        showStatusMessage('Changes saved successfully! They will appear when you refresh the portfolio page.', 'success');
+    });
 
-        // Update hero data
+    // Helper to update the portfolioData object from the current form values
+    function updatePortfolioDataFromForm() {
+        portfolioData.siteName = document.getElementById('site-name').value;
         portfolioData.hero = {
             title: document.getElementById('hero-title').value,
             subtitle: document.getElementById('hero-subtitle').value,
             backgroundImage: document.getElementById('hero-background').value
         };
-
-        // Update about data
         portfolioData.about = {
             bio: document.getElementById('about-bio').value,
             profileImage: document.getElementById('profile-image-url').value,
-            skills: Array.from(document.querySelectorAll('.skill-input')).map(input => input.value).filter(Boolean)
+            skills: Array.from(document.querySelectorAll('#skills-container .skill-input')).map(input => input.value).filter(Boolean)
         };
-
-        // Update projects
         portfolioData.projects = Array.from(document.querySelectorAll('#projects-container .array-item')).map(item => {
-            const categories = Array.from(item.querySelector('.project-categories').selectedOptions)
-                .map(option => option.value);
-
+            const categoriesSelect = item.querySelector('.project-categories');
+            const categories = categoriesSelect ? Array.from(categoriesSelect.selectedOptions).map(option => option.value) : [];
             return {
-                title: item.querySelector('.project-title').value,
-                description: item.querySelector('.project-desc').value,
-                image: item.querySelector('.project-image').value,
-                highResUrl: item.querySelector('.project-highres').value,
+                title: item.querySelector('.project-title')?.value || '',
+                description: item.querySelector('.project-desc')?.value || '',
+                image: item.querySelector('.project-image')?.value || '',
+                highResUrl: item.querySelector('.project-highres')?.value || '',
                 categories: categories
             };
         }).filter(project => project.title); // Filter out empty projects
 
-        // Update testimonials
         portfolioData.testimonials = Array.from(document.querySelectorAll('#testimonials-container .array-item')).map(item => {
             return {
-                text: item.querySelector('.testimonial-text').value,
-                author: item.querySelector('.testimonial-author').value
+                text: item.querySelector('.testimonial-text')?.value || '',
+                author: item.querySelector('.testimonial-author')?.value || ''
             };
         }).filter(testimonial => testimonial.text); // Filter out empty testimonials
 
-        // Update social links
         portfolioData.socialLinks = Array.from(document.querySelectorAll('#social-links-container .array-item')).map(item => {
             return {
-                platform: item.querySelector('.social-platform').value,
-                url: item.querySelector('.social-url').value
+                platform: item.querySelector('.social-platform')?.value || '',
+                url: item.querySelector('.social-url')?.value || ''
             };
         }).filter(link => link.url); // Filter out empty links
 
-        // Update copyright text
         portfolioData.copyrightText = document.getElementById('copyright-text').value;
+    }
 
-        // Save to localStorage
-        localStorage.setItem('portfolioData', JSON.stringify(portfolioData));
-
-        // Show success message
-        const statusMessage = document.getElementById('status-message');
-        statusMessage.textContent = 'Changes saved successfully! They will appear when you refresh the portfolio page.';
-        statusMessage.className = 'status success';
-
-        // Hide message after 5 seconds
-        setTimeout(() => {
-            statusMessage.className = 'status';
-            statusMessage.textContent = '';
-        }, 5000);
-    });
-
-    // Initialize the form
-    initializeForm();
+    // Call the initial data loading function
+    loadInitialData();
 });
